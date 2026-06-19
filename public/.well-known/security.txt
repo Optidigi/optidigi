@@ -1,0 +1,3 @@
+Contact: mailto:info@optidigi.nl
+Canonical: https://optidigi.nl/.well-known/security.txt
+Preferred-Languages: nl, en

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://optidigi.nl/</loc>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://optidigi.nl/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://optidigi.nl/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://optidigi.nl/" />
+  </url>
+  <url>
+    <loc>https://optidigi.nl/en/</loc>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://optidigi.nl/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://optidigi.nl/en/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://optidigi.nl/" />
+  </url>
+  <url>
+    <loc>https://optidigi.nl/over-ons/</loc>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://optidigi.nl/over-ons/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://optidigi.nl/en/about/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://optidigi.nl/over-ons/" />
+  </url>
+  <url>
+    <loc>https://optidigi.nl/en/about/</loc>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://optidigi.nl/over-ons/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://optidigi.nl/en/about/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://optidigi.nl/over-ons/" />
+  </url>
+  <url>
+    <loc>https://optidigi.nl/prijzen/</loc>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://optidigi.nl/prijzen/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://optidigi.nl/en/pricing/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://optidigi.nl/prijzen/" />
+  </url>
+  <url>
+    <loc>https://optidigi.nl/en/pricing/</loc>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://optidigi.nl/prijzen/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://optidigi.nl/en/pricing/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://optidigi.nl/prijzen/" />
+  </url>
+  <url>
+    <loc>https://optidigi.nl/contact/</loc>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://optidigi.nl/contact/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://optidigi.nl/en/contact/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://optidigi.nl/contact/" />
+  </url>
+  <url>
+    <loc>https://optidigi.nl/en/contact/</loc>
+    <xhtml:link rel="alternate" hreflang="nl-NL" href="https://optidigi.nl/contact/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://optidigi.nl/en/contact/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://optidigi.nl/contact/" />
+  </url>
+</urlset>

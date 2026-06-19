@@ -1,0 +1,73 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import Section from "../../components/sections/Section.astro";
+import SectionTitle from "../../components/ui/SectionTitle.astro";
+import Card from "../../components/ui/Card.astro";
+import Proposal from "../../components/sections/Proposal.astro";
+import { locales, pages, sections } from "../../i18n";
+
+const locale = locales.en;
+const page = pages.en.pricing;
+const content = sections.en;
+
+const cards = [
+  {
+    title: "Fixed project price",
+    text: "For clear projects, such as a custom website or defined integration, we work with an agreed price upfront.",
+  },
+  {
+    title: "Capped budget",
+    text: "For more complex API integrations, we agree on a maximum budget and solve the highest priorities first.",
+  },
+  {
+    title: "Monthly service",
+    text: "For support, hosting, updates, security or business-critical assistance, we make monthly agreements.",
+  },
+];
+---
+
+<MainLayout
+  title={page.title}
+  description={page.description}
+  alternates={page.alternates}
+  {...locale}
+>
+  <Section id="pricing">
+    <div class="py-8 lg:py-16">
+      <h1 class="mb-10 text-center text-4xl font-medium leading-none md:text-6xl">Pricing and approach</h1>
+      <SectionTitle
+        sectionTitle="Pricing"
+        description="No fictional package prices. The investment depends on scope, integrations, risk and the desired support."
+      />
+      <div class="grid gap-10 lg:grid-cols-3">
+        {
+          cards.map((item) => (
+            <Card isUnderline={true}>
+              <div class="flex h-full flex-col gap-6 rounded-[45px] bg-gray p-[50px]">
+                <h2 class="text-3xl font-medium">{item.title}</h2>
+                <p>{item.text}</p>
+                <a class="flex items-center gap-3.5 underline" href="/en/contact">Ask about the approach</a>
+              </div>
+            </Card>
+          ))
+        }
+      </div>
+      <Card>
+        <div class="mt-[60px] rounded-[45px] bg-dark p-[60px] text-gray">
+          <h2 class="mb-6 text-3xl font-medium text-white">What determines the price?</h2>
+          <p>
+            Important factors are the number of pages or screens, the level of
+            custom work, existing systems, API integrations, dashboards,
+            automation, content, hosting and support agreements.
+          </p>
+          <p class="mt-6">
+            An introductory call is meant to quickly determine whether the
+            request fits. After that, a concrete proposal follows, or first a
+            technical blueprint.
+          </p>
+        </div>
+      </Card>
+    </div>
+  </Section>
+  <Proposal {...content.proposal} />
+</MainLayout>

@@ -1,0 +1,21 @@
+---
+import Accordion from "../ui/Accordion.astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import Section from "./Section.astro";
+
+const {
+  sectionTitle = "Werkwijze",
+  description = "Een nuchter traject van kennismaking tot oplevering en beheer.",
+  items,
+} = Astro.props;
+---
+
+<Section id="process">
+  <div class="mt-[140px]">
+    <SectionTitle
+      sectionTitle={sectionTitle}
+      description={description}
+    />
+    <Accordion items={items} />
+  </div>
+</Section>

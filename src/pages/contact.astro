@@ -1,0 +1,46 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Section from "../components/sections/Section.astro";
+import SectionTitle from "../components/ui/SectionTitle.astro";
+import Card from "../components/ui/Card.astro";
+import ContactSection from "../components/sections/Contact.astro";
+import { locales, pages, sections } from "../i18n";
+
+const locale = locales.nl;
+const page = pages.nl.contact;
+const content = sections.nl;
+---
+
+<MainLayout
+  title={page.title}
+  description={page.description}
+  alternates={page.alternates}
+  {...locale}
+>
+  <Section id="contactgegevens">
+    <div class="py-8 lg:py-16">
+        <SectionTitle
+          sectionTitle="Contactgegevens"
+          description="Mail je vraag of projectidee naar Optidigi."
+        />
+      <Card>
+        <div class="grid gap-10 rounded-[45px] bg-gray p-[60px] lg:grid-cols-2">
+          <div class="flex flex-col gap-4">
+            <h1 class="text-4xl font-medium leading-none md:text-6xl">Neem contact op</h1>
+            <p>Optidigi V.O.F.</p>
+            <p>E-mail: <a class="underline" href="mailto:info@optidigi.nl">info@optidigi.nl</a></p>
+          </div>
+          <div class="flex flex-col gap-4">
+            <h2 class="text-3xl font-medium">Introductiecall</h2>
+            <p>
+              Beschrijf kort wat je wilt bouwen of verbeteren. Dan bepalen we
+              of een introductiecall van 15 minuten zinvol is.
+            </p>
+            <a href="mailto:info@optidigi.nl?subject=Introductiecall%20Optidigi" class="btn-primary text-center">Mail Optidigi</a>
+          </div>
+        </div>
+      </Card>
+    </div>
+  </Section>
+  <ContactSection sectionTitle={content.contactSection.title} description={content.contactSection.description} form={content.contactSection.form} />
+</MainLayout>

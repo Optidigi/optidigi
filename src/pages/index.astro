@@ -1,0 +1,34 @@
+---
+import Cases from "../components/sections/Cases.astro";
+import Contact from "../components/sections/Contact.astro";
+import Hero from "../components/sections/Hero.astro";
+import Process from "../components/sections/Process.astro";
+import Proposal from "../components/sections/Proposal.astro";
+import Services from "../components/sections/Services.astro";
+import Sponsors from "../components/sections/Sponsors.astro";
+import Team from "../components/sections/Team.astro";
+import Testimonials from "../components/sections/Testimonials.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { locales, pages, sections } from "../i18n";
+
+const locale = locales.nl;
+const page = pages.nl.home;
+const content = sections.nl;
+---
+
+<MainLayout
+  title={page.title}
+  description={page.description}
+  alternates={page.alternates}
+  {...locale}
+>
+  <Hero {...content.hero} />
+  <Sponsors />
+  <Services {...content.services} pathPrefix={locale.pathPrefix} />
+  <Proposal {...content.proposal} />
+  <Cases {...content.cases} />
+  <Process sectionTitle={content.process.title} description={content.process.description} items={content.process.items} />
+  <Team sectionTitle={content.team.title} description={content.team.description} members={content.team.members} />
+  <Testimonials sectionTitle={content.testimonials.title} description={content.testimonials.description} />
+  <Contact sectionTitle={content.contactSection.title} description={content.contactSection.description} form={content.contactSection.form} />
+</MainLayout>

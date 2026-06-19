@@ -1,0 +1,53 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import Section from "../../components/sections/Section.astro";
+import SectionTitle from "../../components/ui/SectionTitle.astro";
+import Card from "../../components/ui/Card.astro";
+import Process from "../../components/sections/Process.astro";
+import { locales, pages, sections } from "../../i18n";
+
+const locale = locales.en;
+const page = pages.en.about;
+const content = sections.en;
+---
+
+<MainLayout
+  title={page.title}
+  description={page.description}
+  alternates={page.alternates}
+  {...locale}
+>
+  <Section id="about">
+    <div class="py-8 lg:py-16">
+      <SectionTitle
+        sectionTitle="About Optidigi"
+        description="A practical digital solutions agency focused on useful technology for entrepreneurs and growing teams."
+      />
+      <Card>
+        <div class="grid gap-10 rounded-[45px] bg-gray p-[60px] lg:grid-cols-2">
+          <div class="flex flex-col gap-6">
+            <h1 class="text-4xl font-medium leading-none md:text-6xl">Technology that makes your business easier to run.</h1>
+            <p>
+              Optidigi builds high-quality websites and designs digital systems
+              and automations that make business processes more efficient.
+            </p>
+            <p>
+              We do not only build a front end. Where useful, we connect
+              websites, forms, dashboards and existing software so information
+              needs to be copied manually less often.
+            </p>
+          </div>
+          <div class="flex flex-col gap-6">
+            <h2 class="text-3xl font-medium">Company details</h2>
+            <div>
+              <p>Optidigi</p>
+              <p><a class="underline" href="mailto:info@optidigi.nl">info@optidigi.nl</a></p>
+              <p>KvK: 99460165</p>
+            </div>
+          </div>
+        </div>
+      </Card>
+    </div>
+  </Section>
+  <Process sectionTitle={content.process.title} description={content.process.description} items={content.process.items} />
+</MainLayout>

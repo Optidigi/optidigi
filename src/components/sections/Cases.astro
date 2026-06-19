@@ -1,0 +1,65 @@
+---
+import { Image } from "astro:assets";
+import Card from "../ui/Card.astro";
+import Section from "./Section.astro";
+
+const defaultCards = [
+  {
+    index: 0,
+    title:
+      "Een website staat niet los van je bedrijf. We kijken daarom ook naar formulieren, opvolging, systemen en de handmatige stappen erachter.",
+    link: "/contact",
+  },
+  {
+    index: 1,
+    title:
+      "Bestaande software blijft waar mogelijk centraal. Optidigi bouwt koppelingen rond de systemen waar je team al mee werkt.",
+    link: "/over-ons",
+  },
+  {
+    index: 1,
+    title:
+      "Bij complexere vragen starten we met een duidelijke blauwdruk, zodat scope, risico's en investering vooraf concreet worden.",
+    link: "/prijzen",
+  },
+];
+
+import larrow from "../../assets/icon3.svg";
+import SectionTitle from "../ui/SectionTitle.astro";
+
+type CaseCard = { title: string; link: string; linkLabel?: string };
+
+const {
+  sectionTitle = "Uitgangspunten",
+  title,
+  description = "Geen losse visitekaartjes of zware standaardpakketten, maar digitale onderdelen die praktisch samenwerken.",
+  moreInfo = "Meer info",
+  cards = defaultCards,
+}: { title?: string; sectionTitle?: string; description?: string; moreInfo?: string; cards?: CaseCard[] } = Astro.props;
+---
+
+<Section id="cases">
+  <SectionTitle
+    sectionTitle={title || sectionTitle}
+    description={description}
+  />
+  <div class="flex flex-col lg:flex-row justify-between rounded-[45px] p-1">
+    {
+      cards.map((card) => (
+        <Card>
+          <div class="flex p-[60px] h-full bg-dark text-gray rounded-[45px] m-[1px]">
+            <div class="flex flex-col gap-5">
+              <p>{card.title}</p>
+              <a href={card.link} class="flex items-center gap-[15px]" aria-label={`${card.linkLabel || moreInfo}: ${card.title}`}>
+                <span class="text-white underline">{card.linkLabel || moreInfo}</span>
+                <picture>
+                  <Image src={larrow} alt="" />
+                </picture>
+              </a>
+            </div>
+          </div>
+        </Card>
+      ))
+    }
+  </div>
+</Section>

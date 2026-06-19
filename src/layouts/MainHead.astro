@@ -1,0 +1,29 @@
+---
+import Seo from "../components/seo/Seo.astro";
+
+// Pass the contents to create SEO for the page
+const { title, description, image, robots, alternates } = Astro.props;
+---
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="viewport" content="width=device-width" />
+  <meta name="generator" content={Astro.generator} />
+
+  <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <Seo
+    {title}
+    {description}
+    url={Astro.url.toString()}
+    {image}
+    {robots}
+    {alternates}
+  />
+
+  <!-- Preconnect fonts, images... -->
+</head>

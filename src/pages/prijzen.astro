@@ -1,0 +1,72 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Section from "../components/sections/Section.astro";
+import SectionTitle from "../components/ui/SectionTitle.astro";
+import Card from "../components/ui/Card.astro";
+import Proposal from "../components/sections/Proposal.astro";
+import { locales, pages, sections } from "../i18n";
+
+const locale = locales.nl;
+const page = pages.nl.pricing;
+const content = sections.nl;
+
+const cards = [
+  {
+    title: "Vaste projectprijs",
+    text: "Voor duidelijke trajecten, zoals een maatwerk website of afgebakende integratie, werken we met een vooraf afgesproken prijs.",
+  },
+  {
+    title: "Begrensd budget",
+    text: "Bij complexere API-koppelingen spreken we een maximaal budget af en lossen we eerst de hoogste prioriteiten op.",
+  },
+  {
+    title: "Maandelijkse service",
+    text: "Voor beheer, hosting, updates, veiligheid of bedrijfskritische ondersteuning maken we maandelijkse afspraken.",
+  },
+];
+---
+
+<MainLayout
+  title={page.title}
+  description={page.description}
+  alternates={page.alternates}
+  {...locale}
+>
+  <Section id="prijzen">
+    <div class="py-8 lg:py-16">
+      <h1 class="mb-10 text-center text-4xl font-medium leading-none md:text-6xl">Prijzen en aanpak</h1>
+      <SectionTitle
+        sectionTitle="Prijzen"
+        description="Geen verzonnen pakketprijzen. De investering hangt af van scope, koppelingen, risico en het gewenste beheer."
+      />
+      <div class="grid gap-10 lg:grid-cols-3">
+        {
+          cards.map((item) => (
+            <Card isUnderline={true}>
+              <div class="flex h-full flex-col gap-6 rounded-[45px] bg-gray p-[50px]">
+                <h2 class="text-3xl font-medium">{item.title}</h2>
+                <p>{item.text}</p>
+                <a class="flex items-center gap-3.5 underline" href="/contact">Vraag naar de aanpak</a>
+              </div>
+            </Card>
+          ))
+        }
+      </div>
+      <Card>
+        <div class="mt-[60px] rounded-[45px] bg-dark p-[60px] text-gray">
+          <h2 class="mb-6 text-3xl font-medium text-white">Wat bepaalt de prijs?</h2>
+          <p>
+            Belangrijke factoren zijn het aantal pagina's of schermen, het niveau
+            van maatwerk, bestaande systemen, API-koppelingen, dashboards,
+            automatisering, content, hosting en beheerafspraken.
+          </p>
+          <p class="mt-6">
+            Een introductiecall is bedoeld om snel te bepalen of de vraag past.
+            Daarna volgt een concreet voorstel of eerst een technische blauwdruk.
+          </p>
+        </div>
+      </Card>
+    </div>
+  </Section>
+  <Proposal {...content.proposal} />
+</MainLayout>

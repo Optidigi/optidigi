@@ -1,0 +1,41 @@
+---
+import Footer from "../components/ui/Footer.astro";
+import Navbar from "../components/ui/Navbar.astro";
+import MainHead from "./MainHead.astro";
+import "../styles/global.css";
+
+const { ...props } = Astro.props;
+const { lang = "nl", nav, navButton, footerLinks, footer, home = "/", alternates } = props;
+type NavItem = { href: string; label: string };
+const localizedNav = nav?.map((item: NavItem) => {
+  if (item.label === "EN" && alternates?.en) return { ...item, href: alternates.en };
+  if (item.label === "NL" && alternates?.nl) return { ...item, href: alternates.nl };
+  return item;
+});
+---
+
+<html lang={lang}>
+  <MainHead {...props} />
+  <style>
+    html.lenis {
+      height: auto;
+    }
+    .lenis.lenis-smooth {
+      scroll-behavior: auto;
+    }
+    .lenis.lenis-smooth [data-lenis-prevent] {
+      overscroll-behavior: contain;
+    }
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+  </style>
+  <script src="../utils/lenis"></script>
+  <body class="bg-white font-grotesk">
+    <main>
+      <Navbar menuitems={localizedNav || nav} navButton={navButton} home={home} />
+      <slot />
+      <Footer links={footerLinks} footer={footer} home={home} />
+    </main>
+  </body>
+</html>

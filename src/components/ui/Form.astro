@@ -1,0 +1,150 @@
+---
+import { Image } from "astro:assets";
+import decorForm from "../../assets/pics/contact-pic.png";
+
+const defaults = {
+  intro: "Kennismaken",
+  project: "Project bespreken",
+  nameLabel: "Naam*",
+  namePlaceholder: "Naam",
+  emailLabel: "E-mail*",
+  emailPlaceholder: "E-mail",
+  messageLabel: "Bericht*",
+  messagePlaceholder: "Bericht",
+  submit: "Verstuur e-mail",
+  projectMessage: "We willen graag een project bespreken. Neem contact met ons op.",
+  imageAlt: "Decoratieve illustratie",
+};
+const content = { ...defaults, ...(Astro.props.content || {}) };
+---
+
+<div
+  class="flex relative justify-start items-center p-[60px] bg-[#F3F3F3] rounded-[45px] overflow-hidden"
+>
+  <form action="mailto:info@optidigi.nl" method="post" enctype="text/plain" class="bg-gray sm:p-6 h-full w-full lg:max-w-lg">
+    <input type="hidden" id="project-message" value={content.projectMessage} />
+    <div class="flex flex-col sm:flex-row gap-[35px] sm:items-center mb-10">
+      <div class="flex items-center gap-[14px]">
+        <input
+          type="checkbox"
+          id="checkbox1"
+          name="checkbox1"
+          class="form-checkbox text-black"
+        />
+        <label for="checkbox1" class="text-black">{content.intro}</label>
+      </div>
+      <div class="flex items-center gap-[14px]">
+        <input
+          type="checkbox"
+          id="checkbox2"
+          name="checkbox2"
+          class="form-checkbox text-black"
+        />
+        <label for="checkbox2" class="flex items-center text-black"
+          >{content.project}</label
+        >
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label for="name" class="block text-black mb-2">{content.nameLabel}</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder={content.namePlaceholder}
+        class="w-full px-[30px] py-[18px] border border-black rounded-[14px] text-black outline-none"
+      />
+    </div>
+
+    <div class="mb-4">
+      <label for="email" class="block text-black mb-2">{content.emailLabel}</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder={content.emailPlaceholder}
+        class="w-full px-[30px] py-[18px] border border-black rounded-[14px] text-black outline-none"
+      />
+    </div>
+
+    <div class="mb-4">
+      <label for="message" class="block text-black mb-2">{content.messageLabel}</label>
+      <textarea
+        id="message"
+        name="message"
+        placeholder={content.messagePlaceholder}
+        class="w-full px-[30px] py-[18px] border border-black rounded-[14px] text-black outline-none"
+      ></textarea>
+    </div>
+
+    <button type="submit" name="submit" class="btn-primary w-full">{content.submit}</button>
+  </form>
+  <picture class="absolute right-[-25%] top-[2%] bottom-[2%] hidden lg:block">
+    <Image src={decorForm} alt={content.imageAlt} />
+  </picture>
+</div>
+<style>
+  .form-checkbox {
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .form-checkbox:before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--green);
+    transform: scale(0);
+    transition: transform 0.1s ease-in-out;
+  }
+
+  .form-checkbox:checked:before {
+    transform: scale(0.6);
+  }
+</style>
+<script>
+  function formSetup() {
+    var cb1 = document.getElementById("checkbox1") as HTMLInputElement;
+    var cb2 = document.getElementById("checkbox2") as HTMLInputElement;
+    var message = document.getElementById("message") as HTMLInputElement;
+    var projectMessage = document.getElementById("project-message") as HTMLInputElement;
+
+    if (cb1 && cb2) {
+      cb1.checked = true;
+
+      cb2.addEventListener("change", function () {
+        if (cb2.checked) {
+          cb1.checked = false;
+          message.value = projectMessage ? projectMessage.value : "";
+        } else {
+          message.value = "";
+          cb1.checked = true;
+        }
+      });
+      cb1.addEventListener("change", function () {
+        if (cb1.checked) {
+          cb2.checked = false;
+          message.value = "";
+        } else {
+          cb2.checked = true;
+          message.value = projectMessage ? projectMessage.value : "";
+        }
+      });
+    }
+  }
+
+  formSetup();
+  document.addEventListener("astro:after-swap", formSetup);
+</script>

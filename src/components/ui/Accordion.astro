@@ -1,0 +1,64 @@
+---
+import AccordionItem from "./AccordionItem.astro";
+
+type AccordionItemData = {
+  index: number;
+  title: string;
+  description: string;
+};
+type LocalizedItem = [string, string];
+
+const defaultContent = [
+{
+  index: 1,
+  title: "Kennismaking",
+  description: "We starten met een korte call om te bepalen of er een match is op budget, urgentie en het type probleem."
+},
+{
+  index: 2,
+  title: "Inventarisatie",
+  description: "In een verdiepende sessie brengen we de website, processen, systemen en knelpunten in kaart."
+},
+{
+  index: 3,
+  title: "Voorstel en blauwdruk",
+  description: "Je ontvangt een helder plan. Bij complexe koppelingen kan een betaalde blauwdruk nodig zijn voordat de bouw start."
+},
+{
+  index: 4,
+  title: "Iteratieve bouw",
+  description: "We bouwen in overzichtelijke stappen en houden de voortgang concreet met korte updates of calls."
+},
+{
+  index: 5,
+  title: "Oplevering",
+  description: "Na oplevering maken we de oplossing begrijpelijk voor het team en controleren we of de workflow praktisch werkt."
+},
+{
+  index: 6,
+  title: "Beheer",
+  description: "Als beheer gewenst is, spreken we maandelijkse afspraken af voor hosting, veiligheid, updates of bedrijfskritische ondersteuning."
+}
+];
+
+const { items }: { items?: LocalizedItem[] } = Astro.props;
+const content: AccordionItemData[] = items
+  ? items.map((item: LocalizedItem, index: number) => ({
+      index: index + 1,
+      title: item[0],
+      description: item[1],
+    }))
+  : defaultContent;
+---
+
+{
+  content.map((item) => {
+    return (
+      <AccordionItem
+        index={item.index}
+        title={item.title}
+        description={item.description}
+      />
+    );
+  })
+}

@@ -1,0 +1,45 @@
+---
+import SectionTitle from "../ui/SectionTitle.astro";
+import TeamCard from "../ui/TeamCard.astro";
+import Section from "./Section.astro";
+
+type TeamMember = {
+  pic?: ImageMetadata;
+  name: string;
+  role: string;
+  description: string;
+  link?: string;
+};
+
+const {
+  sectionTitle = "Team",
+  description = "De mensen achter Optidigi.",
+  members = [],
+} = Astro.props as {
+  sectionTitle?: string;
+  description?: string;
+  members?: TeamMember[];
+};
+---
+
+<Section id="team">
+  <div class="mt-[140px]">
+    <SectionTitle sectionTitle={sectionTitle} description={description} />
+    <div
+      class="grid grid-cols-1 md:grid-cols-2 gap-10 pb-2"
+    >
+      {
+        members.map((member, index) => (
+          <TeamCard
+            key={index}
+            pic={member.pic}
+            name={member.name}
+            role={member.role}
+            description={member.description}
+            link={member.link}
+          />
+        ))
+      }
+    </div>
+  </div>
+</Section>

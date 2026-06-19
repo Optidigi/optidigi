@@ -1,0 +1,21 @@
+---
+import Form from "../ui/Form.astro";
+import SectionTitle from "../ui/SectionTitle.astro";
+import Section from "./Section.astro";
+
+const {
+  sectionTitle = "Contact",
+  description = "Stuur een korte mail over je vraag. Dan bepalen we snel of een introductiecall zinvol is.",
+  form,
+} = Astro.props;
+---
+
+<Section id="contact">
+  <div class="mb-[140px] relative">
+    <SectionTitle
+      sectionTitle={sectionTitle}
+      description={description}
+    />
+    <Form content={form} />
+  </div>
+</Section>

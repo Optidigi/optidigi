@@ -1,0 +1,27 @@
+---
+import { Image } from "astro:assets";
+import amblast from "../../assets/clients/amblast.png";
+import quitantie from "../../assets/clients/quitantie.png";
+import kbkc from "../../assets/clients/kbkc.png";
+import rasko from "../../assets/clients/rasko.png";
+import Section from "./Section.astro";
+
+const sponsors = [
+  { logo: amblast, alt: "Amblast Facility Services" },
+  { logo: quitantie, alt: "Quitantie Inkomensbeheer & Bewindvoering" },
+  { logo: kbkc, alt: "KBKC & Partners" },
+  { logo: rasko, alt: "RASKO Bouw en Renovatie" },
+];
+---
+
+<Section id="clients">
+  <div class="flex-row items-center">
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
+      {sponsors.map((sponsor) => (
+        <div class="p-4 grayscale transition duration-200 hover:grayscale-0">
+          <Image src={sponsor.logo} class="h-12 w-auto mx-auto" alt={sponsor.alt} loading="lazy" />
+        </div>
+      ))}
+    </div>
+  </div>
+</Section>

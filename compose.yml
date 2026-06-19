@@ -1,0 +1,20 @@
+services:
+  optidigi:
+    image: ${OPTIDIGI_IMAGE:-ghcr.io/owner/optidigi:latest}
+    container_name: optidigi
+    restart: unless-stopped
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik}"
+      - "traefik.http.routers.optidigi.rule=Host(`${DOMAIN:-optidigi.nl}`) || Host(`www.${DOMAIN:-optidigi.nl}`)"
+      - "traefik.http.routers.optidigi.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
+      - "traefik.http.routers.optidigi.tls=true"
+      - "traefik.http.routers.optidigi.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}"
+      - "traefik.http.services.optidigi.loadbalancer.server.port=8080"
+
+networks:
+  traefik:
+    external: true
+    name: ${TRAEFIK_NETWORK:-traefik}

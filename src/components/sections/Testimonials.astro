@@ -1,0 +1,22 @@
+---
+import SectionTitle from "../ui/SectionTitle.astro";
+import SwiperSlider from "../ui/SwiperSlider.astro";
+import Section from "./Section.astro";
+
+const {
+  sectionTitle = "Ervaringen",
+  description = "Publieke feedback van klanten.",
+} = Astro.props;
+---
+
+<Section id="testimonials">
+  <div class="mt-20">
+    <SectionTitle
+      sectionTitle={sectionTitle}
+      description={description}
+    />
+    <div class="rounded-[45px] bg-dark mb-[150px] text-gray">
+      <SwiperSlider />
+    </div>
+  </div>
+</Section>

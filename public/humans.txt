@@ -1,0 +1,8 @@
+/* TEAM */
+Naam: Optidigi V.O.F.
+Contact: info@optidigi.nl
+
+/* SITE */
+Taal: Nederlands
+URL: https://optidigi.nl
+Generator: Astro
