@@ -4,10 +4,10 @@ services:
     container_name: optidigi
     restart: unless-stopped
     networks:
-      - traefik
+      - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=${TRAEFIK_NETWORK:-traefik}"
+      - "traefik.docker.network=${TRAEFIK_NETWORK:-proxy}"
       - "traefik.http.routers.optidigi.rule=Host(`${DOMAIN:-optidigi.nl}`) || Host(`www.${DOMAIN:-optidigi.nl}`)"
       - "traefik.http.routers.optidigi.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}"
       - "traefik.http.routers.optidigi.tls=true"
@@ -15,6 +15,6 @@ services:
       - "traefik.http.services.optidigi.loadbalancer.server.port=8080"
 
 networks:
-  traefik:
+  proxy:
     external: true
-    name: ${TRAEFIK_NETWORK:-traefik}
+    name: ${TRAEFIK_NETWORK:-proxy}

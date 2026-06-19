@@ -36,7 +36,7 @@ For VPS deployment with Docker and Traefik, set values in an `.env` file next to
 ```bash
 OPTIDIGI_IMAGE=ghcr.io/owner/optidigi:latest
 DOMAIN=optidigi.nl
-TRAEFIK_NETWORK=traefik
+TRAEFIK_NETWORK=proxy
 TRAEFIK_ENTRYPOINT=websecure
 TRAEFIK_CERT_RESOLVER=letsencrypt
 ```
