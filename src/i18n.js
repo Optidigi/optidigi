@@ -4,17 +4,17 @@ export const locales = {
     pathPrefix: "",
     home: "/",
     nav: [
-      { href: "/over-ons", label: "Over ons" },
+      { href: "/over-ons/", label: "Over ons" },
       { href: "/#services", label: "Oplossingen" },
-      { href: "/prijzen", label: "Prijzen" },
-      { href: "/contact", label: "Contact" },
-      { href: "/en", label: "EN" },
+      { href: "/prijzen/", label: "Prijzen" },
+      { href: "/contact/", label: "Contact" },
+      { href: "/en/", label: "EN" },
     ],
     footerLinks: [
-      { name: "Over ons", href: "/over-ons" },
+      { name: "Over ons", href: "/over-ons/" },
       { name: "Oplossingen", href: "/#services" },
-      { name: "Prijzen", href: "/prijzen" },
-      { name: "Contact", href: "/contact" },
+      { name: "Prijzen", href: "/prijzen/" },
+      { name: "Contact", href: "/contact/" },
     ],
     navButton: {
       href: "mailto:info@optidigi.nl?subject=Introductiecall%20Optidigi",
@@ -32,17 +32,17 @@ export const locales = {
     pathPrefix: "/en",
     home: "/en/",
     nav: [
-      { href: "/en/about", label: "About" },
+      { href: "/en/about/", label: "About" },
       { href: "/en/#services", label: "Solutions" },
-      { href: "/en/pricing", label: "Pricing" },
-      { href: "/en/contact", label: "Contact" },
+      { href: "/en/pricing/", label: "Pricing" },
+      { href: "/en/contact/", label: "Contact" },
       { href: "/", label: "NL" },
     ],
     footerLinks: [
-      { name: "About", href: "/en/about" },
+      { name: "About", href: "/en/about/" },
       { name: "Solutions", href: "/en/#services" },
-      { name: "Pricing", href: "/en/pricing" },
-      { name: "Contact", href: "/en/contact" },
+      { name: "Pricing", href: "/en/pricing/" },
+      { name: "Contact", href: "/en/contact/" },
     ],
     navButton: {
       href: "mailto:info@optidigi.nl?subject=Introductory%20call%20Optidigi",
@@ -182,19 +182,19 @@ export const sections = {
         {
           title:
             "Een website staat niet los van je bedrijf. We kijken daarom ook naar formulieren, opvolging, systemen en de handmatige stappen erachter.",
-          link: "/contact",
+          link: "/contact/",
           linkLabel: "Website en workflow",
         },
         {
           title:
             "Bestaande software blijft waar mogelijk centraal. Optidigi bouwt koppelingen rond de systemen waar je team al mee werkt.",
-          link: "/over-ons",
+          link: "/over-ons/",
           linkLabel: "Bestaande software",
         },
         {
           title:
             "Bij complexere vragen starten we met een duidelijke blauwdruk, zodat scope, risico's en investering vooraf concreet worden.",
-          link: "/prijzen",
+          link: "/prijzen/",
           linkLabel: "Blauwdruk en scope",
         },
       ],
@@ -300,19 +300,19 @@ export const sections = {
         {
           title:
             "A website is not separate from your business. We also look at forms, follow-up, systems and the manual steps behind them.",
-          link: "/en/contact",
+          link: "/en/contact/",
           linkLabel: "Website and workflow",
         },
         {
           title:
             "Existing software remains central where possible. Optidigi builds integrations around the systems your team already uses.",
-          link: "/en/about",
+          link: "/en/about/",
           linkLabel: "Existing software",
         },
         {
           title:
             "For more complex questions, we start with a clear blueprint so scope, risk and investment are concrete upfront.",
-          link: "/en/pricing",
+          link: "/en/pricing/",
           linkLabel: "Blueprint and scope",
         },
       ],

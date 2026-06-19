@@ -5,10 +5,10 @@ type NavItem = { href: string; label: string };
 type NavButton = { href: string; label: string };
 
 const menuitems: NavItem[] = Astro.props.menuitems || [
-  { href: "/over-ons", label: "Over ons" },
+  { href: "/over-ons/", label: "Over ons" },
   { href: "/#services", label: "Oplossingen" },
-  { href: "/prijzen", label: "Prijzen" },
-  { href: "/contact", label: "Contact" },
+  { href: "/prijzen/", label: "Prijzen" },
+  { href: "/contact/", label: "Contact" },
 ];
 const navButton: NavButton = Astro.props.navButton || {
   href: "mailto:info@optidigi.nl?subject=Introductiecall%20Optidigi",

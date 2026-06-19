@@ -12,10 +12,10 @@ type FooterText = {
 };
 
 const links: FooterLink[] = Astro.props.links || [
-  { name: "Over ons", href: "/over-ons" },
+  { name: "Over ons", href: "/over-ons/" },
   { name: "Oplossingen", href: "/#services" },
-  { name: "Prijzen", href: "/prijzen" },
-  { name: "Contact", href: "/contact" },
+  { name: "Prijzen", href: "/prijzen/" },
+  { name: "Contact", href: "/contact/" },
 ];
 const footer: FooterText = Astro.props.footer || {
   contactTitle: "Contact",
