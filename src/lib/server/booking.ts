@@ -1,7 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { bookingConfig, mailConfig } from "./config";
 import { database } from "./database";
-import { enqueueEmail, escapeHtml } from "./email";
+import { enqueueEmail } from "./email";
+import { appointmentEmails, contactEmails } from "./email-templates";
 import { addUtcDays, dateKey, formatDutch, localParts, parseDateKey, zonedDate } from "./time";
 import { InputError } from "./validation";
 import type { AppointmentInput, ContactInput } from "./validation";
@@ -80,10 +81,10 @@ export function createAppointment(input: AppointmentInput) {
 
     const label = formatDutch(requested, config.timezone);
     const type = input.type === "video" ? "Videogesprek" : "Telefoongesprek";
-    const details = `Moment: ${label}\nType: ${type}\nNaam: ${input.name}\nBedrijf: ${input.company || "-"}\nE-mail: ${input.email}\nTelefoon: ${input.phone || "-"}\nOnderwerp: ${input.subject}\nOpmerking: ${input.note || "-"}\nReferentie: ${id}`;
-    enqueueEmail({ relatedType: "appointment", relatedId: id, to: mailConfig().contactTo, replyTo: input.email, subject: `[Afspraak] ${label} — ${input.name}`, text: details, html: `<h1>Nieuwe afspraak</h1><pre style="font:inherit;white-space:pre-wrap">${escapeHtml(details)}</pre>` });
-    const confirmation = `Hoi ${input.name},\n\nJe afspraak met Optidigi is bevestigd voor ${label}.\nType gesprek: ${type}.\n\nWil je het moment wijzigen? Antwoord dan op deze e-mail.\n\nOptidigi`;
-    enqueueEmail({ relatedType: "appointment", relatedId: id, to: input.email, replyTo: mailConfig().contactTo, subject: `Bevestiging afspraak met Optidigi — ${label}`, text: confirmation, html: `<p>Hoi ${escapeHtml(input.name)},</p><p>Je afspraak met Optidigi is bevestigd voor <strong>${escapeHtml(label)}</strong>.</p><p>Type gesprek: ${type}.</p><p>Wil je het moment wijzigen? Antwoord dan op deze e-mail.</p><p>Optidigi</p>` });
+    const mail = mailConfig();
+    const emails = appointmentEmails({ ...input, id, label, type, contactEmail: mail.contactTo });
+    enqueueEmail({ relatedType: "appointment", relatedId: id, to: mail.contactTo, replyTo: input.email, ...emails.admin });
+    enqueueEmail({ relatedType: "appointment", relatedId: id, to: input.email, replyTo: mail.contactTo, ...emails.customer });
     db.exec("COMMIT");
     return { id, startAt: valid.startAt, endAt: valid.endAt, created: true };
   } catch (error) {
@@ -102,10 +103,10 @@ export function createContact(input: ContactInput) {
   try {
     db.prepare(`INSERT INTO contacts (id, name, email, subject, message, created_at) VALUES (?, ?, ?, ?, ?, ?)`)
       .run(id, input.name, input.email, input.subject, input.message, now);
-    const details = `Naam: ${input.name}\nE-mail: ${input.email}\nOnderwerp: ${input.subject}\n\n${input.message}\n\nReferentie: ${id}`;
-    enqueueEmail({ relatedType: "contact", relatedId: id, to: mailConfig().contactTo, replyTo: input.email, subject: `[Website] ${input.subject} — ${input.name}`, text: details, html: `<h1>Nieuw contactbericht</h1><pre style="font:inherit;white-space:pre-wrap">${escapeHtml(details)}</pre>` });
-    const confirmation = `Hoi ${input.name},\n\nBedankt voor je bericht aan Optidigi. We reageren doorgaans binnen één werkdag.\n\nOptidigi`;
-    enqueueEmail({ relatedType: "contact", relatedId: id, to: input.email, replyTo: mailConfig().contactTo, subject: "We hebben je bericht ontvangen", text: confirmation, html: `<p>Hoi ${escapeHtml(input.name)},</p><p>Bedankt voor je bericht aan Optidigi. We reageren doorgaans binnen één werkdag.</p><p>Optidigi</p>` });
+    const mail = mailConfig();
+    const emails = contactEmails({ id, ...input, contactEmail: mail.contactTo });
+    enqueueEmail({ relatedType: "contact", relatedId: id, to: mail.contactTo, replyTo: input.email, ...emails.admin });
+    enqueueEmail({ relatedType: "contact", relatedId: id, to: input.email, replyTo: mail.contactTo, ...emails.customer });
     db.exec("COMMIT");
     return { id };
   } catch (error) {

@@ -10,6 +10,7 @@
     "build": "astro build",
     "check": "astro check",
     "test": "tsx --test tests/*.test.mjs",
+    "email:preview": "tsx scripts/preview-emails.ts",
     "verify": "npm run check && npm run test && npm run build",
     "start": "node ./dist/server/entry.mjs",
     "preview": "astro preview",

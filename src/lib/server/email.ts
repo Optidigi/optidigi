@@ -13,9 +13,6 @@ type Message = {
   html: string;
 };
 
-export const escapeHtml = (value: string) =>
-  value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[character]!);
-
 export function requireMailConfiguration() {
   const config = mailConfig();
   if (!config.accountId || !config.apiToken) {
