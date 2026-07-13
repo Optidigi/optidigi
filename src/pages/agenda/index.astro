@@ -260,7 +260,7 @@ export const prerender = false;
     if (!appointmentToDelete || !confirmDelete) return;
     confirmDelete.disabled = true; confirmDelete.textContent = "Verwijderen…";
     try {
-      const response = await fetch(`/api/admin/appointments/${encodeURIComponent(appointmentToDelete.id)}`, { method: "DELETE" });
+      const response = await fetch(`/api/admin/appointments/${encodeURIComponent(appointmentToDelete.id)}`, { method: "DELETE", headers: { "Content-Type": "application/json" } });
       if (redirectOnUnauthorized(response)) return;
       if (!response.ok) throw new Error("Verwijderen is mislukt.");
       deleteDialog?.close(); appointmentToDelete = null; await load(); setMessage("De afspraak is definitief verwijderd.");
@@ -272,7 +272,7 @@ export const prerender = false;
     const button = (event.target as HTMLElement).closest<HTMLButtonElement>("[data-block-id]"); if (!button) return;
     button.disabled = true;
     try {
-      const response = await fetch(`/api/admin/blocks/${encodeURIComponent(button.dataset.blockId || "")}`, { method: "DELETE" });
+      const response = await fetch(`/api/admin/blocks/${encodeURIComponent(button.dataset.blockId || "")}`, { method: "DELETE", headers: { "Content-Type": "application/json" } });
       if (redirectOnUnauthorized(response)) return;
       if (!response.ok) throw new Error("delete failed"); await load();
     } catch { setMessage("De blokkering kon niet worden verwijderd.", true); button.disabled = false; }
