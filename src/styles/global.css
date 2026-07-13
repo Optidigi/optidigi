@@ -103,6 +103,31 @@
   box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary) 25%, transparent);
 }
 
+.agenda-has-appointment button::after,
+.agenda-is-blocked button::before {
+  position: absolute;
+  bottom: 0.3rem;
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: 9999px;
+  content: "";
+}
+
+.agenda-has-appointment button::after {
+  left: calc(50% - 0.2rem);
+  background: #10b981;
+}
+
+.agenda-is-blocked button::before {
+  left: calc(50% + 0.15rem);
+  background: #f59e0b;
+}
+
+.agenda-has-appointment[data-selected="true"] button::after,
+.agenda-is-blocked[data-selected="true"] button::before {
+  background: currentColor;
+}
+
 /* Green brand treatment, applied by the primary homepage. */
 .theme-green {
   --primary: #166534;

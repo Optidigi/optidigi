@@ -7,6 +7,14 @@ export const prerender = false;
 ---
 
 <Layout title="Agenda | Optidigi" description="Beheer afspraken en beschikbaarheid van Optidigi." noindex>
+  <script is:inline>
+    (() => {
+      const saved = localStorage.getItem("optidigi-agenda-theme");
+      const dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+      document.documentElement.classList.toggle("dark", dark);
+      document.documentElement.style.colorScheme = dark ? "dark" : "light";
+    })();
+  </script>
   <main class="theme-green scheme-light min-h-screen bg-background text-foreground dark:scheme-dark">
     <header class="sticky top-0 z-30 border-b border-foreground/10 bg-background/90 backdrop-blur-xl">
       <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
