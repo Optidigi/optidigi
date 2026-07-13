@@ -10,8 +10,8 @@ type ContactEmailInput = {
 };
 
 const colors = {
-  ink: "#111318", paper: "#ffffff", canvas: "#f3f5f2", border: "#dfe4df",
-  muted: "#66706b", accent: "#00a977",
+  ink: "#18181b", paper: "#ffffff", canvas: "#fafafa", surface: "#f7f7f7",
+  border: "#e4e4e7", muted: "#71717a", accent: "#05aa74", accentDark: "#038458",
 };
 
 export const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({
@@ -22,29 +22,29 @@ const multiline = (value: string) => escapeHtml(value).replace(/\r?\n/g, "<br>")
 const headerText = (value: string) => value.replace(/[\r\n]+/g, " ").trim();
 
 const detailsCard = (items: Array<[string, string | undefined]>) => `
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:separate;background:${colors.canvas};border:1px solid ${colors.border};border-radius:14px;">
-    <tr><td style="padding:10px 22px;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:separate;background:${colors.paper};border:1px solid ${colors.border};border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.04);">
+    <tr><td style="padding:8px 20px;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="border-collapse:collapse;">
         ${items.map(([label, value]) => `<tr>
-          <td style="padding:12px 16px 12px 0;border-bottom:1px solid ${colors.border};color:${colors.muted};font-size:13px;line-height:20px;vertical-align:top;width:112px;">${escapeHtml(label)}</td>
-          <td style="padding:12px 0;border-bottom:1px solid ${colors.border};color:${colors.ink};font-size:14px;font-weight:600;line-height:20px;vertical-align:top;word-break:break-word;">${multiline(value || "—")}</td>
+          <td class="detail-label" style="padding:13px 16px 13px 0;border-bottom:1px dashed ${colors.border};color:${colors.muted};font-size:12px;line-height:19px;vertical-align:top;width:108px;">${escapeHtml(label)}</td>
+          <td class="detail-value" style="padding:13px 0;border-bottom:1px dashed ${colors.border};color:${colors.ink};font-size:13px;font-weight:600;line-height:19px;vertical-align:top;word-break:break-word;">${multiline(value || "—")}</td>
         </tr>`).join("")}
       </table>
     </td></tr>
   </table>`;
 
 const messageCard = (label: string, message: string) => `
-  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:18px;border-collapse:separate;background:${colors.paper};border:1px solid ${colors.border};border-radius:14px;">
-    <tr><td style="padding:20px 22px;">
-      <p style="margin:0 0 8px;color:${colors.muted};font-size:12px;font-weight:700;letter-spacing:.08em;line-height:18px;text-transform:uppercase;">${escapeHtml(label)}</p>
-      <p style="margin:0;color:${colors.ink};font-size:15px;line-height:24px;word-break:break-word;">${multiline(message || "—")}</p>
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:14px;border-collapse:separate;background:${colors.surface};border:1px dashed ${colors.border};border-radius:12px;">
+    <tr><td style="padding:18px 20px;">
+      <p style="margin:0 0 7px;color:${colors.muted};font-size:11px;font-weight:700;letter-spacing:.08em;line-height:17px;text-transform:uppercase;">${escapeHtml(label)}</p>
+      <p style="margin:0;color:${colors.ink};font-size:14px;line-height:23px;word-break:break-word;">${multiline(message || "—")}</p>
     </td></tr>
   </table>`;
 
 const button = (href: string, label: string) => `
-  <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin-top:24px;border-collapse:separate;">
-    <tr><td style="background:${colors.ink};border-radius:999px;">
-      <a href="${escapeHtml(href)}" style="display:inline-block;padding:13px 22px;color:#ffffff;font-size:14px;font-weight:700;line-height:20px;text-decoration:none;">${escapeHtml(label)}</a>
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin-top:22px;border-collapse:separate;">
+    <tr><td style="background:${colors.accent};border:1px solid ${colors.accentDark};border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.16),0 8px 22px rgba(5,170,116,.16);">
+      <a href="${escapeHtml(href)}" style="display:inline-block;padding:11px 18px;color:#ffffff;font-size:13px;font-weight:700;line-height:20px;text-decoration:none;">${escapeHtml(label)} &nbsp;›</a>
     </td></tr>
   </table>`;
 
@@ -59,28 +59,41 @@ function layout(input: {
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="light only">
   <title>${escapeHtml(input.title)}</title>
+  <style>
+    @media screen and (max-width:480px) {
+      .email-pad { padding-left:20px !important; padding-right:20px !important; }
+      .email-title { font-size:26px !important; line-height:31px !important; }
+      .detail-label { display:block !important; width:auto !important; padding:12px 0 2px !important; border-bottom:0 !important; }
+      .detail-value { display:block !important; width:auto !important; padding:0 0 12px !important; }
+    }
+  </style>
 </head>
-<body style="margin:0;padding:0;background:${colors.canvas};color:${colors.ink};font-family:Arial,Helvetica,sans-serif;-webkit-text-size-adjust:100%;">
+<body style="margin:0;padding:0;background:${colors.canvas};color:${colors.ink};font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;-webkit-text-size-adjust:100%;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${escapeHtml(input.preheader)}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background:${colors.canvas};border-collapse:collapse;">
-    <tr><td align="center" style="padding:28px 14px;">
-      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:600px;border-collapse:separate;background:${colors.paper};border:1px solid ${colors.border};border-radius:20px;overflow:hidden;">
-        <tr><td style="padding:25px 30px;background:${colors.ink};border-bottom:4px solid ${colors.accent};">
-          <a href="https://optidigi.nl" style="color:#ffffff;font-size:23px;font-weight:800;letter-spacing:-.05em;line-height:26px;text-decoration:none;">opti<span style="color:${colors.accent};">digi</span></a>
+    <tr><td align="center" style="padding:32px 12px;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:600px;border-collapse:separate;background:${colors.paper};border:1px solid ${colors.border};border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(24,24,27,.06);">
+        <tr><td class="email-pad" style="padding:25px 30px;background:${colors.paper};border-bottom:1px dashed ${colors.border};">
+          <a href="https://optidigi.nl" style="display:inline-block;text-decoration:none;">
+            <img src="https://optidigi.nl/optidigi-logo-email.png" width="116" height="29" alt="Optidigi" style="display:block;width:116px;height:29px;border:0;outline:none;text-decoration:none;">
+          </a>
         </td></tr>
-        <tr><td style="padding:38px 30px 18px;">
-          <p style="margin:0 0 10px;color:${colors.accent};font-size:12px;font-weight:800;letter-spacing:.1em;line-height:18px;text-transform:uppercase;">${escapeHtml(input.eyebrow)}</p>
-          <h1 style="margin:0;color:${colors.ink};font-size:30px;font-weight:800;letter-spacing:-.035em;line-height:36px;">${escapeHtml(input.title)}</h1>
-          <p style="margin:16px 0 0;color:${colors.muted};font-size:16px;line-height:25px;">${escapeHtml(input.intro)}</p>
+        <tr><td class="email-pad" style="padding:36px 30px 18px;">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 18px;border-collapse:separate;">
+            <tr><td style="padding:6px 10px;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:999px;color:#166534;font-size:11px;font-weight:700;line-height:16px;">● &nbsp;${escapeHtml(input.eyebrow)}</td></tr>
+          </table>
+          <h1 class="email-title" style="margin:0;max-width:500px;color:${colors.ink};font-size:29px;font-weight:700;letter-spacing:-.035em;line-height:35px;">${escapeHtml(input.title)}</h1>
+          <p style="margin:14px 0 0;max-width:500px;color:${colors.muted};font-size:15px;line-height:24px;">${escapeHtml(input.intro)}</p>
         </td></tr>
-        <tr><td style="padding:12px 30px 40px;">
+        <tr><td class="email-pad" style="padding:12px 30px 38px;">
           ${input.body}
           ${input.action && input.actionHref ? button(input.actionHref, input.action) : ""}
-          <p style="margin:24px 0 0;color:${colors.muted};font-size:13px;line-height:21px;">${escapeHtml(input.footerNote)}</p>
+          <p style="margin:22px 0 0;max-width:500px;color:${colors.muted};font-size:12px;line-height:20px;">${escapeHtml(input.footerNote)}</p>
         </td></tr>
-        <tr><td style="padding:22px 30px;background:${colors.canvas};border-top:1px solid ${colors.border};">
-          <p style="margin:0;color:${colors.ink};font-size:13px;font-weight:700;line-height:20px;">Optidigi <span style="color:${colors.accent};">—</span> Software, AI &amp; automatisering</p>
-          <p style="margin:4px 0 0;color:${colors.muted};font-size:12px;line-height:19px;">Automatisch verzonden via <a href="https://optidigi.nl" style="color:${colors.muted};text-decoration:underline;">optidigi.nl</a></p>
+        <tr><td class="email-pad" style="padding:21px 30px;background:${colors.surface};border-top:1px dashed ${colors.border};">
+          <p style="margin:0;color:${colors.ink};font-size:12px;font-weight:700;line-height:19px;">Optidigi · Nederland</p>
+          <p style="margin:3px 0 0;color:${colors.muted};font-size:11px;line-height:18px;">Software, AI &amp; automatisering die aansluiten op hoe je bedrijf werkt.</p>
+          <p style="margin:9px 0 0;color:${colors.muted};font-size:11px;line-height:18px;">Automatisch verzonden via <a href="https://optidigi.nl" style="color:${colors.ink};text-decoration:underline;">optidigi.nl</a></p>
         </td></tr>
       </table>
     </td></tr>

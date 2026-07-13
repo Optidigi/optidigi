@@ -26,5 +26,8 @@ const previews = {
   "contact-admin.html": contact.admin.html,
 };
 
-for (const [name, html] of Object.entries(previews)) writeFileSync(resolve(output, name), html, "utf8");
+for (const [name, html] of Object.entries(previews)) {
+  const localHtml = html.replace("https://optidigi.nl/optidigi-logo-email.png", "/public/optidigi-logo-email.png");
+  writeFileSync(resolve(output, name), localHtml, "utf8");
+}
 console.log(`Email previews written to ${output}`);
