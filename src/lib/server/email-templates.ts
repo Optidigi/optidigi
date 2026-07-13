@@ -68,7 +68,7 @@ function layout(input: {
     }
   </style>
 </head>
-<body style="margin:0;padding:0;background:${colors.canvas};color:${colors.ink};font-family:Arial,'Helvetica Neue',Helvetica,sans-serif;-webkit-text-size-adjust:100%;">
+<body style="margin:0;padding:0;background:${colors.canvas};color:${colors.ink};font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-text-size-adjust:100%;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${escapeHtml(input.preheader)}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background:${colors.canvas};border-collapse:collapse;">
     <tr><td align="center" style="padding:32px 12px;">
@@ -111,8 +111,8 @@ export function appointmentEmails(input: AppointmentEmailInput): { admin: EmailC
       text: adminText,
       html: layout({
         preheader: `${input.name} heeft een ${input.type.toLowerCase()} gepland voor ${input.label}.`,
-        eyebrow: "Nieuwe afspraak", title: `${input.name} heeft een gesprek gepland`,
-        intro: "De afspraak staat direct in de Optidigi-agenda. Hieronder vind je alle gegevens.",
+        eyebrow: "Nieuwe afspraak", title: `Nieuwe afspraak met ${input.name}`,
+        intro: "De afspraak staat in de Optidigi-agenda. Hieronder vind je alle gegevens.",
         body: `${detailsCard([["Moment", input.label], ["Type", input.type], ["Naam", input.name], ["Bedrijf", input.company], ["E-mail", input.email], ["Telefoon", input.phone], ["Onderwerp", input.subject], ["Referentie", input.id]])}${messageCard("Opmerking", input.note || "Geen opmerking toegevoegd.")}`,
         action: `Beantwoord ${input.name}`, actionHref: `mailto:${input.email}`,
         footerNote: "Deze afspraak is automatisch bevestigd. Beheer beschikbaarheid en afspraken via de Optidigi-agenda.",
@@ -123,8 +123,8 @@ export function appointmentEmails(input: AppointmentEmailInput): { admin: EmailC
       text: customerText,
       html: layout({
         preheader: `Je afspraak met Optidigi staat gepland voor ${input.label}.`,
-        eyebrow: "Afspraak bevestigd", title: "We spreken je binnenkort",
-        intro: `Hoi ${input.name}, je afspraak staat gepland. We kijken uit naar ons gesprek.`,
+        eyebrow: "Afspraak bevestigd", title: "Je afspraak staat gepland",
+        intro: `Hoi ${input.name}, bedankt voor je aanvraag. Hieronder vind je de bevestigde afspraak.`,
         body: detailsCard([["Moment", input.label], ["Type", input.type], ["Onderwerp", input.subject], ["Referentie", input.id]]),
         action: "Afspraak wijzigen", actionHref: `mailto:${input.contactEmail}?subject=${encodeURIComponent(`Wijziging afspraak ${input.id}`)}`,
         footerNote: "Wil je het moment wijzigen of annuleren? Antwoord op deze e-mail; dan helpen we je meteen.",
@@ -141,8 +141,8 @@ export function contactEmails(input: ContactEmailInput): { admin: EmailContent; 
       subject: `[Website] ${headerText(input.subject)} — ${headerText(input.name)}`,
       text: adminText,
       html: layout({
-        preheader: `${input.name} stuurde een nieuw bericht via optidigi.nl.`, eyebrow: "Nieuw websitebericht",
-        title: `${input.name} wil kennismaken`, intro: "Een nieuw contactverzoek is binnengekomen via de website.",
+        preheader: `${input.name} stuurde een nieuw bericht via optidigi.nl.`, eyebrow: "Nieuw contactverzoek",
+        title: `Nieuw bericht van ${input.name}`, intro: "Dit bericht is verstuurd via het contactformulier op optidigi.nl.",
         body: `${detailsCard([["Naam", input.name], ["E-mail", input.email], ["Onderwerp", input.subject], ["Referentie", input.id]])}${messageCard("Bericht", input.message)}`,
         action: `Beantwoord ${input.name}`, actionHref: `mailto:${input.email}?subject=${encodeURIComponent(`Re: ${input.subject}`)}`,
         footerNote: "Door deze e-mail te beantwoorden, reageer je rechtstreeks naar de afzender.",
@@ -152,7 +152,7 @@ export function contactEmails(input: ContactEmailInput): { admin: EmailContent; 
       subject: "We hebben je bericht ontvangen", text: customerText,
       html: layout({
         preheader: "We hebben je bericht ontvangen en reageren doorgaans binnen één werkdag.",
-        eyebrow: "Bericht ontvangen", title: "Bedankt voor je bericht",
+        eyebrow: "Bericht ontvangen", title: "Bedankt. Je bericht is verstuurd.",
         intro: `Hoi ${input.name}, je bericht is goed bij ons aangekomen. We reageren doorgaans binnen één werkdag.`,
         body: `${detailsCard([["Onderwerp", input.subject], ["Referentie", input.id]])}${messageCard("Jouw bericht", input.message)}`,
         action: "Nog iets toevoegen?", actionHref: `mailto:${input.contactEmail}?subject=${encodeURIComponent(`Aanvulling ${input.id}`)}`,

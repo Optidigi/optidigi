@@ -21,6 +21,12 @@ test("all transactional emails use the branded, compatible shell and a plain-tex
     assert.match(email.html, /role="presentation"/);
     assert.match(email.html, /optidigi\.nl/);
     assert.match(email.html, /Software, AI &amp; automatisering/);
+    assert.match(email.html, /font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif/);
+    assert.match(email.html, /#18181b/);
+    assert.match(email.html, /#e4e4e7/);
+    assert.match(email.html, /#05aa74/);
+    assert.match(email.html, /optidigi-logo-email\.png/);
+    assert.doesNotMatch(email.html, /background:#111318/);
     assert.ok(email.text.length > 100);
     assert.ok(email.subject.length > 5);
   }
@@ -28,10 +34,12 @@ test("all transactional emails use the branded, compatible shell and a plain-tex
 
 test("customer content and admin reply actions are clear", () => {
   assert.match(appointment.customer.html, /Afspraak bevestigd/);
+  assert.match(appointment.customer.html, /Je afspraak staat gepland/);
   assert.match(appointment.customer.html, /Afspraak wijzigen/);
   assert.match(appointment.admin.html, /mailto:ada@example\.com/);
   assert.doesNotMatch(appointment.admin.subject, /[\r\n]/);
   assert.match(contact.customer.html, /binnen één werkdag/);
+  assert.match(contact.customer.html, /Bedankt\. Je bericht is verstuurd\./);
   assert.match(contact.admin.html, /Beantwoord Grace Hopper/);
 });
 
