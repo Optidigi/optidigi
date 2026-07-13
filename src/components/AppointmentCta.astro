@@ -1,0 +1,71 @@
+---
+import { siteConfig } from "@/config/site";
+
+interface Props {
+  href?: string;
+  label?: string;
+  align?: "start" | "center";
+  class?: string;
+}
+
+const {
+  href = siteConfig.ctaHref,
+  label = "Plan je digitale kansenscan",
+  align = "start",
+  class: className = "",
+} = Astro.props;
+
+const alignClass = align === "center" ? "items-center" : "items-start";
+const microcopyClass = align === "center" ? "justify-center" : "";
+const primaryButtonClass =
+  "cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none active:scale-98 focus-visible:ring-1 focus-visible:ring-ring shadow-md border-[0.5px] border-white/10 shadow-black/15 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 [&_svg]:drop-shadow-sm text-shadow-sm bg-primary ring-1 ring-(--ring-color) [--ring-color:color-mix(in_oklab,black_15%,var(--color-primary))] dark:border-transparent dark:[--ring-color:color-mix(in_oklab,white_15%,var(--color-primary))] text-primary-foreground hover:bg-primary/90 h-10 px-5 py-2";
+---
+
+<div class:list={["flex flex-col gap-2.5", alignClass, className]}>
+  <a href={href} data-booking-trigger class:list={[primaryButtonClass, "brand-primary-action"]}>
+    {label}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+  </a>
+  <p
+    class:list={[
+      "text-muted-foreground flex flex-wrap items-center gap-x-3 gap-y-1 text-xs leading-snug",
+      microcopyClass,
+    ]}
+  >
+    <span class="inline-flex items-center gap-1.5">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-circle-check size-3.5 opacity-80"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="m9 12 2 2 4-4"></path>
+      </svg>
+      Vrijblijvend
+    </span>
+    <span class="bg-border hidden h-3 w-px sm:block" aria-hidden="true"></span>
+    <span class="inline-flex items-center gap-1.5">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-clock size-3.5 opacity-80"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M12 6v6l4 2"></path>
+      </svg>
+      Ongeveer 15 minuten
+    </span>
+  </p>
+</div>

@@ -1,0 +1,38 @@
+---
+import AppointmentScheduler from "@/components/AppointmentScheduler";
+---
+
+<dialog
+  data-booking-dialog
+  aria-labelledby="booking-dialog-title"
+  class="m-auto max-h-[calc(100dvh-4rem)] w-[calc(100%-1.5rem)] max-w-5xl overflow-y-auto rounded-2xl bg-card p-0 text-foreground shadow-2xl shadow-black/30 ring-1 ring-foreground/10 backdrop:bg-black/70 backdrop:backdrop-blur-sm open:animate-in open:fade-in open:zoom-in-98 lg:max-h-[calc(100dvh-2rem)] lg:overflow-hidden"
+>
+  <button
+    type="button"
+    data-booking-close
+    aria-label="Venster sluiten"
+    class="bg-card/90 hover:bg-muted absolute right-3 top-3 z-30 flex size-9 cursor-pointer items-center justify-center rounded-full text-muted-foreground shadow-sm ring-1 ring-foreground/10 backdrop-blur transition hover:text-foreground"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="size-4" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+  </button>
+
+  <AppointmentScheduler client:load />
+</dialog>
+
+<script>
+  const bookingDialog = document.querySelector<HTMLDialogElement>("[data-booking-dialog]");
+
+  const openBookingDialog = (event: Event) => {
+    const trigger = (event.target as HTMLElement | null)?.closest<HTMLElement>("[data-booking-trigger]");
+    if (!trigger || !bookingDialog) return;
+    event.preventDefault();
+    document.dispatchEvent(new CustomEvent("booking-reset"));
+    if (!bookingDialog.open) bookingDialog.showModal();
+  };
+
+  document.addEventListener("click", openBookingDialog);
+  document.querySelector("[data-booking-close]")?.addEventListener("click", () => bookingDialog?.close());
+  bookingDialog?.addEventListener("click", (event) => {
+    if (event.target === bookingDialog) bookingDialog.close();
+  });
+</script>

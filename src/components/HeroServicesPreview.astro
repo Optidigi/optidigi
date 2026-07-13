@@ -1,0 +1,85 @@
+---
+import ServiceTabIcon from "@/components/ServiceTabIcon.astro";
+import AutomationOverview from "@/components/hero/AutomationOverview.astro";
+import CloudSoftwarePreview from "@/components/hero/CloudSoftwarePreview.astro";
+import CustomSoftwarePreview from "@/components/hero/CustomSoftwarePreview.astro";
+import { automationOverviewPanel } from "@/components/hero/automation-overview-data";
+
+const tabPillBaseClass = "ring-border-illustration group-active:scale-99 hover:text-foreground flex h-10 items-center gap-2 rounded-full px-3 ring-1 transition-all duration-150 sm:px-4 [&>svg]:size-4";
+const tabPillActiveClass = `${tabPillBaseClass} bg-illustration text-foreground shadow-primary/6.5 shadow-md`;
+const tabPillInactiveClass = `${tabPillBaseClass} text-muted-foreground group-hover:bg-foreground/5`;
+const tabs = [
+  { id: "automation", label: "AI & automatie", icon: "bot" as const },
+  { id: "custom-software", label: "Maatwerk", icon: "layers" as const },
+  { id: "cloud-software", label: "Cloud & software", icon: "cloud" as const },
+];
+const defaultTabId = tabs[0].id;
+---
+
+<div class="@container relative z-10 border-b pt-12 [mask-image:radial-gradient(ellipse_80%_95%_at_50%_0%,#000_80%,transparent_100%)] lg:pt-20" data-hero-services-preview data-default-tab={defaultTabId}>
+  <div class="border-foreground/10 border-y border-dashed pb-2">
+    <div class="mx-auto max-w-4xl px-6 sm:px-11">
+      <div class="divide-foreground/10 relative z-20 grid grid-cols-3 items-center justify-center gap-px divide-x divide-dashed *:h-16" role="tablist" aria-label="Voorbeelden van onze diensten">
+        {tabs.map((tab, index) => (
+          <button type="button" role="tab" data-service-tab={tab.id} aria-selected={index === 0 ? "true" : "false"} class="group flex cursor-pointer items-center justify-center px-1 sm:px-2">
+            <div class={index === 0 ? tabPillActiveClass : tabPillInactiveClass}>
+              <ServiceTabIcon icon={tab.icon} />
+              <span class="@max-md:hidden">{tab.label}</span>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <div class="relative mx-auto -mt-2 max-w-6xl max-md:mx-1 lg:px-10">
+    <div class="bg-card ring-foreground/10 rounded-2xl p-1 shadow-2xl shadow-black/25 ring-1 backdrop-blur">
+      <div class="bg-card dark:bg-background ring-foreground/5 aspect-3/4 overflow-hidden rounded-xl border-4 border-l-8 border-transparent shadow ring-1 sm:aspect-3/2">
+        <div class="shadow-black/6.5 relative size-full overflow-hidden">
+          {tabs.map((tab, index) => (
+            <div data-service-panel={tab.id} hidden={index !== 0 ? true : undefined} class:list={["absolute inset-0 overflow-hidden bg-background transition-opacity duration-200 ease-out motion-reduce:transition-none", index === 0 ? "opacity-100" : "opacity-0"]}>
+              {tab.id === "custom-software" ? <CustomSoftwarePreview /> : tab.id === "cloud-software" ? <CloudSoftwarePreview /> : <AutomationOverview panel={automationOverviewPanel} />}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ defaultTabId }}>
+  const root = document.querySelector("[data-hero-services-preview]");
+  if (root) {
+    const activePillClass = "ring-border-illustration group-active:scale-99 hover:text-foreground flex h-10 items-center gap-2 rounded-full px-3 ring-1 transition-all duration-150 sm:px-4 [&>svg]:size-4 bg-illustration text-foreground shadow-primary/6.5 shadow-md";
+    const inactivePillClass = "ring-border-illustration text-muted-foreground group-active:scale-99 hover:text-foreground flex h-10 items-center gap-2 rounded-full px-3 ring-1 transition-all duration-150 sm:px-4 [&>svg]:size-4 group-hover:bg-foreground/5";
+    const buttons = root.querySelectorAll("[data-service-tab]");
+    let currentTab = root.dataset.defaultTab || defaultTabId;
+    let isTransitioning = false;
+    const setTab = (tabId) => {
+      if (tabId === currentTab || isTransitioning) return;
+      isTransitioning = true;
+      const currentPanel = root.querySelector(`[data-service-panel="${currentTab}"]`);
+      const nextPanel = root.querySelector(`[data-service-panel="${tabId}"]`);
+      buttons.forEach((button) => {
+        const pill = button.querySelector("div");
+        if (!pill) return;
+        const active = button.dataset.serviceTab === tabId;
+        pill.className = active ? activePillClass : inactivePillClass;
+        button.setAttribute("aria-selected", active ? "true" : "false");
+      });
+      currentPanel?.classList.replace("opacity-100", "opacity-0");
+      window.setTimeout(() => {
+        currentPanel?.setAttribute("hidden", "");
+        if (nextPanel) {
+          nextPanel.removeAttribute("hidden");
+          nextPanel.classList.replace("opacity-0", "opacity-100");
+        }
+        currentTab = tabId;
+        window.setTimeout(() => { isTransitioning = false; }, 200);
+      }, 200);
+    };
+    buttons.forEach((button) => button.addEventListener("click", () => {
+      if (button.dataset.serviceTab) setTab(button.dataset.serviceTab);
+    }));
+  }
+</script>

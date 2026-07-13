@@ -1,0 +1,233 @@
+---
+import Logo from "@/components/Logo.astro";
+import AppointmentCta from "@/components/AppointmentCta.astro";
+import { FlickeringGrid } from "@/components/effects/FlickeringGrid";
+import { siteConfig } from "@/config/site";
+
+interface Props {
+  showBrandMark?: boolean;
+  showLead?: boolean;
+  compact?: boolean;
+}
+
+const { showBrandMark = false, showLead = true, compact = false } = Astro.props;
+
+const year = new Date().getFullYear();
+---
+
+{showLead && <section
+  class:list={[
+    "brand-footer-lead",
+    "bg-linear-to-b from-background to-muted dark:to-card relative from-50% to-50% overflow-hidden pt-12 md:pt-24",
+  ]}
+>
+  <div class="mx-auto max-w-5xl px-6">
+    <div
+      data-slot="card"
+      class:list={[
+        "bg-card text-card-foreground relative overflow-hidden p-12 md:px-32 md:py-20",
+        "ring-border shadow-black/6.5 rounded-xl ring-1 shadow-lg",
+      ]}
+    >
+      <svg
+        class="text-muted pointer-events-none absolute inset-0 size-full translate-y-3/4"
+        viewBox="0 0 180 220"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M80 100H28C12.536 100 0 87.464 0 72V28C0 12.536 12.536 0 28 0H72C87.464 0 100 12.536 100 28V80H160C171.046 80 180 88.9543 180 100V167.639C180 175.215 175.72 182.14 168.944 185.528L103.416 218.292C101.17 219.415 98.6923 220 96.1803 220C87.2442 220 80 212.756 80 203.82V100ZM28 20C23.5817 20 20 23.5817 20 28V72C20 76.4183 23.5817 80 28 80H80V28C80 23.5817 76.4183 20 72 20H28ZM100 100H152C156.418 100 160 103.582 160 108V165.092C160 168.103 158.309 170.859 155.625 172.224L111.625 194.591C106.303 197.296 100 193.429 100 187.459V100Z"
+          fill="currentColor"></path>
+        <defs>
+          <linearGradient id="paint_logo" x1="90" y1="0" x2="90" y2="220" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#9B99FE"></stop>
+            <stop offset="1" stop-color="#2BC8B7"></stop>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <div class="relative text-center">
+        <h2 class="text-balance text-3xl font-semibold md:text-4xl">
+          Klaar om slimmer te werken?
+        </h2>
+        <p class="text-muted-foreground mb-6 mt-4 text-balance">
+          In een vrijblijvende sessie bespreken we waar werk vastloopt en welke digitale
+          verbeteringen het meeste verschil kunnen maken voor je bedrijf.
+        </p>
+        <AppointmentCta align="center" class="mt-2" />
+      </div>
+    </div>
+  </div>
+</section>}
+
+<footer id="footer" role="contentinfo" class:list={["brand-footer-surface bg-muted dark:bg-card relative isolate overflow-hidden", compact ? "pt-10 sm:pt-14" : "pt-12 sm:pt-20", !showBrandMark && "pb-12 sm:pb-20"]}>
+  <div class:list={["relative z-10 mx-auto max-w-5xl px-6", compact ? "space-y-10" : "space-y-16"]}>
+    <div class="grid gap-12 md:grid-cols-5">
+      <div class="space-y-6 md:col-span-2 md:space-y-12">
+        <a aria-label="go home" class="inline-flex h-8 items-center" href="/">
+          <Logo class="h-6 w-auto" />
+        </a>
+        <p class="text-muted-foreground text-balance text-sm">
+          Optidigi helpt bedrijven slimmer werken met software, AI en automatisering die
+          aansluiten op bestaande processen.
+        </p>
+      </div>
+
+      <div class="col-span-3 grid gap-6 sm:grid-cols-3">
+        <div class="space-y-4 text-sm">
+          <span class="block font-medium">Diensten</span>
+          <div class="flex flex-wrap gap-4 sm:flex-col">
+            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#diensten">
+              <span>Automatisering</span>
+            </a>
+            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#diensten">
+              <span>AI-toepassingen</span>
+            </a>
+            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#diensten">
+              <span>Websites & portalen</span>
+            </a>
+            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#diensten">
+              <span>Software op maat</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="space-y-4 text-sm">
+          <span class="block font-medium">Bedrijf</span>
+          <div class="flex flex-wrap gap-4 sm:flex-col">
+            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#aanpak">
+              <span>Aanpak</span>
+            </a>
+            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#faq">
+              <span>Veelgestelde vragen</span>
+            </a>
+            <a
+              class="text-muted-foreground hover:text-primary block duration-150"
+              href="/contact"
+            >
+              <span>Contact</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+          <span class="block text-sm font-medium">Contact</span>
+          <div class="flex flex-wrap gap-3 text-sm">
+            <a
+              aria-label="E-mail"
+              class="text-muted-foreground hover:text-primary block"
+              href={`mailto:${siteConfig.email}`}
+            >
+              <svg
+                class="size-5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+              </svg>
+            </a>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="LinkedIn"
+              class="text-muted-foreground hover:text-primary block"
+              href="#"
+            >
+              <svg
+                class="size-5"
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  fill="currentColor"
+                  d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93zM6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37z"
+                ></path>
+              </svg>
+            </a>
+          </div>
+          <p class="text-muted-foreground text-sm">
+            <a class="hover:text-primary duration-150" href={`mailto:${siteConfig.email}`}>
+              {siteConfig.email}
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      aria-hidden="true"
+      class:list={[
+        showBrandMark
+          ? "border-foreground/10 border-b border-dashed"
+          : "h-px bg-[length:6px_1px] bg-repeat-x opacity-25 [background-image:linear-gradient(90deg,var(--color-foreground)_1px,transparent_1px)]",
+      ]}
+    >
+    </div>
+
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div class:list={["text-muted-foreground text-sm", showBrandMark ? "space-y-2" : "space-y-1"]}>
+        <p>© {year}&nbsp;{siteConfig.name}. Alle rechten voorbehouden.</p>
+        {showBrandMark ? (
+          <dl class="text-muted-foreground/75 flex flex-wrap gap-x-4 gap-y-1 text-xs">
+            <div class="flex gap-1.5">
+              <dt>KvK-nummer:</dt>
+              <dd class="tabular-nums">{siteConfig.kvk}</dd>
+            </div>
+            <div class="flex gap-1.5">
+              <dt>Btw-id:</dt>
+              <dd class="tabular-nums">{siteConfig.btw}</dd>
+            </div>
+          </dl>
+        ) : (
+          <p class="text-muted-foreground/75 text-xs">
+            KVK {siteConfig.kvk} · BTW {siteConfig.btw}
+          </p>
+        )}
+      </div>
+      <div
+        class:list={[
+          "ring-foreground/5 bg-card flex items-center gap-2 rounded-full border border-transparent py-1 pl-2 shadow ring-1",
+          showBrandMark ? "shrink-0 whitespace-nowrap pr-3" : "pr-4",
+        ]}
+      >
+        <div class="relative flex size-3">
+          <span
+            class="duration-1500 absolute inset-0 block size-full animate-pulse rounded-full bg-emerald-100"
+          ></span>
+          <span class="relative m-auto block size-1 rounded-full bg-emerald-500"></span>
+        </div>
+        <span class="text-sm">{showBrandMark ? "Operationeel" : "Alles werkt naar behoren"}</span>
+      </div>
+    </div>
+  </div>
+
+  {showBrandMark && (
+    <div aria-hidden="true" class:list={["relative z-0 overflow-hidden", compact ? "-mt-20 h-56 sm:-mt-24 sm:h-64" : "-mt-28 h-72 sm:-mt-32 sm:h-80 md:-mt-36 md:h-96"]}>
+      <FlickeringGrid
+        client:visible
+        className="absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent_0%,transparent_7%,#000_43%,#000_100%)]"
+        squareSize={3}
+        gridGap={7}
+        flickerChance={0.3}
+        maxOpacity={0.085}
+        maskImageSrc="/optidigi-logo.svg"
+        maskMaxOpacity={0.42}
+      />
+    </div>
+  )}
+</footer>

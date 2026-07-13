@@ -1,0 +1,565 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+@custom-variant data-expanded (&[data-expanded]);
+@custom-variant not-data-expanded (&:not([data-expanded]));
+@custom-variant in-data-expanded (&:is([data-expanded] *));
+@custom-variant not-in-data-expanded (&:not(:is([data-expanded] *)));
+
+:root {
+  --radius: 0.625rem;
+  --grid-size: 108px;
+  --subgrid-size: calc(var(--grid-size) / 2);
+  --border-illustration: color-mix(in oklab, var(--foreground) 7.5%, transparent);
+  --illustration: var(--card);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-border-illustration: var(--border-illustration);
+  --color-illustration: var(--illustration);
+  --scale-98: 0.98;
+  --scale-85: 0.85;
+  --spacing-12_5: 3.125rem;
+  --spacing-13_5: 3.375rem;
+  --spacing-18: 4.5rem;
+}
+
+/* Green brand treatment, applied by the primary homepage. */
+.theme-green {
+  --primary: #166534;
+  --primary-foreground: #ffffff;
+  --ring: #16a34a;
+  --brand-action: #05aa74;
+  --brand-action-hover: #049866;
+  --brand-action-active: #038458;
+  --brand-action-foreground: #ffffff;
+}
+
+.dark .theme-green {
+  --primary: #4ade80;
+  --primary-foreground: #052e16;
+  --ring: #4ade80;
+  --brand-action: #6ee7b7;
+  --brand-action-hover: #86edc5;
+  --brand-action-active: #4dd9a4;
+  --brand-action-foreground: #09090b;
+}
+
+.theme-green .brand-primary-action {
+  border-color: color-mix(in oklab, var(--brand-action) 72%, white);
+  background-color: var(--brand-action);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 20%) 0%,
+    transparent 48%,
+    rgb(0 0 0 / 7%) 100%
+  );
+  color: var(--brand-action-foreground);
+  text-shadow: none;
+  --ring-color: color-mix(in oklab, var(--brand-action) 72%, black);
+  box-shadow:
+    0 1px 2px color-mix(in oklab, black 18%, transparent),
+    0 10px 28px color-mix(in oklab, var(--brand-action) 16%, transparent);
+}
+
+.theme-green .brand-primary-action:hover {
+  background-color: var(--brand-action-hover);
+}
+
+.theme-green .brand-primary-action:active {
+  background-color: var(--brand-action-active);
+}
+
+.dark .theme-green .brand-primary-action {
+  border-color: color-mix(in oklab, var(--brand-action) 52%, white);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 16%) 0%,
+    transparent 50%,
+    rgb(0 0 0 / 9%) 100%
+  );
+  box-shadow:
+    0 1px 2px color-mix(in oklab, black 30%, transparent),
+    0 10px 32px color-mix(in oklab, var(--brand-action) 22%, transparent);
+}
+
+.theme-green [data-slot="card"] {
+  background-image:
+    linear-gradient(145deg, rgb(255 255 255 / 46%) 0%, transparent 38%),
+    radial-gradient(
+      circle at 100% 0%,
+      color-mix(in oklab, #05aa74 2.5%, transparent) 0%,
+      transparent 42%
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 82%),
+    0 1px 2px rgb(0 0 0 / 4%),
+    0 12px 32px rgb(0 0 0 / 4%);
+}
+
+.dark .theme-green [data-slot="card"] {
+  background-image:
+    linear-gradient(145deg, rgb(255 255 255 / 6%) 0%, transparent 38%),
+    radial-gradient(
+      circle at 100% 0%,
+      color-mix(in oklab, #6ee7b7 3.5%, transparent) 0%,
+      transparent 44%
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 9%),
+    0 1px 2px rgb(0 0 0 / 18%),
+    0 14px 36px rgb(0 0 0 / 14%);
+}
+
+.theme-green [data-services-grid] [data-slot="card"] {
+  background-color: color-mix(in oklab, #05aa74 0.5%, var(--card));
+  background-image:
+    linear-gradient(145deg, rgb(255 255 255 / 42%) 0%, transparent 38%),
+    radial-gradient(
+      circle at 100% 0%,
+      color-mix(in oklab, #05aa74 1%, transparent) 0%,
+      transparent 42%
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 92%),
+    0 0 0 1px color-mix(in oklab, var(--foreground) 9%, #05aa74 0.5%),
+    0 12px 32px rgb(0 0 0 / 5%);
+}
+
+.dark .theme-green [data-services-grid] [data-slot="card"] {
+  background-color: color-mix(in oklab, #6ee7b7 1%, var(--card));
+  background-image:
+    linear-gradient(145deg, rgb(255 255 255 / 5%) 0%, transparent 38%),
+    radial-gradient(
+      circle at 100% 0%,
+      color-mix(in oklab, #6ee7b7 1.5%, transparent) 0%,
+      transparent 44%
+    );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 11%),
+    0 0 0 1px color-mix(in oklab, var(--foreground) 12%, #6ee7b7 1%),
+    0 14px 36px rgb(0 0 0 / 16%);
+}
+
+.theme-green [data-service-tab] > div,
+.theme-green .brand-secondary-control {
+  background-color: color-mix(in oklab, #05aa74 0.75%, var(--card));
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 70%) 0%,
+    transparent 52%,
+    color-mix(in oklab, #05aa74 2%, transparent) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 92%),
+    0 0 0 1px color-mix(in oklab, var(--foreground) 11%, transparent),
+    0 3px 8px rgb(0 0 0 / 7%);
+}
+
+.theme-green [data-service-tab][aria-selected="true"] > div {
+  background-color: color-mix(in oklab, #05aa74 1.5%, var(--card));
+  box-shadow:
+    inset 0 1px 0 white,
+    0 0 0 1px color-mix(in oklab, var(--foreground) 14%, #05aa74 2%),
+    0 5px 14px rgb(0 0 0 / 9%);
+}
+
+.theme-green .brand-secondary-control {
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 96%),
+    0 0 0 1px color-mix(in oklab, var(--foreground) 14%, transparent),
+    0 4px 10px rgb(0 0 0 / 8%);
+}
+
+.dark .theme-green [data-service-tab] > div,
+.dark .theme-green .brand-secondary-control {
+  background-color: color-mix(in oklab, #6ee7b7 1.5%, var(--card));
+  background-image: linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 10%) 0%,
+    transparent 54%,
+    color-mix(in oklab, #6ee7b7 3%, transparent) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    0 0 0 1px color-mix(in oklab, var(--foreground) 15%, transparent),
+    0 3px 10px rgb(0 0 0 / 22%);
+}
+
+.dark .theme-green .brand-secondary-control {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 14%),
+    0 0 0 1px color-mix(in oklab, var(--foreground) 18%, transparent),
+    0 4px 12px rgb(0 0 0 / 24%);
+}
+
+.dark .theme-green [data-service-tab][aria-selected="true"] > div {
+  background-color: color-mix(in oklab, #6ee7b7 3%, var(--card));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 16%),
+    0 0 0 1px color-mix(in oklab, var(--foreground) 22%, #6ee7b7 2%),
+    0 5px 14px rgb(0 0 0 / 28%);
+}
+
+@media (max-width: 639px) {
+  .theme-green [data-hero-services-preview] {
+    mask-image: radial-gradient(ellipse 88% 94% at 50% 0%, #000 74%, transparent 100%);
+  }
+}
+
+.dark .theme-green .brand-on-primary {
+  color: var(--brand-action-foreground);
+}
+
+.theme-green [data-ai-automation-showcase] [data-expandable][data-slide="0"][data-expanded] {
+  background-image: linear-gradient(
+    112deg,
+    #04865d 0%,
+    #05aa74 30%,
+    #9333ea 70%,
+    #db2777 112%
+  );
+}
+
+.theme-green [data-ai-automation-showcase] [data-expandable][data-slide="1"][data-expanded] {
+  background-image: linear-gradient(
+    112deg,
+    #04865d 0%,
+    #05aa74 30%,
+    #d97706 70%,
+    #ea580c 112%
+  );
+}
+
+.dark .theme-green [data-ai-automation-showcase] [data-expandable][data-slide="0"][data-expanded] {
+  background-image: linear-gradient(
+    112deg,
+    #6ee7b7 0%,
+    #34d399 30%,
+    #c084fc 70%,
+    #f472b6 112%
+  );
+}
+
+.dark .theme-green [data-ai-automation-showcase] [data-expandable][data-slide="1"][data-expanded] {
+  background-image: linear-gradient(
+    112deg,
+    #6ee7b7 0%,
+    #34d399 30%,
+    #fbbf24 70%,
+    #fb923c 112%
+  );
+}
+
+.theme-green [data-ai-automation-showcase] [data-expandable][data-slide="0"][data-expanded] > span:first-child > div:first-child {
+  background-image: linear-gradient(112deg, #04865d 0%, #05aa74 30%, #9333ea 70%, #db2777 100%);
+  opacity: 0.58;
+}
+
+.theme-green [data-ai-automation-showcase] [data-expandable][data-slide="1"][data-expanded] > span:first-child > div:first-child {
+  background-image: linear-gradient(112deg, #04865d 0%, #05aa74 30%, #d97706 70%, #ea580c 100%);
+  opacity: 0.58;
+}
+
+.dark .theme-green [data-ai-automation-showcase] [data-expandable][data-slide="0"][data-expanded] > span:first-child > div:first-child {
+  background-image: linear-gradient(112deg, #6ee7b7 0%, #34d399 30%, #c084fc 70%, #f472b6 100%);
+}
+
+.dark .theme-green [data-ai-automation-showcase] [data-expandable][data-slide="1"][data-expanded] > span:first-child > div:first-child {
+  background-image: linear-gradient(112deg, #6ee7b7 0%, #34d399 30%, #fbbf24 70%, #fb923c 100%);
+}
+
+.theme-green .implement-flow-beam-1 {
+  stroke: #05aa74;
+}
+
+.theme-green .implement-flow-beam-2 {
+  stroke: #9333ea;
+}
+
+.theme-green .implement-flow-beam-3 {
+  stroke: #d97706;
+}
+
+.dark .theme-green .implement-flow-beam-1 {
+  stroke: #6ee7b7;
+}
+
+.dark .theme-green .implement-flow-beam-2 {
+  stroke: #c084fc;
+}
+
+.dark .theme-green .implement-flow-beam-3 {
+  stroke: #fbbf24;
+}
+
+.theme-green .brand-software-card-atmosphere {
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgb(5 170 116 / 5%) 50%,
+    rgb(161 161 170 / 5%) 100%
+  );
+}
+
+.dark .theme-green .brand-software-card-atmosphere {
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgb(110 231 183 / 5%) 50%,
+    rgb(161 161 170 / 5%) 100%
+  );
+}
+
+.theme-green {
+  --brand-footer-surface: color-mix(in oklab, #05aa74 5%, var(--background));
+}
+
+.dark .theme-green {
+  --brand-footer-surface: color-mix(in oklab, #6ee7b7 7%, var(--card));
+}
+
+.theme-green .brand-footer-lead {
+  background-image: linear-gradient(
+    to bottom,
+    var(--background) 0% 50%,
+    var(--brand-footer-surface) 50% 100%
+  );
+}
+
+.theme-green .brand-footer-surface {
+  background-color: var(--brand-footer-surface);
+}
+
+@utility object-top-left {
+  object-position: top left;
+}
+
+@utility fill-illustration {
+  fill: var(--color-illustration);
+}
+
+@utility stroke-illustration {
+  stroke: var(--color-illustration);
+}
+
+@keyframes nav-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes nav-scale-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@keyframes nav-enter-from-left {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes nav-enter-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes nav-exit-to-left {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+
+@keyframes nav-exit-to-right {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+}
+
+.animate-scale-in {
+  animation: nav-scale-in 200ms ease;
+}
+
+.animate-scale-out {
+  animation: nav-scale-out 200ms ease;
+}
+
+.animate-enter-from-left {
+  animation: nav-enter-from-left 200ms ease;
+}
+
+.animate-enter-from-right {
+  animation: nav-enter-from-right 200ms ease;
+}
+
+.animate-exit-to-left {
+  animation: nav-exit-to-left 200ms ease;
+}
+
+.animate-exit-to-right {
+  animation: nav-exit-to-right 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scale-in,
+  .animate-scale-out,
+  .animate-enter-from-left,
+  .animate-enter-from-right,
+  .animate-exit-to-left,
+  .animate-exit-to-right {
+    animation: none;
+  }
+}
+
+@keyframes typing {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes hue-rotate {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.animate-scan {
+  animation: scan 3s infinite;
+}
+
+.animate-hue-rotate {
+  animation: hue-rotate 4s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scan,
+  .animate-hue-rotate {
+    animation: none;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background overflow-x-hidden antialiased;
+  }
+}

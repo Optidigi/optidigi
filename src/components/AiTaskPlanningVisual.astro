@@ -1,0 +1,835 @@
+---
+import IntegrationBadgeIcon from "@/components/IntegrationBadgeIcon.astro";
+
+const brands = ["gmail", "salesforce", "calendar", "notion", "website", "docs"] as const;
+
+const tasks = [
+  {
+    title: "7 klantvragen via mail binnen",
+    completedTitle: "7 mails beantwoord en CRM bijgewerkt",
+    durationMs: 4250,
+    completedLabel: "Voltooid",
+    steps: [
+      {
+        brand: "gmail",
+        doing: "Klantmails ophalen",
+        done: "7 ongelezen threads",
+        resolvedLabel: "Opgehaald",
+        durationMs: 750,
+      },
+      {
+        brand: "docs",
+        doing: "Interne kennisbank doorzoeken",
+        done: "12 relevante artikelen",
+        resolvedLabel: "Gevonden",
+        durationMs: 950,
+      },
+      {
+        brand: "website",
+        doing: "Productinfo op website checken",
+        done: "4 pagina's geraadpleegd",
+        resolvedLabel: "Gecontroleerd",
+        durationMs: 850,
+      },
+      {
+        brand: "gmail",
+        doing: "Antwoorden versturen",
+        done: "7 mails verzonden",
+        resolvedLabel: "Verzonden",
+        durationMs: 800,
+      },
+      {
+        brand: "salesforce",
+        doing: "CRM bijwerken",
+        done: "Activiteiten gelogd",
+        resolvedLabel: "Bijgewerkt",
+        durationMs: 900,
+      },
+    ],
+  },
+  {
+    title: "8 klantdossiers missen documenten",
+    completedTitle: "3 documenten gevonden, 5 klanten herinnerd",
+    durationMs: 4500,
+    completedLabel: "Voltooid",
+    steps: [
+      {
+        brand: "notion",
+        doing: "Dossiers scannen",
+        done: "8 dossiers gecontroleerd",
+        resolvedLabel: "Gecontroleerd",
+        durationMs: 1100,
+      },
+      {
+        brand: "docs",
+        doing: "Interne documentatie doorzoeken",
+        done: "3 documenten gevonden",
+        resolvedLabel: "Gevonden",
+        durationMs: 1200,
+      },
+      {
+        brand: "salesforce",
+        doing: "Klanten koppelen",
+        done: "5 dossiers incompleet",
+        resolvedLabel: "Gekoppeld",
+        durationMs: 1000,
+      },
+      {
+        brand: "gmail",
+        doing: "Herinneringen versturen",
+        done: "5 mails verstuurd",
+        resolvedLabel: "Verstuurd",
+        durationMs: 1200,
+      },
+    ],
+  },
+  {
+    title: "3 afspraken wachten op bevestiging",
+    completedTitle: "Afspraken bevestigd en agenda bijgewerkt",
+    durationMs: 3900,
+    completedLabel: "Voltooid",
+    steps: [
+      {
+        brand: "calendar",
+        doing: "Openstaande afspraken laden",
+        done: "3 wachten op bevestiging",
+        resolvedLabel: "Geladen",
+        durationMs: 900,
+      },
+      {
+        brand: "website",
+        doing: "Beschikbaarheid op website controleren",
+        done: "3 tijdsloten beschikbaar",
+        resolvedLabel: "Gecontroleerd",
+        durationMs: 950,
+      },
+      {
+        brand: "gmail",
+        doing: "Bevestigingen versturen",
+        done: "3 uitnodigingen verzonden",
+        resolvedLabel: "Verzonden",
+        durationMs: 1100,
+      },
+      {
+        brand: "calendar",
+        doing: "Agenda bijwerken",
+        done: "3 afspraken ingepland",
+        resolvedLabel: "Bijgewerkt",
+        durationMs: 950,
+      },
+    ],
+  },
+] as const;
+
+const circleDashedPaths = [
+  "M10.1 2.182a10 10 0 0 1 3.8 0",
+  "M13.9 21.818a10 10 0 0 1-3.8 0",
+  "M17.609 3.721a10 10 0 0 1 2.69 2.7",
+  "M2.182 13.9a10 10 0 0 1 0-3.8",
+  "M20.279 17.609a10 10 0 0 1-2.7 2.69",
+  "M21.818 10.1a10 10 0 0 1 0 3.8",
+  "M3.721 6.391a10 10 0 0 1 2.7-2.69",
+  "M6.391 20.279a10 10 0 0 1-2.69-2.7",
+];
+
+const totalDurationMs = tasks.reduce((sum, task) => sum + task.durationMs, 0);
+const completeHoldMs = 10000;
+const stepSolvedMs = 380;
+const taskGapMs = 450;
+const stepFadeMs = 150;
+---
+
+<div
+  data-task-planning
+  class="bg-illustration ring-border-illustration relative z-10 w-full min-w-0 rounded-2xl border border-transparent px-4 pt-4 pb-4 shadow-xl shadow-black/10 ring-1 sm:px-6"
+>
+  <div class="hidden" data-brand-library aria-hidden="true">
+    {
+      brands.map((brand) => (
+        <template data-brand={brand}>
+          <IntegrationBadgeIcon brand={brand} />
+        </template>
+      ))
+    }
+  </div>
+
+  <div class="flex items-center gap-2">
+    <div class="text-foreground text-sm font-medium">Taakplanning</div>
+    <div class="bg-violet-500/10 text-violet-600 ml-auto rounded px-2 py-0.5 text-[10px]">
+      Auto-generated
+    </div>
+  </div>
+  <p class="text-muted-foreground mt-0.5 text-balance text-sm">
+    Open werk wordt automatisch herkend en opgepakt.
+  </p>
+
+  <div class="mt-2 space-y-1" data-task-list>
+    {
+      tasks.map((task, index) => (
+        <div
+          data-task-row
+          data-index={index}
+          data-state={index === 0 ? "active" : "pending"}
+          class="relative -mx-1.5 rounded-lg px-2 py-1.5"
+        >
+          <div
+            data-task-highlight
+            class:list={[
+              "pointer-events-none absolute inset-0 rounded-lg ring-1 transition-colors duration-200",
+              index === 0
+                ? "bg-violet-500/5 shadow-sm ring-violet-500/20"
+                : "bg-transparent ring-transparent",
+            ]}
+            aria-hidden="true"
+          />
+          <div
+            data-task-content
+            class:list={[
+              "relative flex flex-col gap-2 sm:flex-row sm:items-center",
+              index === 0 ? "" : "opacity-40",
+            ]}
+          >
+            <div class="flex min-w-0 items-center gap-2 sm:flex-1">
+              <div class="relative size-4 shrink-0">
+              <svg
+                data-icon="pending"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class:list={[
+                  "absolute inset-0 size-4 text-muted-foreground",
+                  index === 0 ? "hidden" : "",
+                ]}
+                aria-hidden="true"
+              >
+                {circleDashedPaths.map((d) => (
+                  <path d={d} />
+                ))}
+              </svg>
+              <div
+                data-icon="active"
+                class:list={["absolute inset-0", index === 0 ? "" : "hidden"]}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-violet-600 size-4 animate-spin"
+                  style="animation-duration: 3s"
+                  aria-hidden="true"
+                >
+                  {circleDashedPaths.map((d) => (
+                    <path d={d} />
+                  ))}
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-violet-600 absolute left-1/2 top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 fill-current"
+                  aria-hidden="true"
+                >
+                  <polygon points="6 3 20 12 6 21 6 3" />
+                </svg>
+              </div>
+              <svg
+                data-icon="complete"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="absolute inset-0 hidden size-4 text-green-500"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <div
+                data-task-title
+                class:list={[
+                  "line-clamp-1 truncate text-xs font-medium leading-tight",
+                  index === 0 ? "text-violet-600" : "text-foreground",
+                ]}
+              >
+                {task.title}
+              </div>
+              <div
+                data-task-status
+                class:list={[
+                  "text-[10px] leading-tight tabular-nums sm:min-w-[6.5rem]",
+                  index === 0 ? "text-violet-600/70" : "text-muted-foreground",
+                ]}
+              >
+                {index === 0 ? "Bezig... 0.0s" : "Wachtend"}
+              </div>
+            </div>
+            </div>
+
+            <div
+              data-task-activity
+              class:list={[
+                "w-full transition-opacity duration-200 sm:ml-auto sm:w-[11rem] sm:shrink-0",
+                index === 0 ? "opacity-100" : "pointer-events-none opacity-0",
+              ]}
+            >
+              <div
+                data-task-pill
+                class:list={[
+                  "ring-border-illustration shadow-black/6.5 relative flex h-8 items-center gap-1.5 overflow-hidden rounded-md py-0.5 pl-1 pr-2 shadow-sm ring-1 transition-colors duration-200",
+                  index === 0 ? "bg-violet-500/5 ring-violet-500/15" : "bg-illustration",
+                ]}
+              >
+                <div
+                  data-step-surface
+                  class="flex w-full min-w-0 items-center gap-1.5 transition-opacity duration-150"
+                >
+                <div
+                  data-step-brand
+                  class="bg-background ring-border-illustration flex size-5 shrink-0 items-center justify-center rounded-sm ring-1"
+                >
+                  {index === 0 && (
+                    <IntegrationBadgeIcon brand={task.steps[0].brand} class="size-3.5" />
+                  )}
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div
+                    data-step-action
+                    class="truncate text-[10px] font-medium leading-tight text-foreground"
+                  >
+                    {index === 0 ? task.steps[0].doing : ""}
+                  </div>
+                  <div class="flex items-center gap-1">
+                    <span
+                      data-step-state
+                      class:list={[
+                        "truncate text-[9px] leading-none",
+                        index === 0 ? "text-violet-600/70" : "text-transparent",
+                      ]}
+                    >
+                      Bezig...
+                    </span>
+                    <svg
+                      data-step-check
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="hidden size-2.5 shrink-0 text-green-600 dark:text-green-500"
+                      aria-hidden="true"
+                    >
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <div
+    class="text-muted-foreground mt-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 border-t border-dashed pt-1.5 pb-0.5 text-[10px] tabular-nums"
+    aria-live="polite"
+  >
+    <span data-complete-count class="min-w-0 sm:min-w-[6.75rem]">0/{tasks.length} taken voltooid</span>
+    <span data-est-remaining class="min-w-0 text-right sm:min-w-[7.5rem]">
+      Ca. {Math.ceil(totalDurationMs / 1000)}s resterend
+    </span>
+  </div>
+</div>
+
+<style>
+  [data-task-planning][data-hover-paused="true"] [data-icon="active"] .animate-spin {
+    animation-play-state: paused;
+  }
+</style>
+
+<script
+  define:vars={{
+    tasks,
+    totalDurationMs,
+    completeHoldMs,
+    stepSolvedMs,
+    taskGapMs,
+    stepFadeMs,
+  }}
+>
+  function formatElapsed(ms) {
+    return `${(ms / 1000).toFixed(1)}s`;
+  }
+
+  function remainingSeconds(completedCount, activeIndex, activeElapsedMs) {
+    let remainingMs = 0;
+
+    if (activeIndex >= 0) {
+      remainingMs += Math.max(0, tasks[activeIndex].durationMs - activeElapsedMs);
+      for (let i = activeIndex + 1; i < tasks.length; i++) {
+        remainingMs += tasks[i].durationMs;
+      }
+      return remainingMs;
+    }
+
+    for (let i = completedCount; i < tasks.length; i++) {
+      remainingMs += tasks[i].durationMs;
+    }
+
+    return remainingMs;
+  }
+
+  function updateFooter(root, completedCount, activeIndex = -1, activeElapsedMs = 0) {
+    const completeCount = root.querySelector("[data-complete-count]");
+    const estRemaining = root.querySelector("[data-est-remaining]");
+
+    if (!completeCount || !estRemaining) {
+      return;
+    }
+
+    completeCount.textContent = `${completedCount}/${tasks.length} taken voltooid`;
+
+    const remainingMs = remainingSeconds(completedCount, activeIndex, activeElapsedMs);
+    estRemaining.textContent = `Ca. ${Math.ceil(remainingMs / 1000)}s resterend`;
+  }
+
+  async function transitionStepContent(row, root, step, playback) {
+    const surface = row.querySelector("[data-step-surface]");
+
+    if (surface) {
+      surface.classList.add("opacity-0");
+      const faded = await wait(stepFadeMs, playback);
+      if (!faded) {
+        return false;
+      }
+    }
+
+    setActivityBrand(row, root, step.brand);
+    setActivityWorking(row, step.doing);
+    surface?.classList.remove("opacity-0");
+    return true;
+  }
+
+  function cloneBrandIcon(root, brand) {
+    const template = root.querySelector(`[data-brand-library] template[data-brand="${brand}"]`);
+    return template?.content?.firstElementChild?.cloneNode(true) ?? null;
+  }
+
+  function setPillMode(row, mode) {
+    const pill = row.querySelector("[data-task-pill]");
+
+    if (!pill) {
+      return;
+    }
+
+    pill.classList.remove(
+      "bg-illustration",
+      "bg-card",
+      "bg-background",
+      "bg-violet-500/5",
+      "bg-green-500/5",
+      "ring-border-illustration",
+      "ring-violet-500/15",
+      "ring-green-500/15",
+    );
+
+    if (mode === "working") {
+      pill.classList.add("bg-violet-500/5", "ring-violet-500/15");
+    } else if (mode === "solved") {
+      pill.classList.add("bg-green-500/5", "ring-green-500/15");
+    } else {
+      pill.classList.add("bg-illustration", "ring-border-illustration");
+    }
+  }
+
+  function setActivityBrand(row, root, brand) {
+    const brandSlot = row.querySelector("[data-step-brand]");
+
+    if (!brandSlot) {
+      return;
+    }
+
+    brandSlot.replaceChildren();
+    const icon = cloneBrandIcon(root, brand);
+    if (icon) {
+      brandSlot.append(icon);
+    }
+  }
+
+  function setActivityWorking(row, actionText) {
+    const action = row.querySelector("[data-step-action]");
+    const state = row.querySelector("[data-step-state]");
+    const check = row.querySelector("[data-step-check]");
+
+    setPillMode(row, "working");
+
+    if (action) {
+      action.textContent = actionText;
+      action.classList.remove("text-green-700/85");
+      action.classList.add("text-foreground");
+    }
+
+    if (state) {
+      state.textContent = "Bezig...";
+      state.classList.remove("text-green-600/75", "text-transparent");
+      state.classList.add("text-violet-600/70");
+    }
+
+    check?.classList.add("hidden");
+  }
+
+  function setActivitySolved(row, doneText, resolvedLabel = "Afgerond") {
+    const action = row.querySelector("[data-step-action]");
+    const state = row.querySelector("[data-step-state]");
+    const check = row.querySelector("[data-step-check]");
+
+    setPillMode(row, "solved");
+
+    if (action) {
+      action.textContent = doneText;
+      action.classList.remove("text-green-700/85");
+      action.classList.add("text-foreground");
+    }
+
+    if (state) {
+      state.textContent = resolvedLabel;
+      state.classList.remove("text-violet-600/70", "text-transparent");
+      state.classList.add("text-green-600/75");
+    }
+
+    check?.classList.remove("hidden");
+  }
+
+  function setActivityHidden(row, hidden) {
+    const activity = row.querySelector("[data-task-activity]");
+
+    if (!activity) {
+      return;
+    }
+
+    activity.classList.toggle("opacity-0", hidden);
+    activity.classList.toggle("pointer-events-none", hidden);
+    activity.classList.toggle("opacity-100", !hidden);
+  }
+
+  function setRowState(row, state, statusText) {
+    row.dataset.state = state;
+
+    const highlight = row.querySelector("[data-task-highlight]");
+    const content = row.querySelector("[data-task-content]");
+    const title = row.querySelector("[data-task-title]");
+    const status = row.querySelector("[data-task-status]");
+    const pendingIcon = row.querySelector('[data-icon="pending"]');
+    const activeIcon = row.querySelector('[data-icon="active"]');
+    const completeIcon = row.querySelector('[data-icon="complete"]');
+
+    highlight?.classList.remove(
+      "bg-background",
+      "bg-violet-500/5",
+      "bg-muted/30",
+      "bg-green-500/5",
+      "ring-violet-500/20",
+      "ring-border-illustration",
+      "ring-green-500/20",
+      "bg-transparent",
+      "ring-transparent",
+      "shadow-sm",
+    );
+    content?.classList.remove("opacity-40");
+
+    if (state === "active") {
+      highlight?.classList.add("bg-violet-500/5", "shadow-sm", "ring-violet-500/20");
+      title?.classList.remove("text-foreground", "line-through", "opacity-50");
+      title?.classList.add("text-violet-600");
+      const taskIndex = Number(row.dataset.index);
+      if (title && tasks[taskIndex]) {
+        title.textContent = tasks[taskIndex].title;
+      }
+      setActivityHidden(row, false);
+      status?.classList.remove("text-muted-foreground");
+      status?.classList.add("text-violet-600/70");
+      pendingIcon?.classList.add("hidden");
+      activeIcon?.classList.remove("hidden");
+      completeIcon?.classList.add("hidden");
+    } else if (state === "complete") {
+      highlight?.classList.add("bg-transparent", "ring-transparent");
+      const taskIndex = Number(row.dataset.index);
+      if (title && tasks[taskIndex]?.completedTitle) {
+        title.textContent = tasks[taskIndex].completedTitle;
+      }
+      title?.classList.remove("text-violet-600");
+      title?.classList.add("text-foreground", "line-through", "opacity-50");
+      status?.classList.remove("text-violet-600/70");
+      status?.classList.add("text-muted-foreground");
+      pendingIcon?.classList.add("hidden");
+      activeIcon?.classList.add("hidden");
+      completeIcon?.classList.remove("hidden");
+      setActivityHidden(row, true);
+    } else {
+      highlight?.classList.add("bg-transparent", "ring-transparent");
+      content?.classList.add("opacity-40");
+      title?.classList.remove("text-violet-600", "line-through", "opacity-50");
+      title?.classList.add("text-foreground");
+      status?.classList.remove("text-violet-600/70");
+      status?.classList.add("text-muted-foreground");
+      pendingIcon?.classList.remove("hidden");
+      activeIcon?.classList.add("hidden");
+      completeIcon?.classList.add("hidden");
+      setActivityHidden(row, true);
+    }
+
+    if (status && statusText) {
+      status.textContent = statusText;
+    }
+  }
+
+  function resetRows(rows, root) {
+    rows.forEach((row, index) => {
+      if (index === 0) {
+        const firstStep = tasks[0].steps[0];
+        setRowState(row, "active", "Bezig... 0.0s");
+        setActivityBrand(row, root, firstStep.brand);
+        setActivityWorking(row, firstStep.doing);
+        row.querySelector("[data-step-surface]")?.classList.remove("opacity-0");
+      } else {
+        setRowState(row, "pending", "Wachtend");
+      }
+    });
+
+  }
+
+  function wait(durationMs, playback) {
+    return new Promise((resolve) => {
+      let elapsed = 0;
+      let lastFrame = performance.now();
+
+      const tick = (now) => {
+        if (!playback.isAlive()) {
+          resolve(false);
+          return;
+        }
+
+        if (playback.canAdvance()) {
+          elapsed += now - lastFrame;
+        }
+        lastFrame = now;
+
+        if (elapsed >= durationMs) {
+          resolve(true);
+          return;
+        }
+
+        requestAnimationFrame(tick);
+      };
+
+      requestAnimationFrame(tick);
+    });
+  }
+
+  async function runTaskSteps(row, taskIndex, root, playback) {
+    const status = row.querySelector("[data-task-status]");
+    const task = tasks[taskIndex];
+    let taskElapsed = 0;
+
+    for (let stepIndex = 0; stepIndex < task.steps.length; stepIndex++) {
+      const step = task.steps[stepIndex];
+      let stepElapsed = 0;
+      let lastFrame = performance.now();
+
+      if (stepIndex === 0) {
+        setActivityBrand(row, root, step.brand);
+        setActivityWorking(row, step.doing);
+        row.querySelector("[data-step-surface]")?.classList.remove("opacity-0");
+      } else {
+        const transitioned = await transitionStepContent(row, root, step, playback);
+        if (!transitioned) {
+          return false;
+        }
+        lastFrame = performance.now();
+      }
+
+      let stepDone = false;
+
+      while (!stepDone) {
+        if (!playback.isAlive()) {
+          return false;
+        }
+
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+
+        const now = performance.now();
+
+        if (playback.canAdvance()) {
+          const delta = now - lastFrame;
+          stepElapsed += delta;
+          taskElapsed += delta;
+        }
+        lastFrame = now;
+
+        if (!playback.canAdvance()) {
+          continue;
+        }
+
+        if (status) {
+          status.textContent = `Bezig... ${formatElapsed(taskElapsed)}`;
+        }
+
+        const footerRoot = row.closest("[data-task-planning]");
+        if (footerRoot) {
+          updateFooter(footerRoot, taskIndex, taskIndex, taskElapsed);
+        }
+
+        if (stepElapsed >= step.durationMs) {
+          setActivitySolved(row, step.done, step.resolvedLabel ?? "Afgerond");
+          stepDone = true;
+        }
+      }
+
+      const hold = await wait(stepSolvedMs, playback);
+      if (!hold) {
+        return false;
+      }
+    }
+
+    setRowState(row, "complete", task.completedLabel);
+    return true;
+  }
+
+  async function runCycle(root, playback) {
+    const rows = [...root.querySelectorAll("[data-task-row]")];
+
+    resetRows(rows, root);
+    updateFooter(root, 0, 0, 0);
+
+    for (let index = 0; index < rows.length; index++) {
+      if (!playback.isAlive()) {
+        return;
+      }
+
+      const completed = await runTaskSteps(rows[index], index, root, playback);
+      if (!completed) {
+        return;
+      }
+
+      updateFooter(root, index + 1, -1, 0);
+
+      if (index + 1 < rows.length) {
+        const gap = await wait(taskGapMs, playback);
+        if (!gap) {
+          return;
+        }
+
+        const nextRow = rows[index + 1];
+        const firstStep = tasks[index + 1].steps[0];
+        setRowState(nextRow, "active", "Bezig... 0.0s");
+        setActivityBrand(nextRow, root, firstStep.brand);
+        setActivityWorking(nextRow, firstStep.doing);
+        nextRow.querySelector("[data-step-surface]")?.classList.remove("opacity-0");
+        updateFooter(root, index + 1, index + 1, 0);
+      }
+    }
+
+    if (!playback.isAlive()) {
+      return;
+    }
+
+    updateFooter(root, tasks.length, -1, 0);
+    await wait(completeHoldMs, playback);
+
+    if (playback.isAlive()) {
+      runCycle(root, playback);
+    }
+  }
+
+  function initTaskPlanning(root) {
+    if (root.dataset.initialized === "true") {
+      return;
+    }
+
+    root.dataset.initialized = "true";
+
+    let running = false;
+    let visible = false;
+    let hoverPaused = false;
+
+    const playback = {
+      isAlive: () => running && visible,
+      canAdvance: () => running && visible && !hoverPaused,
+    };
+
+    const start = () => {
+      if (running) {
+        return;
+      }
+
+      running = true;
+      runCycle(root, playback);
+    };
+
+    const stop = () => {
+      running = false;
+    };
+
+    root.addEventListener("mouseenter", () => {
+      hoverPaused = true;
+      root.dataset.hoverPaused = "true";
+    });
+
+    root.addEventListener("mouseleave", () => {
+      hoverPaused = false;
+      root.removeAttribute("data-hover-paused");
+    });
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const rows = [...root.querySelectorAll("[data-task-row]")];
+      rows.forEach((row, index) => {
+        setRowState(row, "complete", tasks[index].completedLabel);
+      });
+      updateFooter(root, tasks.length, -1, 0);
+      return;
+    }
+
+    if ("IntersectionObserver" in window) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          visible = entries[0]?.isIntersecting ?? false;
+
+          if (visible) {
+            start();
+          } else {
+            stop();
+          }
+        },
+        { threshold: 0.35 },
+      );
+
+      observer.observe(root);
+    } else {
+      visible = true;
+      start();
+    }
+  }
+
+  document.querySelectorAll("[data-task-planning]").forEach(initTaskPlanning);
+</script>

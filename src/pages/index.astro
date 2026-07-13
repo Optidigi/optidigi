@@ -1,0 +1,15 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import HomePage from "@/components/HomePage.astro";
+import { siteConfig } from "@/config/site";
+---
+
+<Layout title="Optidigi" description={siteConfig.description}>
+  <div
+    class="theme-green scheme-light selection:bg-primary/15 selection:text-foreground bg-background dark:scheme-dark"
+  >
+    <SiteHeader />
+    <HomePage />
+  </div>
+</Layout>

@@ -1,0 +1,29 @@
+---
+/**
+ * Faded vertical dashed guides used around framed Optidigi sections.
+ * Uses mask-y-from so rails fade at top/bottom instead of hard-stopping.
+ */
+interface Props {
+  /** frame: tall editorial (slides); column: centered split; content: subtle 2-col text */
+  scale?: "frame" | "bounded-frame" | "column" | "content";
+  class?: string;
+}
+
+const { scale = "column", class: className = "" } = Astro.props;
+
+const scaleClasses: Record<NonNullable<Props["scale"]>, string> = {
+  frame: "absolute -inset-x-1 -inset-y-56",
+  "bounded-frame": "absolute inset-x-0 inset-y-0",
+  column: "absolute inset-y-6 left-1/2 hidden w-0 -translate-x-1/2 md:block",
+  content: "absolute inset-y-4 left-1/2 hidden w-0 -translate-x-1/2 md:block",
+};
+---
+
+<div
+  aria-hidden="true"
+  class:list={[
+    "mask-y-from-80% border-foreground/10 pointer-events-none border-x border-dashed",
+    scaleClasses[scale],
+    className,
+  ]}
+></div>

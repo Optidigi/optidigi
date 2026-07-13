@@ -1,0 +1,73 @@
+---
+/** Static activity chart for the automation overview. */
+interface Props {
+  statement?: boolean;
+}
+
+const { statement = false } = Astro.props;
+---
+
+{
+  statement ? (
+    <div aria-hidden="true" class="relative w-full pt-2">
+      <div class="absolute top-1 right-2 z-10 flex items-center gap-4 text-[10px] text-muted-foreground">
+        <span class="flex items-center gap-1.5"><span class="size-1.5 rounded-full bg-[var(--brand-action)]" />Automatisch</span>
+        <span class="flex items-center gap-1.5"><span class="size-1.5 rounded-full bg-muted-foreground/45" />Handwerk</span>
+      </div>
+      <svg width="100%" viewBox="0 0 600 170" class="overflow-visible">
+        <defs>
+          <linearGradient id="hero-activity-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--brand-action)" stop-opacity="0.16" />
+            <stop offset="100%" stop-color="var(--brand-action)" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M20 142 C82 138 104 126 154 120 C211 113 235 105 286 96 C342 86 369 78 418 70 C474 60 529 52 580 32 L580 155 L20 155 Z"
+          fill="url(#hero-activity-fill)"
+        />
+        <path
+          d="M20 142 C82 138 104 126 154 120 C211 113 235 105 286 96 C342 86 369 78 418 70 C474 60 529 52 580 32"
+          fill="none"
+          stroke="var(--brand-action)"
+          stroke-width="2.25"
+          stroke-linecap="round"
+        />
+        <path
+          d="M20 54 C88 58 112 66 165 72 C223 79 248 88 300 96 C359 104 389 112 438 120 C490 128 535 136 580 140"
+          fill="none"
+          stroke="var(--color-muted-foreground)"
+          stroke-opacity="0.34"
+          stroke-width="1.4"
+          stroke-linecap="round"
+          stroke-dasharray="4 6"
+        />
+        <circle cx="580" cy="32" r="3.5" fill="var(--brand-action)" />
+        <circle cx="580" cy="140" r="3" fill="var(--color-muted-foreground)" fill-opacity="0.38" />
+      </svg>
+    </div>
+  ) : (
+<div aria-hidden="true" class="relative w-full">
+  <svg width="100%" viewBox="0 0 600 200" class="overflow-visible">
+    <path
+      d="M 20 132 C 26.22 131.56, 44.89 132.22, 57.33 129.33 C 69.78 126.44, 82.22 116.44, 94.67 114.67 C 107.11 112.89, 119.56 120.44, 132 118.67 C 144.44 116.89, 156.89 105.78, 169.33 104 C 181.78 102.22, 194.22 110, 206.67 108 C 219.11 106, 231.56 95.33, 244 92 C 256.44 88.67, 268.89 87.78, 281.33 88 C 293.78 88.22, 306.22 95.33, 318.67 93.33 C 331.11 91.33, 343.56 80.89, 356 76 C 368.44 71.11, 380.89 65.11, 393.33 64 C 405.78 62.89, 418.22 71.33, 430.67 69.33 C 443.11 67.33, 455.56 57.33, 468 52 C 480.44 46.67, 492.89 38.67, 505.33 37.33 C 517.78 36, 530.22 46.89, 542.67 44 C 555.11 41.11, 573.78 24, 580 20"
+      fill="none"
+      stroke="var(--color-primary)"
+      stroke-width="1"
+    ></path>
+    <path
+      d="M 20 144 C 26.22 143.67, 44.89 143.56, 57.33 142 C 69.78 140.44, 82.22 135.56, 94.67 134.67 C 107.11 133.78, 119.56 137.78, 132 136.67 C 144.44 135.56, 156.89 129, 169.33 128 C 181.78 127, 194.22 131.67, 206.67 130.67 C 219.11 129.67, 231.56 124, 244 122 C 256.44 120, 268.89 118.78, 281.33 118.67 C 293.78 118.56, 306.22 122.44, 318.67 121.33 C 331.11 120.22, 343.56 114.67, 356 112 C 368.44 109.33, 380.89 105.78, 393.33 105.33 C 405.78 104.89, 418.22 110.22, 430.67 109.33 C 443.11 108.44, 455.56 103.11, 468 100 C 480.44 96.89, 492.89 91.56, 505.33 90.67 C 517.78 89.78, 530.22 96, 542.67 94.67 C 555.11 93.33, 573.78 84.67, 580 82.67"
+      fill="none"
+      stroke="var(--color-muted-foreground)"
+      stroke-opacity="0.5"
+      stroke-width="1"
+    ></path>
+    <text x="20" y="190" text-anchor="middle" font-size="6" fill="var(--color-muted-foreground)">W1</text>
+    <text x="132" y="190" text-anchor="middle" font-size="6" fill="var(--color-muted-foreground)">W2</text>
+    <text x="244" y="190" text-anchor="middle" font-size="6" fill="var(--color-muted-foreground)">W3</text>
+    <text x="356" y="190" text-anchor="middle" font-size="6" fill="var(--color-muted-foreground)">W4</text>
+    <text x="468" y="190" text-anchor="middle" font-size="6" fill="var(--color-muted-foreground)">W5</text>
+    <text x="580" y="190" text-anchor="middle" font-size="6" fill="var(--color-muted-foreground)">W6</text>
+  </svg>
+</div>
+  )
+}

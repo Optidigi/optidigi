@@ -1,0 +1,145 @@
+---
+/** Connected-systems illustration for the solution build step. */
+import IntegrationBadgeIcon from "@/components/IntegrationBadgeIcon.astro";
+
+const destinations = [
+  { label: "Gmail", brand: "gmail" as const, tint: "bg-red-500/10" },
+  { label: "Agenda", brand: "calendar" as const, tint: "bg-violet-500/10" },
+  { label: "Website", brand: "website" as const, tint: "bg-emerald-500/10" },
+];
+---
+
+<div
+  aria-hidden="true"
+  class="implement-flow relative flex w-[17.5rem] items-center justify-center [--border:color-mix(in_oklab,var(--color-foreground)_7.5%,transparent)] [--primary:var(--color-indigo-500)]"
+>
+  <svg
+    viewBox="0 0 320 200"
+    fill="none"
+    class="text-foreground/15 pointer-events-none absolute inset-0 mx-auto h-full w-full"
+    aria-hidden="true"
+  >
+    <path
+      d="M108 72 H158 Q172 72 180 54 L192 36 Q200 20 218 20 H272"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="1"></path>
+    <path d="M108 100 H272" stroke="currentColor" stroke-linecap="round" stroke-width="1"></path>
+    <path
+      d="M108 128 H158 Q172 128 180 146 L192 164 Q200 180 218 180 H272"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-width="1"></path>
+
+    <path
+      d="M108 72 H158 Q172 72 180 54 L192 36 Q200 20 218 20 H272"
+      stroke="var(--color-cyan-500)"
+      stroke-linecap="round"
+      stroke-dasharray="5 25"
+      stroke-dashoffset="300"
+      class="implement-flow-beam implement-flow-beam-1"></path>
+    <path
+      d="M108 100 H272"
+      stroke="var(--color-indigo-400)"
+      stroke-linecap="round"
+      stroke-dasharray="5 25"
+      stroke-dashoffset="300"
+      class="implement-flow-beam implement-flow-beam-2"></path>
+    <path
+      d="M108 128 H158 Q172 128 180 146 L192 164 Q200 180 218 180 H272"
+      stroke="var(--color-emerald-500)"
+      stroke-linecap="round"
+      stroke-dasharray="5 25"
+      stroke-dashoffset="300"
+      class="implement-flow-beam implement-flow-beam-3"></path>
+  </svg>
+
+  <div class="relative z-10 flex items-center gap-8">
+    <div
+      class="bg-illustration ring-border-illustration shadow-black/6.5 relative w-24 shrink-0 rounded-xl p-2.5 shadow-md ring-1"
+    >
+      <div class="mb-2 flex items-start gap-2">
+        <div
+          class="bg-linear-to-br flex size-6 shrink-0 items-center justify-center rounded-md from-amber-400/20 to-fuchsia-500/20 ring-1 ring-foreground/10"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-3.5 text-fuchsia-600"
+            aria-hidden="true"
+          >
+            <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"
+            ></path>
+            <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"
+            ></path>
+            <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path>
+          </svg>
+        </div>
+        <div class="min-w-0 text-left">
+          <div class="text-foreground text-[10px] font-semibold leading-tight">AI Agent</div>
+          <div class="text-foreground/50 text-[9px] leading-tight">Taken</div>
+        </div>
+      </div>
+      <div class="space-y-1">
+        <div class="bg-foreground/10 h-1 w-full rounded-full"></div>
+        <div class="bg-foreground/10 h-1 w-3/4 rounded-full"></div>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-5">
+      {
+        destinations.map((item) => (
+          <div class="bg-illustration ring-border-illustration shadow-black/6.5 flex items-center gap-2 rounded-xl py-1.5 pl-1.5 pr-2.5 shadow-md ring-1">
+            <div
+              class={`after:border-foreground/5 relative flex size-5 items-center justify-center rounded-md after:absolute after:inset-0 after:rounded-md after:border ${item.tint}`}
+            >
+              <IntegrationBadgeIcon brand={item.brand} class="size-3" />
+            </div>
+            <div class="text-foreground text-[10px] font-medium">{item.label}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes implement-flow-beam {
+    0% {
+      stroke-dashoffset: 300;
+      opacity: 0.35;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0.35;
+    }
+  }
+
+  .implement-flow-beam {
+    animation: implement-flow-beam 2s ease-in-out infinite;
+  }
+
+  .implement-flow-beam-2 {
+    animation-delay: 0.2s;
+  }
+
+  .implement-flow-beam-3 {
+    animation-delay: 0.4s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .implement-flow-beam {
+      animation: none;
+    }
+  }
+</style>

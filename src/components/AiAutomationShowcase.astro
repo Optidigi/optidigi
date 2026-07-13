@@ -1,0 +1,444 @@
+---
+import AiAgentConversation from "./AiAgentConversation.astro";
+import SolutionBuildVisual from "@/components/process/SolutionBuildVisual.astro";
+import DashedSideGuides from "./lines/DashedSideGuides.astro";
+
+const learnMoreClass =
+  "brand-secondary-control cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all focus-visible:outline-none active:scale-98 focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-sm shadow-black/10 border border-transparent bg-card ring-1 ring-foreground/10 duration-200 hover:bg-muted/50 dark:ring-foreground/15 dark:hover:bg-muted/50 h-8 rounded-md px-3 text-xs";
+
+const expandButtonBaseClass =
+  "text-foreground not-data-expanded:hover:text-foreground/80 data-expanded:bg-clip-text data-expanded:text-transparent pl-12.5 sm:pl-13.5 relative cursor-pointer";
+
+const slideEnterClass =
+  "transition-[opacity,transform,filter] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none";
+
+const slidePanelBaseClass = "col-start-1 row-start-1 flex h-full w-full flex-col gap-12";
+const slidePanelHiddenClass =
+  "pointer-events-none invisible opacity-0 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none";
+const slidePanelVisibleClass =
+  "pointer-events-auto visible opacity-100 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none";
+
+const slideBgImageClass = "size-full object-cover opacity-65 dark:opacity-35";
+
+/** Local background images shared with the homepage service showcase. */
+const slide0Bg = "/feature-slide-1.jpg";
+const slide1Bg = "/feature-slide-0.jpg";
+
+---
+
+<section class="bg-background @container overflow-hidden py-24" data-ai-automation-showcase>
+  <div class="border-foreground/10 border-b border-dashed pb-8 sm:pb-12">
+    <div class="sm:px-18 mx-auto max-w-5xl px-8">
+      <p class="text-foreground/60 text-4xl font-medium leading-[1.2] sm:text-5xl">
+        Zet
+        <button
+          type="button"
+          data-expandable
+          data-slide="0"
+          data-expanded="true"
+          class={`${expandButtonBaseClass} data-expanded:bg-gradient-to-br data-expanded:from-amber-400 data-expanded:to-fuchsia-500`}
+        >
+          <span
+            class="pointer-events-none absolute left-0.5 top-0.5 size-10 sm:left-0 sm:top-[7px] sm:size-11"
+          >
+            <div
+              class="starting:opacity-0 not-in-data-expanded:hidden absolute inset-x-2 bottom-0.5 top-2 rounded-xl opacity-75 blur duration-200 bg-linear-to-r from-amber-500 to-fuchsia-500"
+            >
+            </div>
+            <span
+              class="bg-illustration ring-border absolute inset-0 z-0 flex rounded-xl shadow shadow-black/5 ring *:m-auto *:size-5"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-brain drop-shadow-black/40 text-foreground drop-shadow-md"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"
+                ></path>
+                <path
+                  d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"
+                ></path>
+                <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path>
+                <path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path>
+                <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path>
+                <path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path>
+                <path d="M19.938 10.5a4 4 0 0 1 .585.396"></path>
+                <path d="M6 18a4 4 0 0 1-1.967-.516"></path>
+                <path d="M19.967 17.484A4 4 0 0 1 18 18"></path>
+              </svg>
+            </span>
+          </span>
+          <span class="in-data-expanded:text-transparent duration-200">AI agents</span>
+        </button>
+        aan het werk in je bestaande systemen, en laat
+        <button
+          type="button"
+          data-expandable
+          data-slide="1"
+          class={`${expandButtonBaseClass} data-expanded:bg-gradient-to-r data-expanded:from-green-600 data-expanded:to-sky-600`}
+        >
+          <span
+            class="pointer-events-none absolute left-0.5 top-0.5 size-10 sm:left-0 sm:top-[7px] sm:size-11"
+          >
+            <div
+              class="starting:opacity-0 not-in-data-expanded:hidden absolute inset-x-2 bottom-0.5 top-2 rounded-xl opacity-75 blur duration-200 bg-linear-to-r from-green-600 to-sky-500"
+            >
+            </div>
+            <span
+              class="bg-illustration ring-border absolute inset-0 z-0 flex rounded-xl shadow shadow-black/5 ring *:m-auto *:size-5"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-bot drop-shadow-black/40 text-foreground drop-shadow-md"
+                aria-hidden="true"
+              >
+                <path d="M12 8V4H8"></path>
+                <rect width="16" height="12" x="4" y="8" rx="2"></rect>
+                <path d="M2 14h2"></path>
+                <path d="M20 14h2"></path>
+                <path d="M15 13v2"></path>
+                <path d="M9 13v2"></path>
+              </svg>
+            </span>
+          </span>
+          <span class="in-data-expanded:text-transparent duration-200">Automations</span>
+        </button>
+        het terugkerende werk afhandelen.
+      </p>
+    </div>
+  </div>
+
+  <div class="mx-auto my-1 max-w-5xl px-2 md:px-6">
+    <div class="grid gap-6 md:grid-cols-2">
+      <div class="relative flex h-full min-h-0 flex-col p-6 sm:p-12">
+        <DashedSideGuides scale="frame" />
+        <div class="grid min-h-0 flex-1">
+          <div
+            data-slide-panel="0"
+            class:list={[slidePanelBaseClass, slidePanelVisibleClass]}
+          >
+            <div class="max-w-sm text-balance">
+              <h3 class="text-foreground text-xl font-medium">
+                AI die meedenkt in je dagelijkse werk
+              </h3>
+              <p class="text-muted-foreground mb-6 mt-4 text-balance">
+                Van klantvragen en documenten tot interne processen: AI helpt je team sneller
+                antwoorden, betere beslissingen nemen en minder handmatig werk doen.
+              </p>
+              <a class={learnMoreClass} href="/#diensten">
+                Meer over AI
+                <span
+                  class="border-l-foreground/50 ml-0.5 block size-0 border-y-4 border-l-4 border-y-transparent"
+                ></span>
+              </a>
+            </div>
+            <div class="mt-auto max-w-sm">
+              <ul class="text-muted-foreground mt-auto space-y-3 pt-8 text-sm">
+                <li class="flex items-center gap-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-shield-check *:nth-2:text-emerald-600 size-4 dark:text-emerald-500/25"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+                    ></path>
+                    <path d="m9 12 2 2 4-4"></path>
+                  </svg>
+                  <span class="text-foreground font-medium">AVG-bewust ingericht</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-shield-check *:nth-2:text-emerald-600 size-4 dark:text-emerald-500/25"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+                    ></path>
+                    <path d="m9 12 2 2 4-4"></path>
+                  </svg>
+                  <span class="text-foreground font-medium">Koppelingen met bestaande tools</span>
+                </li>
+                <li class="flex items-center gap-3">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-shield-check *:nth-2:text-emerald-600 size-4 dark:text-emerald-500/25"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"
+                    ></path>
+                    <path d="m9 12 2 2 4-4"></path>
+                  </svg>
+                  <span class="text-foreground font-medium">Praktisch en schaalbaar</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+            data-slide-panel="1"
+            aria-hidden="true"
+            class:list={[slidePanelBaseClass, slidePanelHiddenClass]}
+          >
+            <div class="max-w-sm text-balance">
+              <h3 class="text-foreground text-xl font-medium">
+                Automatisering die terugkerend werk overneemt
+              </h3>
+              <p class="text-muted-foreground mb-6 mt-4 text-balance">
+                Laat workflows, opvolging en administratie automatisch lopen, gekoppeld aan de
+                systemen die je team al gebruikt.
+              </p>
+              <a class={learnMoreClass} href="/#diensten">
+                Meer over automatisering
+                <span
+                  class="border-l-foreground/50 ml-0.5 block size-0 border-y-4 border-l-4 border-y-transparent"
+                ></span>
+              </a>
+            </div>
+            <div class="mt-auto max-w-sm">
+              <ul class="text-muted-foreground space-y-3 pt-8 text-sm">
+                <li class="flex items-center gap-3"><span class="flex size-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">1</span><span class="text-foreground font-medium">Start bij een aanvraag of wijziging</span></li>
+                <li class="flex items-center gap-3"><span class="flex size-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">2</span><span class="text-foreground font-medium">Werkt CRM, mail en agenda automatisch bij</span></li>
+                <li class="flex items-center gap-3"><span class="flex size-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">3</span><span class="text-foreground font-medium">Betrekt je team alleen wanneer dat nodig is</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative h-fit">
+        <DashedSideGuides scale="frame" />
+        <div class="aspect-7/8 relative overflow-hidden rounded-xl">
+          <div
+            data-slide-illustration="0"
+            class:list={[
+              "scale-85 relative z-10 flex h-full items-center justify-center px-4",
+              slideEnterClass,
+            ]}
+          >
+            <div class="min-w-xs w-full">
+              <AiAgentConversation />
+            </div>
+          </div>
+
+          <div
+            data-slide-illustration="1"
+            hidden
+            class:list={[
+              "scale-85 relative z-10 flex h-full items-center justify-center px-4",
+              slideEnterClass,
+              "opacity-0 scale-[0.99] blur-xs",
+            ]}
+          >
+            <div aria-hidden="true" class="flex h-full w-full items-center justify-center">
+              <div class="scale-145 sm:scale-160">
+                <SolutionBuildVisual />
+              </div>
+            </div>
+          </div>
+
+          <div data-slide-bg="0" class:list={["absolute inset-0", slideEnterClass]}>
+            <img
+              alt="feature background image"
+              loading="lazy"
+              decoding="async"
+              class={slideBgImageClass}
+              src={slide0Bg}
+              width="3029"
+              height="3029"
+            />
+          </div>
+          <div
+            data-slide-bg="1"
+            hidden
+            class:list={[
+              "absolute inset-0",
+              slideEnterClass,
+              "opacity-0",
+            ]}
+          >
+            <img
+              alt="feature background image"
+              loading="lazy"
+              decoding="async"
+              class={slideBgImageClass}
+              src={slide1Bg}
+              width="2206"
+              height="2206"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div aria-hidden="true" class="border-foreground/10 h-px border-t border-dashed"></div>
+</section>
+
+<script>
+  const section = document.querySelector<HTMLElement>("[data-ai-automation-showcase]");
+  if (section) {
+    const buttons = section.querySelectorAll<HTMLButtonElement>("[data-expandable]");
+    const panels = section.querySelectorAll<HTMLElement>("[data-slide-panel]");
+    const illustrations = section.querySelectorAll<HTMLElement>("[data-slide-illustration]");
+    const backgrounds = section.querySelectorAll<HTMLElement>("[data-slide-bg]");
+
+    const activeClasses = ["opacity-100", "scale-100", "blur-0"];
+    const inactiveClasses = ["opacity-0", "scale-[0.99]", "blur-xs"];
+
+    const panelHiddenClasses = ["pointer-events-none", "invisible", "opacity-0"];
+    const panelVisibleClasses = ["pointer-events-auto", "visible", "opacity-100"];
+
+    const setSlide = (index: number) => {
+      buttons.forEach((button) => {
+        const slide = Number(button.dataset.slide);
+        if (slide === index) {
+          button.setAttribute("data-expanded", "true");
+        } else {
+          button.removeAttribute("data-expanded");
+        }
+      });
+
+      const toggleLayer = (element: HTMLElement, isActive: boolean) => {
+        if (isActive) {
+          element.removeAttribute("hidden");
+          element.classList.remove(...inactiveClasses);
+          element.classList.add(...activeClasses);
+        } else {
+          element.classList.remove(...activeClasses);
+          element.classList.add(...inactiveClasses);
+          window.setTimeout(() => {
+            if (!element.classList.contains("opacity-100")) {
+              element.setAttribute("hidden", "");
+            }
+          }, 500);
+        }
+      };
+
+      const togglePanel = (element: HTMLElement, isActive: boolean) => {
+        if (isActive) {
+          element.removeAttribute("aria-hidden");
+          element.classList.remove(...panelHiddenClasses);
+          element.classList.add(...panelVisibleClasses);
+        } else {
+          element.setAttribute("aria-hidden", "true");
+          element.classList.remove(...panelVisibleClasses);
+          element.classList.add(...panelHiddenClasses);
+        }
+      };
+
+      panels.forEach((panel, panelIndex) => togglePanel(panel, panelIndex === index));
+      illustrations.forEach((illustration, illustrationIndex) =>
+        toggleLayer(illustration, illustrationIndex === index),
+      );
+      backgrounds.forEach((background, backgroundIndex) => {
+        if (backgroundIndex === index) {
+          background.removeAttribute("hidden");
+          background.classList.remove("opacity-0");
+          background.classList.add("opacity-100");
+        } else {
+          background.classList.remove("opacity-100");
+          background.classList.add("opacity-0");
+          window.setTimeout(() => {
+            if (background.classList.contains("opacity-0")) {
+              background.setAttribute("hidden", "");
+            }
+          }, 500);
+        }
+      });
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const slide = Number(button.dataset.slide);
+        if (!Number.isNaN(slide)) {
+          currentSlide = slide;
+          setSlide(slide);
+          restartAutoRotate();
+        }
+      });
+    });
+
+    let currentSlide = 0;
+    let autoRotateId: ReturnType<typeof setInterval> | undefined;
+    const slideCount = buttons.length;
+    const autoRotateMs = 7000;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const stopAutoRotate = () => {
+      if (autoRotateId !== undefined) {
+        window.clearInterval(autoRotateId);
+        autoRotateId = undefined;
+      }
+    };
+
+    const startAutoRotate = () => {
+      if (prefersReducedMotion.matches || slideCount < 2) return;
+      stopAutoRotate();
+      autoRotateId = window.setInterval(() => {
+        currentSlide = (currentSlide + 1) % slideCount;
+        setSlide(currentSlide);
+      }, autoRotateMs);
+    };
+
+    const restartAutoRotate = () => {
+      stopAutoRotate();
+      startAutoRotate();
+    };
+
+    section.addEventListener("mouseenter", stopAutoRotate);
+    section.addEventListener("mouseleave", startAutoRotate);
+    section.addEventListener("focusin", stopAutoRotate);
+    section.addEventListener("focusout", (event) => {
+      if (!section.contains(event.relatedTarget as Node | null)) {
+        startAutoRotate();
+      }
+    });
+
+    setSlide(0);
+    startAutoRotate();
+  }
+</script>

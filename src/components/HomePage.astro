@@ -1,0 +1,43 @@
+---
+import AiAutomationShowcase from "@/components/AiAutomationShowcase.astro";
+import AppointmentCta from "@/components/AppointmentCta.astro";
+import FaqSection from "@/components/FaqSection";
+import HeroServicesPreview from "@/components/HeroServicesPreview.astro";
+import ProcessSteps from "@/components/ProcessSteps.astro";
+import ServicesGrid from "@/components/ServicesGrid.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import ValueProposition from "@/components/ValueProposition.astro";
+---
+
+<main class="overflow-x-clip">
+  <section class="bg-background relative">
+    <div class="mask-b-from-55% mask-b-to-75% mask-t-from-35% mask-t-to-65% dark:mask-t-to-55% absolute inset-0">
+      <img alt="" loading="lazy" decoding="async" class="not-dark:hidden size-full object-cover object-bottom" src="/gradient-dark.jpg" width="3115" height="3115" />
+      <img alt="" loading="lazy" decoding="async" class="size-full object-cover object-bottom dark:hidden" src="/gradient-light.jpg" width="2156" height="2156" />
+    </div>
+
+    <div class="pb-20 pt-24 md:pt-32 lg:pt-40">
+      <div class="relative z-10 mx-auto grid max-w-5xl items-end gap-4 px-6">
+        <h1 class="text-balance text-4xl font-semibold sm:text-5xl md:max-w-4xl lg:text-6xl">
+          Meer groei, minder handwerk, betere digitale processen.
+        </h1>
+        <div class="max-w-lg">
+          <p class="text-muted-foreground mb-6 text-balance text-lg lg:text-xl">
+            Optidigi ontwikkelt en integreert software, AI en automatisering die aansluiten op hoe je bedrijf werkt.
+          </p>
+          <AppointmentCta />
+        </div>
+      </div>
+
+      <HeroServicesPreview />
+    </div>
+  </section>
+
+  <AiAutomationShowcase />
+  <ValueProposition />
+  <ServicesGrid />
+  <ProcessSteps />
+  <FaqSection client:visible />
+</main>
+
+<SiteFooter showBrandMark />

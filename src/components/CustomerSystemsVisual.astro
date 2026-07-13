@@ -1,0 +1,123 @@
+---
+const actions = [
+  {
+    label: "Aanvraag indienen",
+    detail: "Nieuw formulier ontvangen",
+    accent: "bg-emerald-500",
+    icon: "form",
+  },
+  {
+    label: "Document uploaden",
+    detail: "2 bestanden ontvangen",
+    accent: "bg-sky-500",
+    icon: "upload",
+  },
+] as const;
+---
+
+<div
+  aria-hidden="true"
+  class="bg-illustration ring-border-illustration shadow-black/6.5 relative z-10 rounded-2xl border border-transparent px-6 pt-4 pb-4 text-xs shadow-lg ring-1"
+>
+  <div class="mb-2 flex items-center gap-2 border-b border-border-illustration pb-2">
+    <div class="flex items-center gap-1">
+      <span class="bg-foreground/15 size-1.5 rounded-full"></span>
+      <span class="bg-foreground/15 size-1.5 rounded-full"></span>
+      <span class="bg-foreground/15 size-1.5 rounded-full"></span>
+    </div>
+    <div
+      class="bg-muted/60 text-muted-foreground ring-border-illustration flex h-5 min-w-0 flex-1 items-center rounded-md px-2 ring-1"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="10"
+        height="10"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="mr-1 shrink-0 opacity-60"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M2 12h20"></path>
+        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+      </svg>
+      <span class="truncate">mijnbedrijf.nl/mijn-omgeving</span>
+    </div>
+  </div>
+
+  <div class="mb-0.5 flex items-center gap-2">
+    <div class="text-foreground text-sm font-semibold">Klantomgeving</div>
+    <div
+      class="bg-sky-500/10 text-sky-700 dark:text-sky-400 ml-auto rounded px-2 py-0.5 text-[10px] font-medium"
+    >
+      Live
+    </div>
+  </div>
+
+  <div class="text-muted-foreground mb-3 flex flex-wrap items-center gap-x-1.5 text-sm">
+    <span>Webapp</span>
+    <span class="text-foreground/25">·</span>
+    <span>Portaal</span>
+    <span class="text-foreground/25">·</span>
+    <span>Plugin</span>
+  </div>
+
+  <div class="@md:grid-cols-2 grid gap-2">
+    {
+      actions.map((action) => (
+        <div class="bg-muted/50 ring-border-illustration flex gap-2 rounded-md border p-2 ring-1">
+          <div class:list={["w-1 shrink-0 rounded-full", action.accent]} />
+          <div class="min-w-0">
+            <div class="text-foreground flex items-center gap-1.5 text-sm font-medium">
+              {action.icon === "form" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-emerald-600 dark:text-emerald-400 shrink-0"
+                  aria-hidden="true"
+                >
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"></path>
+                  <path d="M14 2v6h6"></path>
+                  <path d="M12 18v-6"></path>
+                  <path d="M9 15h6"></path>
+                </svg>
+              )}
+              {action.icon === "upload" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-sky-600 dark:text-sky-400 shrink-0"
+                  aria-hidden="true"
+                >
+                  <path d="M12 3v12"></path>
+                  <path d="m17 8-5-5-5 5"></path>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                </svg>
+              )}
+              <span class="truncate">{action.label}</span>
+            </div>
+            <div class="text-muted-foreground truncate">{action.detail}</div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</div>

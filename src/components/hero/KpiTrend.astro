@@ -1,0 +1,66 @@
+---
+interface Props {
+  label: string;
+  value: string;
+  valueMuted?: string;
+  trend?: string;
+  trendTone?: "emerald" | "rose";
+  statement?: boolean;
+}
+
+const { label, value, valueMuted, trend, trendTone = "emerald", statement = false } = Astro.props;
+
+const toneBg = trendTone === "emerald" ? "bg-emerald-600" : "bg-rose-600";
+const toneText =
+  trendTone === "emerald"
+    ? "text-emerald-600 dark:text-emerald-400"
+    : "text-rose-600 dark:text-rose-400";
+---
+
+<div class="min-w-0">
+  {
+    statement && (
+      <div class="flex min-w-0 items-start justify-between gap-2">
+        <div class="min-w-0 whitespace-nowrap">
+          <span class="text-foreground align-baseline text-xl font-semibold tracking-tight">{value}</span>
+          {valueMuted && <span class="text-foreground/50 align-baseline text-xl font-bold">{valueMuted}</span>}
+        </div>
+        {trend && <span class:list={["shrink-0 text-[11px] font-medium", toneText]}>{trend}</span>}
+      </div>
+    )
+  }
+  <div class="text-muted-foreground flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+    <span class:list={["truncate", statement && "mt-3"]}>{label}</span>
+    {
+      trend && !statement && (
+        <div class="flex shrink-0 items-center gap-1">
+          <div class:list={["rounded-xs flex size-3", toneBg]}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="m-auto size-2 text-white"
+              aria-hidden="true"
+            >
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+              <polyline points="16 7 22 7 22 13" />
+            </svg>
+          </div>
+          <span class:list={["text-[11px] font-medium", toneText]}>{trend}</span>
+        </div>
+      )
+    }
+  </div>
+  {
+    !statement && (
+      <div class="mt-6 min-w-0">
+        <span class="text-foreground align-baseline text-xl font-semibold">{value}</span>
+        {valueMuted && <span class="text-foreground/50 align-baseline text-xl font-bold">{valueMuted}</span>}
+      </div>
+    )
+  }
+</div>

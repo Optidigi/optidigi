@@ -1,0 +1,76 @@
+---
+import EmailConfirmationCard from "@/components/EmailConfirmationCard";
+import GoogleCalendarIcon from "@/components/workflow/GoogleCalendarIcon.astro";
+import SalesforceIcon from "@/components/workflow/SalesforceIcon.astro";
+---
+
+<div aria-hidden="true" class="w-full max-w-[18rem]">
+  <div>
+    <div
+      class="bg-illustration ring-border-illustration shadow-black/6.5 flex items-center gap-2 rounded-xl p-3 shadow-md ring-1"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-circle-check size-4 fill-emerald-500/15 text-emerald-500"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="m9 12 2 2 4-4"></path>
+      </svg>
+      <span class="text-foreground text-sm font-medium">Aanvraag verwerkt</span>
+    </div>
+
+    <div class="relative space-y-4 pl-6 pt-6">
+      <div
+        class="border-foreground/15 absolute bottom-8 left-6 top-0 border-l border-dashed"
+      >
+      </div>
+
+      <div class="relative pl-6">
+        <div
+          class="border-foreground/15 absolute bottom-1/2 left-0 top-0 w-6 rounded-bl-full border-b border-l border-dashed"
+        >
+        </div>
+        <div
+          class="bg-card ring-border-illustration flex items-center gap-2 rounded-xl p-3 shadow ring-1"
+        >
+          <SalesforceIcon />
+          <span class="text-muted-foreground text-xs font-medium">
+            CRM bijgewerkt <span class="text-foreground/50 pl-0.5 text-xs">12 sec</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="relative pl-6">
+        <div
+          class="border-foreground/15 absolute bottom-1/2 left-0 top-0 w-6 rounded-bl-full border-b border-l border-dashed"
+        >
+        </div>
+        <div
+          class="bg-card ring-border-illustration flex items-center gap-2 rounded-xl p-3 shadow ring-1"
+        >
+          <GoogleCalendarIcon />
+          <span class="text-muted-foreground text-xs font-medium">
+            Opvolging gepland <span class="text-foreground/50 pl-0.5 text-xs">3 sec</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="relative pl-6">
+        <div
+          class="border-foreground/15 absolute bottom-1/2 left-0 top-0 w-6 rounded-bl-full border-b border-l border-dashed"
+        >
+        </div>
+        <EmailConfirmationCard client:visible />
+      </div>
+    </div>
+  </div>
+</div>

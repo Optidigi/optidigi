@@ -1,0 +1,250 @@
+---
+import AutomationActivityChart from "@/components/hero/AutomationActivityChart.astro";
+import KpiTrend from "@/components/hero/KpiTrend.astro";
+import DashboardNavIcon from "@/components/hero/DashboardNavIcon.astro";
+import type { AutomationOverviewData } from "@/components/hero/automation-overview-data";
+
+interface Props {
+  panel: AutomationOverviewData;
+}
+
+const { panel } = Astro.props;
+const fitFrame = true;
+const iconClass = "size-4 opacity-75";
+---
+
+<div
+  class:list={[
+    "bg-background dark:bg-background/95 grid",
+    fitFrame
+      ? "@container/dashboard size-full min-w-0 overflow-hidden lg:grid-cols-[14rem_minmax(0,1fr)]"
+      : "min-w-screen origin-top-left scale-95 border-t sm:scale-97 lg:grid-cols-[auto_1fr] lg:scale-89 xl:scale-74 2xl:max-w-340 2xl:min-w-300",
+  ]}
+  aria-hidden="true"
+>
+  <div
+    class:list={[
+      "grid grid-rows-[auto_1fr] border-r border-border-illustration p-4.5 max-lg:hidden",
+      fitFrame ? "min-h-0 w-56" : "w-72",
+    ]}
+  >
+    <div class="hover:bg-foreground/5 flex items-center gap-2 rounded-lg p-1">
+      <div
+        class="inset-ring-foreground/15 bg-radial flex size-7 rounded-md from-zinc-500/75 to-zinc-500 inset-ring-1"
+      >
+        {fitFrame ? (
+          <span class="m-auto text-[9px] font-semibold tracking-tight text-white">OD</span>
+        ) : (
+          <img
+            src="/optidigi-logo.svg"
+            alt=""
+            width="1095"
+            height="272"
+            class="m-auto h-3 w-auto brightness-0 invert"
+            decoding="async"
+          />
+        )}
+      </div>
+      <span class="text-sm font-medium">Optidigi</span>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="text-muted-foreground ml-auto size-3.5 opacity-50"
+        aria-hidden="true"
+      >
+        <path d="m7 15 5 5 5-5" /><path d="m7 9 5-5 5 5" />
+      </svg>
+    </div>
+
+    <div class="mt-5 flex min-h-0 flex-col gap-1.5">
+      {
+        panel.nav.map((item) => (
+          <div
+            class:list={[
+              "flex items-center gap-3 rounded-lg px-3.5 py-2 text-sm font-medium",
+              item.id === panel.activeNav
+                ? "bg-illustration text-foreground ring-border-illustration shadow-black/6.5 shadow-xs ring-1"
+                : "text-muted-foreground",
+            ]}
+          >
+            <DashboardNavIcon icon={item.icon} />
+            <span class="truncate">{item.label}</span>
+          </div>
+        ))
+      }
+
+      <div class="py-3">
+        <div class="text-muted-foreground pl-3.5 text-xs font-medium">Projecten</div>
+        <div class="mt-2 flex flex-col gap-1">
+          {
+            panel.projects.map((project) => (
+              <div
+                class:list={[
+                  "flex items-center gap-3 rounded-lg px-3.5 py-1.5 text-sm font-medium",
+                  project.active ? "text-foreground" : "text-muted-foreground",
+                ]}
+              >
+                <div class="flex size-4 *:m-auto">
+                  <div
+                    class:list={[
+                      "size-2 rounded-full",
+                      project.active ? "bg-primary" : "bg-muted-foreground/75",
+                    ]}
+                  />
+                </div>
+                <span class="truncate">{project.label}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div
+        class="text-muted-foreground mt-auto flex items-center gap-3 rounded-lg px-3.5 py-2 text-sm font-medium"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class={iconClass} aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" /><circle cx="12" cy="12" r="3" /></svg>
+        Instellingen
+      </div>
+    </div>
+  </div>
+
+  <div
+    class:list={[
+      fitFrame ? "min-h-0 min-w-0" : "lg:py-1 lg:pr-1",
+    ]}
+  >
+    <div
+      class:list={[
+        fitFrame
+          ? "size-full overflow-hidden"
+          : "ring-border-illustration shadow-black/6.5 bg-card/95 dark:bg-card shadow ring-1 lg:rounded-xl",
+      ]}
+    >
+      <div
+        class:list={[
+          "no-scrollbar mask-b-from-95% p-2",
+          fitFrame ? "h-full overflow-hidden" : "max-h-237",
+        ]}
+      >
+        <div class="flex items-center gap-1 px-1.5 pt-1 lg:hidden">
+          <div class="flex size-9 *:m-auto *:size-5">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></svg>
+          </div>
+          <div class="text-lg font-medium">{panel.mobileTitle}</div>
+        </div>
+
+        <div
+          class:list={[
+            "flex gap-2 px-3 pt-2",
+            fitFrame ? "overflow-hidden max-lg:mt-2" : "flex-wrap max-lg:mt-4",
+          ]}
+        >
+          {
+            panel.filters.map((filter) => (
+              <div class="flex items-center gap-2 rounded-full border border-border-illustration p-1 pl-2.5">
+                <div class="text-muted-foreground text-xs font-medium whitespace-nowrap">{filter}</div>
+                <div class="bg-card ring-border-illustration shadow-black/6.5 flex size-5 rounded-full shadow ring-1 *:m-auto">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-3.5 opacity-50" aria-hidden="true"><path d="m7 15 5 5 5-5" /><path d="m7 9 5-5 5 5" /></svg>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="px-3 pt-3 lg:px-5 lg:pt-4">
+          <div class="mb-4 space-y-1">
+            <div class="text-foreground font-medium">{panel.overviewTitle}</div>
+            <div class="text-muted-foreground text-sm">{panel.overviewDescription}</div>
+          </div>
+
+          <div
+            class="*:ring-border-illustration *:bg-illustration *:shadow-black/6.5 grid grid-cols-2 gap-1.5 *:min-w-0 *:rounded-xl *:p-3.5 *:shadow *:ring-1 md:grid-cols-4 lg:gap-2 lg:*:p-4"
+          >
+            {
+              panel.kpis.map((kpi) =>
+                kpi.type === "trend" ? (
+                  <KpiTrend
+                    label={kpi.label}
+                    value={kpi.value}
+                    valueMuted={kpi.valueMuted}
+                    trend={kpi.trend}
+                    trendTone={kpi.trendTone}
+                    statement={fitFrame}
+                  />
+                ) : (
+                  <div class="min-w-0">
+                    {
+                      fitFrame ? (
+                        <>
+                          <div class="text-foreground text-xl font-semibold tracking-tight">{kpi.value}</div>
+                          <div class="text-muted-foreground mt-3 truncate text-xs">{kpi.label}</div>
+                        </>
+                      ) : (
+                        <>
+                          <div class="text-muted-foreground truncate text-xs">{kpi.label}</div>
+                          <div class="text-foreground mt-6 text-xl font-semibold">{kpi.value}</div>
+                        </>
+                      )
+                    }
+                  </div>
+                ),
+              )
+            }
+          </div>
+        </div>
+
+        <div class:list={["mt-2 px-3 lg:px-5", fitFrame && "max-sm:hidden"]}>
+          <div class="space-y-1">
+            <div class="text-foreground text-sm font-medium">{panel.activityTitle}</div>
+            <div class="text-muted-foreground text-xs">{panel.activityDescription}</div>
+          </div>
+          <div class="mt-2">
+            <AutomationActivityChart statement={fitFrame} />
+          </div>
+        </div>
+
+        <div class="px-3 pt-3 pb-2 lg:px-5 lg:pt-4 lg:pb-3">
+          <div class="mb-2 space-y-1">
+            <div class="text-foreground text-sm font-medium">{panel.insightsTitle}</div>
+            <div class="text-muted-foreground text-xs">{panel.insightsDescription}</div>
+          </div>
+          <div class="grid gap-2 md:grid-cols-2">
+            {
+              panel.insights.map((insight) => (
+                <div
+                  class:list={[
+                    "ring-border-illustration shadow-black/6.5 relative rounded-xl p-3 shadow ring-1",
+                    insight.tone === "primary"
+                      ? "bg-linear-to-br from-indigo-500/10 to-sky-500/10"
+                      : "bg-illustration",
+                  ]}
+                >
+                  <div class="flex gap-2.5">
+                    {
+                      insight.tone === "primary" ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary size-3.5 shrink-0" aria-hidden="true"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" /><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" /></svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-rose-500 size-3.5 shrink-0" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>
+                      )
+                    }
+                    <div class="min-w-0">
+                      <p class="text-muted-foreground text-[12px] leading-snug">
+                        <span class="text-foreground font-medium">{insight.label}:</span> {insight.text}
+                      </p>
+                      <div class="text-primary mt-2 text-xs font-medium">{insight.cta}</div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

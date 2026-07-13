@@ -1,0 +1,110 @@
+---
+/** AI-assisted efficiency illustration for the result step. */
+---
+
+<div
+  aria-hidden="true"
+  class="relative max-w-xs min-w-xs text-left [--border:color-mix(in_oklab,var(--color-foreground)_7.5%,transparent)] [--primary:var(--color-indigo-500)]"
+>
+  <div class="absolute inset-x-6 top-6 z-[1]">
+    <div
+      class="absolute inset-0 scale-100 opacity-75 blur-lg transition-all duration-300 dark:opacity-50"
+    >
+      <div
+        class="bg-linear-to-r/increasing animate-hue-rotate absolute inset-x-6 top-12 bottom-0 -translate-y-3 from-pink-400 to-purple-400"
+      >
+      </div>
+    </div>
+    <div
+      class="bg-illustration/95 ring-border-illustration shadow-black/6.5 relative rounded-xl text-left shadow-lg ring-1 backdrop-blur"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="lucide lucide-x absolute top-2 right-2 size-3 text-muted-foreground"
+        aria-hidden="true"
+      >
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg>
+      <span class="text-muted-foreground block p-3 text-xs">Wat pakken we eerst aan?</span>
+      <div class="flex justify-between border-t p-2">
+        <span
+          class="hover:bg-foreground/5 text-muted-foreground hover:text-foreground flex h-6 cursor-pointer items-center gap-1.5 rounded-md p-2 duration-100"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-brain size-3.5 text-fuchsia-600 opacity-90"
+            aria-hidden="true"
+          >
+            <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"
+            ></path>
+            <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"
+            ></path>
+            <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path>
+          </svg>
+          <span class="text-xs">AI Agent</span>
+        </span>
+        <div
+          class="brand-on-primary bg-primary before:border-foreground/20 relative flex size-6 rounded-md text-white shadow before:absolute before:inset-0 before:rounded-md before:border"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-corner-down-left m-auto size-3.5 drop-shadow"
+            aria-hidden="true"
+          >
+            <polyline points="9 10 4 15 9 20"></polyline>
+            <path d="M20 4v7a4 4 0 0 1-4 4H4"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mask-b-from-25% mask-b-to-85% space-y-3 text-left text-sm leading-relaxed">
+    <div class="text-muted-foreground">
+      Leads krijgen nu met
+      <span
+        class="result-highlight bg-linear-to-r from-primary to-emerald-500 bg-clip-text px-0.5 text-transparent"
+      >
+        directe opvolging
+      </span>
+      binnen een uur antwoord.
+    </div>
+    <div class="text-muted-foreground">
+      Niets glipt meer weg tussen mail, telefoon en je dagelijkse agenda.
+    </div>
+  </div>
+</div>
+
+<style>
+  .result-highlight {
+    display: inline;
+    position: relative;
+    top: 0.035em;
+    vertical-align: baseline;
+  }
+</style>

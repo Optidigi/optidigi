@@ -1,0 +1,103 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import ContactShowcase from "@/components/ContactShowcase.astro";
+import { siteConfig } from "@/config/site";
+---
+
+<Layout title="Contact | Optidigi" description="Neem contact op met Optidigi of plan direct een vrijblijvend gesprek over software, AI en automatisering.">
+  <div class="theme-green scheme-light selection:bg-primary/15 selection:text-foreground bg-background dark:scheme-dark">
+    <SiteHeader />
+    <main>
+      <section class="mx-auto max-w-5xl px-6 pb-4 pt-32 lg:pt-40">
+        <div class="max-w-2xl text-balance">
+          <h1 class="text-foreground text-4xl font-semibold sm:text-5xl">Samen kijken wat er slimmer kan</h1>
+          <p class="text-muted-foreground mt-4 text-lg leading-relaxed">Vertel waar werk blijft liggen, welke systemen niet goed samenwerken of welk digitaal idee je wilt realiseren. We helpen je de logische volgende stap te bepalen.</p>
+        </div>
+      </section>
+
+      <section id="contact" class="bg-background @container overflow-hidden py-24">
+        <div aria-hidden="true" class="h-px border-b border-dashed"></div>
+
+        <div class="mx-auto my-1 max-w-5xl px-2 sm:px-6">
+          <div class="grid sm:gap-6 md:grid-cols-2">
+            <div class="relative">
+              <div aria-hidden="true" class="mask-y-from-85% border-foreground/10 pointer-events-none absolute -inset-x-1 -bottom-96 -top-24 border-x border-dashed"></div>
+              <div class="flex h-full flex-col gap-12 px-6 pt-6 sm:p-12 sm:pb-6">
+                <div>
+                  <h2 class="text-foreground text-xl font-medium">Stuur een bericht</h2>
+                  <p class="text-muted-foreground mt-2 text-sm">Een korte uitleg is genoeg. We reageren doorgaans binnen één werkdag.</p>
+                </div>
+
+                <form data-contact-form class="grid gap-4">
+                  <div class="grid gap-4 sm:grid-cols-2">
+                    <label class="grid gap-1.5 text-xs font-medium">Naam<input required name="name" autocomplete="name" placeholder="Jouw naam" class="h-10 rounded-md bg-card px-3 text-sm font-normal outline-none ring-1 ring-border-illustration transition placeholder:text-muted-foreground/60 focus:ring-primary/50" /></label>
+                    <label class="grid gap-1.5 text-xs font-medium">E-mailadres<input required name="email" type="email" autocomplete="email" placeholder="naam@bedrijf.nl" class="h-10 rounded-md bg-card px-3 text-sm font-normal outline-none ring-1 ring-border-illustration transition placeholder:text-muted-foreground/60 focus:ring-primary/50" /></label>
+                  </div>
+                  <label class="grid gap-1.5 text-xs font-medium">Waar kunnen we bij helpen?
+                    <select name="subject" class="h-10 cursor-pointer rounded-md bg-card px-3 text-sm font-normal outline-none ring-1 ring-border-illustration transition focus:ring-primary/50">
+                      <option>AI & automatisering</option><option>Maatwerk software</option><option>Cloud & software</option><option>Overig</option>
+                    </select>
+                  </label>
+                  <label class="grid gap-1.5 text-xs font-medium">Bericht<textarea required name="message" rows="5" placeholder="Waar loop je tegenaan of wat wil je realiseren?" class="resize-none rounded-md bg-card px-3 py-2.5 text-sm font-normal leading-relaxed outline-none ring-1 ring-border-illustration transition placeholder:text-muted-foreground/60 focus:ring-primary/50"></textarea></label>
+                  <div class="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <p data-contact-message class="text-muted-foreground min-h-4 text-xs" aria-live="polite"></p>
+                    <button type="submit" class="brand-primary-action inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border-[0.5px] border-white/10 bg-primary px-5 text-sm font-medium text-primary-foreground shadow-md shadow-black/15 ring-1 ring-black/10 transition hover:bg-primary/90 active:scale-98">
+                      Verstuur bericht
+                      <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="aspect-4/5 relative sm:aspect-square md:aspect-auto">
+              <div aria-hidden="true" class="mask-y-from-85% border-foreground/10 pointer-events-none absolute -inset-x-1 -bottom-96 -top-24 border-x border-dashed"></div>
+              <ContactShowcase />
+            </div>
+          </div>
+        </div>
+
+        <div aria-hidden="true" class="h-px border-t border-dashed"></div>
+
+        <div class="mx-auto max-w-5xl px-2 py-6 sm:px-6 sm:py-12">
+          <div class="@xl:grid-cols-2 @xl:gap-6 grid gap-12 px-6 sm:px-12">
+            <div>
+              <p class="text-sm font-medium">Liever direct contact?</p>
+              <p class="text-muted-foreground mt-2 max-w-sm text-sm leading-relaxed">Mail of bel ons gerust. Je vraag hoeft nog niet volledig uitgewerkt te zijn.</p>
+              <div class="mt-4 grid gap-2 text-sm">
+                <a class="flex w-fit items-center gap-2 text-muted-foreground transition hover:text-primary" href={`mailto:${siteConfig.email}`}><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg>{siteConfig.email}</a>
+                <a class="flex w-fit items-center gap-2 text-muted-foreground transition hover:text-primary" href={`tel:${siteConfig.phoneHref}`}><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z"></path></svg>{siteConfig.phone}</a>
+              </div>
+            </div>
+
+            <div class="@2xl:pl-12 flex flex-col justify-end">
+              <figure class="relative mt-auto max-w-xl">
+                <blockquote class="text-foreground max-w-xs text-balance">“Er werd goed geluisterd en snel teruggebracht wat voor ons echt de logische eerste stap was.”</blockquote>
+                <figcaption class="mt-4 flex items-center gap-2">
+                  <span class="before:border-foreground/10 relative flex size-10 items-center justify-center overflow-hidden rounded-lg bg-illustration text-sm font-semibold text-primary shadow before:absolute before:inset-0 before:rounded-lg before:border">M</span>
+                  <span class="space-y-0.5"><strong class="text-foreground block text-sm font-medium">MKB-ondernemer</strong><span class="text-muted-foreground block text-xs">Klantreactie</span></span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+        <div aria-hidden="true" class="h-px border-t border-dashed"></div>
+      </section>
+    </main>
+    <SiteFooter showBrandMark showLead={false} compact />
+  </div>
+</Layout>
+
+<script>
+  document.querySelector<HTMLFormElement>("[data-contact-form]")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const subject = encodeURIComponent(`${String(form.get("subject"))} — contact via optidigi.nl`);
+    const body = encodeURIComponent(`Naam: ${String(form.get("name"))}\nE-mail: ${String(form.get("email"))}\n\n${String(form.get("message"))}`);
+    window.location.href = `mailto:hey@optidigi.nl?subject=${subject}&body=${body}`;
+    const message = document.querySelector<HTMLElement>("[data-contact-message]");
+    if (message) message.textContent = "Je e-mailprogramma wordt geopend.";
+  });
+</script>

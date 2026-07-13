@@ -1,0 +1,151 @@
+---
+import Logo from "@/components/Logo.astro";
+import AppointmentDialog from "@/components/AppointmentDialog.astro";
+import { HeaderNavigationDesktop, HeaderNavigationMobile } from "@/components/HeaderNavigation";
+import { siteConfig } from "@/config/site";
+
+const navControlHeight = "h-8";
+const navLogoHeight = "h-6";
+const getStartedClass =
+  "cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all focus-visible:outline-none active:scale-98 focus-visible:ring-1 focus-visible:ring-ring shadow-md border-[0.5px] border-white/10 shadow-black/15 [&_svg]:drop-shadow-sm text-shadow-sm bg-primary ring-1 ring-(--ring-color) [--ring-color:color-mix(in_oklab,black_15%,var(--color-primary))] dark:border-transparent dark:[--ring-color:color-mix(in_oklab,white_15%,var(--color-primary))] text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 text-xs";
+
+---
+
+<header
+  role="banner"
+  data-nav
+  data-state="inactive"
+  class="data-[menu-open=true]:h-screen data-[menu-open=true]:backdrop-blur data-[menu-open=true]:bg-background/50 fixed inset-x-0 top-0 z-50"
+>
+  <div
+    class="h-18 absolute inset-x-0 top-0 z-50 border-b ring-1 ring-transparent transition-all duration-300 in-data-scrolled:bg-background/75 in-data-scrolled:backdrop-blur in-data-[menu-open=true]:border-transparent lg:in-data-[menu-open=true]:ring-border lg:in-data-[menu-open=true]:bg-card/75 lg:in-data-[menu-open=true]:shadow-lg lg:in-data-[menu-open=true]:backdrop-blur lg:in-data-[menu-open=true]:border-b lg:in-data-[menu-open=true]:shadow-black/6.5 lg:in-data-[menu-open=true]:h-[calc(var(--nav-viewport-height,0px)+3.4rem)] max-lg:in-data-[state=active]:h-screen max-lg:in-data-[state=active]:bg-background/75 max-lg:in-data-[state=active]:backdrop-blur max-lg:h-14 max-lg:overflow-hidden max-lg:border-b"
+  >
+    <div class="mx-auto max-w-5xl px-6">
+      <div class="relative flex flex-wrap items-center justify-between lg:py-5">
+        <div
+          aria-hidden="true"
+          class="in-data-[menu-open=true]:block absolute inset-x-0 bottom-0 hidden h-px bg-[length:4px_1px] bg-repeat-x opacity-20 [background-image:linear-gradient(90deg,var(--color-foreground)_1px,transparent_1px)]"
+        >
+        </div>
+
+        <div
+          class="flex items-center justify-between gap-8 max-lg:h-14 max-lg:w-full max-lg:border-b"
+        >
+          <a
+            aria-label="home"
+            class:list={[
+              "inline-flex shrink-0 items-center justify-center",
+              navControlHeight,
+            ]}
+            href="/"
+          >
+            <Logo class:list={[navLogoHeight, "w-auto"]} />
+          </a>
+
+          <HeaderNavigationDesktop client:load />
+
+          <button
+            type="button"
+            data-nav-toggle
+            aria-label="Menu openen"
+            class="relative z-20 -m-2.5 -mr-3 block cursor-pointer p-2.5 lg:hidden"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-menu in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-5 duration-200"
+            >
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-x in-data-[state=active]:rotate-0 in-data-[state=active]:scale-100 in-data-[state=active]:opacity-100 absolute inset-0 m-auto size-5 -rotate-180 scale-0 opacity-0 duration-200"
+            >
+              <path d="M18 6 6 18"></path>
+              <path d="m6 6 12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <HeaderNavigationMobile client:load />
+
+        <div
+          class="max-lg:in-data-[state=active]:mt-6 in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent"
+        >
+          <div
+            class="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit"
+          >
+            <a href={siteConfig.ctaHref} data-booking-trigger class:list={[getStartedClass, "brand-primary-action max-sm:w-full"]}>
+              {siteConfig.ctaLabel}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<AppointmentDialog />
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-nav]");
+  const toggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
+
+  toggle?.addEventListener("click", () => {
+    const active = header?.getAttribute("data-state") === "active";
+    header?.setAttribute("data-state", active ? "inactive" : "active");
+    toggle.setAttribute("aria-label", active ? "Menu openen" : "Menu sluiten");
+  });
+
+  document.addEventListener("nav-close", () => {
+    header?.setAttribute("data-state", "inactive");
+    toggle?.setAttribute("aria-label", "Menu openen");
+  });
+
+  const forceCloseDesktopNav = () => {
+    header?.removeAttribute("data-menu-open");
+    const bar = document.querySelector<HTMLElement>("[data-nav] > div");
+    const menu = document.querySelector<HTMLElement>('[data-slot="navigation-menu"]');
+    const main = document.querySelector<HTMLElement>("main");
+    bar?.style.removeProperty("--nav-viewport-height");
+    bar?.style.removeProperty("height");
+    menu?.style.removeProperty("--nav-viewport-height");
+    if (main?.scrollTop) main.scrollTop = 0;
+  };
+
+  header?.addEventListener("click", (event) => {
+    if ((event.target as HTMLElement | null)?.closest("a")) {
+      forceCloseDesktopNav();
+      requestAnimationFrame(forceCloseDesktopNav);
+      window.setTimeout(forceCloseDesktopNav, 300);
+    }
+  });
+  window.addEventListener("hashchange", forceCloseDesktopNav);
+  window.addEventListener("popstate", forceCloseDesktopNav);
+
+  const onScroll = () => {
+    if (!header) return;
+    if (window.scrollY > 8) header.setAttribute("data-scrolled", "true");
+    else header.removeAttribute("data-scrolled");
+  };
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+</script>
