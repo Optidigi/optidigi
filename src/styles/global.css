@@ -86,6 +86,23 @@
   --spacing-18: 4.5rem;
 }
 
+.field {
+  height: 2.75rem;
+  width: 100%;
+  border-radius: 0.75rem;
+  background: var(--background);
+  padding-inline: 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  outline: none;
+  box-shadow: 0 0 0 1px var(--border-illustration);
+  transition: box-shadow 150ms ease;
+}
+
+.field:focus-visible {
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--primary) 25%, transparent);
+}
+
 /* Green brand treatment, applied by the primary homepage. */
 .theme-green {
   --primary: #166534;
