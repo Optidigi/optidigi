@@ -5,7 +5,7 @@ import HomePage from "@/components/HomePage.astro";
 import { siteConfig } from "@/config/site";
 ---
 
-<Layout title="Optidigi" description={siteConfig.description}>
+<Layout title={siteConfig.defaultTitle} description={siteConfig.description} canonicalPath="/">
   <div
     class="theme-green scheme-light selection:bg-primary/15 selection:text-foreground bg-background dark:scheme-dark"
   >

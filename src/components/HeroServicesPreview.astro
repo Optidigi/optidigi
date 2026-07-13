@@ -21,7 +21,7 @@ const defaultTabId = tabs[0].id;
     <div class="mx-auto max-w-4xl px-6 sm:px-11">
       <div class="divide-foreground/10 relative z-20 grid grid-cols-3 items-center justify-center gap-px divide-x divide-dashed *:h-16" role="tablist" aria-label="Voorbeelden van onze diensten">
         {tabs.map((tab, index) => (
-          <button type="button" role="tab" data-service-tab={tab.id} aria-selected={index === 0 ? "true" : "false"} class="group flex cursor-pointer items-center justify-center px-1 sm:px-2">
+          <button type="button" role="tab" id={`service-tab-${tab.id}`} aria-label={tab.label} aria-controls={`service-panel-${tab.id}`} tabindex={index === 0 ? "0" : "-1"} data-service-tab={tab.id} aria-selected={index === 0 ? "true" : "false"} class="group flex cursor-pointer items-center justify-center px-1 sm:px-2">
             <div class={index === 0 ? tabPillActiveClass : tabPillInactiveClass}>
               <ServiceTabIcon icon={tab.icon} />
               <span class="@max-md:hidden">{tab.label}</span>
@@ -37,7 +37,7 @@ const defaultTabId = tabs[0].id;
       <div class="bg-card dark:bg-background ring-foreground/5 aspect-3/4 overflow-hidden rounded-xl border-4 border-l-8 border-transparent shadow ring-1 sm:aspect-3/2">
         <div class="shadow-black/6.5 relative size-full overflow-hidden">
           {tabs.map((tab, index) => (
-            <div data-service-panel={tab.id} hidden={index !== 0 ? true : undefined} class:list={["absolute inset-0 overflow-hidden bg-background transition-opacity duration-200 ease-out motion-reduce:transition-none", index === 0 ? "opacity-100" : "opacity-0"]}>
+            <div role="tabpanel" id={`service-panel-${tab.id}`} aria-labelledby={`service-tab-${tab.id}`} data-service-panel={tab.id} hidden={index !== 0 ? true : undefined} class:list={["absolute inset-0 overflow-hidden bg-background transition-opacity duration-200 ease-out motion-reduce:transition-none", index === 0 ? "opacity-100" : "opacity-0"]}>
               {tab.id === "custom-software" ? <CustomSoftwarePreview /> : tab.id === "cloud-software" ? <CloudSoftwarePreview /> : <AutomationOverview panel={automationOverviewPanel} />}
             </div>
           ))}
@@ -47,7 +47,7 @@ const defaultTabId = tabs[0].id;
   </div>
 </div>
 
-<script define:vars={{ defaultTabId }}>
+<script is:inline define:vars={{ defaultTabId }}>
   const root = document.querySelector("[data-hero-services-preview]");
   if (root) {
     const activePillClass = "ring-border-illustration group-active:scale-99 hover:text-foreground flex h-10 items-center gap-2 rounded-full px-3 ring-1 transition-all duration-150 sm:px-4 [&>svg]:size-4 bg-illustration text-foreground shadow-primary/6.5 shadow-md";
@@ -66,6 +66,7 @@ const defaultTabId = tabs[0].id;
         const active = button.dataset.serviceTab === tabId;
         pill.className = active ? activePillClass : inactivePillClass;
         button.setAttribute("aria-selected", active ? "true" : "false");
+        button.setAttribute("tabindex", active ? "0" : "-1");
       });
       currentPanel?.classList.replace("opacity-100", "opacity-0");
       window.setTimeout(() => {
@@ -80,6 +81,18 @@ const defaultTabId = tabs[0].id;
     };
     buttons.forEach((button) => button.addEventListener("click", () => {
       if (button.dataset.serviceTab) setTab(button.dataset.serviceTab);
+    }));
+    buttons.forEach((button, index) => button.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const targetIndex = event.key === "Home"
+        ? 0
+        : event.key === "End"
+          ? buttons.length - 1
+          : (index + (event.key === "ArrowRight" ? 1 : -1) + buttons.length) % buttons.length;
+      const target = buttons[targetIndex];
+      target?.focus();
+      if (target?.dataset.serviceTab) setTab(target.dataset.serviceTab);
     }));
   }
 </script>

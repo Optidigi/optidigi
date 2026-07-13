@@ -63,7 +63,7 @@ const { brand, class: className = "size-4" } = Astro.props;
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      <g clip-path="url(#task-google-calendar-clip)">
+      <g>
         <path d="M390.736 121.264H121.264V390.736H390.736V121.264Z" fill="white" />
         <path
           d="M390.736 512L512 390.736L451.368 380.392L390.736 390.736L379.67 446.196L390.736 512Z"
@@ -88,11 +88,6 @@ const { brand, class: className = "size-4" } = Astro.props;
           fill="#4285F4"
         />
       </g>
-      <defs>
-        <clipPath id="task-google-calendar-clip">
-          <rect width="512" height="512" fill="white" />
-        </clipPath>
-      </defs>
     </svg>
   )
 }

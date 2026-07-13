@@ -6,7 +6,7 @@ import ContactShowcase from "@/components/ContactShowcase.astro";
 import { siteConfig } from "@/config/site";
 ---
 
-<Layout title="Contact | Optidigi" description="Neem contact op met Optidigi of plan direct een vrijblijvend gesprek over software, AI en automatisering.">
+<Layout title="Contact en afspraak plannen | Optidigi" description="Neem contact op met Optidigi of plan direct een vrijblijvend gesprek over software, AI en automatisering." canonicalPath="/contact">
   <div class="theme-green scheme-light selection:bg-primary/15 selection:text-foreground bg-background dark:scheme-dark">
     <SiteHeader />
     <main>
@@ -31,6 +31,7 @@ import { siteConfig } from "@/config/site";
                 </div>
 
                 <form data-contact-form class="grid gap-4">
+                  <input type="text" name="website" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true" />
                   <div class="grid gap-4 sm:grid-cols-2">
                     <label class="grid gap-1.5 text-xs font-medium">Naam<input required name="name" autocomplete="name" placeholder="Jouw naam" class="h-10 rounded-md bg-card px-3 text-sm font-normal outline-none ring-1 ring-border-illustration transition placeholder:text-muted-foreground/60 focus:ring-primary/50" /></label>
                     <label class="grid gap-1.5 text-xs font-medium">E-mailadres<input required name="email" type="email" autocomplete="email" placeholder="naam@bedrijf.nl" class="h-10 rounded-md bg-card px-3 text-sm font-normal outline-none ring-1 ring-border-illustration transition placeholder:text-muted-foreground/60 focus:ring-primary/50" /></label>
@@ -42,9 +43,12 @@ import { siteConfig } from "@/config/site";
                   </label>
                   <label class="grid gap-1.5 text-xs font-medium">Bericht<textarea required name="message" rows="5" placeholder="Waar loop je tegenaan of wat wil je realiseren?" class="resize-none rounded-md bg-card px-3 py-2.5 text-sm font-normal leading-relaxed outline-none ring-1 ring-border-illustration transition placeholder:text-muted-foreground/60 focus:ring-primary/50"></textarea></label>
                   <div class="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <p data-contact-message class="text-muted-foreground min-h-4 text-xs" aria-live="polite"></p>
-                    <button type="submit" class="brand-primary-action inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border-[0.5px] border-white/10 bg-primary px-5 text-sm font-medium text-primary-foreground shadow-md shadow-black/15 ring-1 ring-black/10 transition hover:bg-primary/90 active:scale-98">
-                      Verstuur bericht
+                    <div class="text-muted-foreground text-xs">
+                      <p data-contact-message class="min-h-4" aria-live="polite"></p>
+                      <p>We gebruiken je gegevens alleen om te reageren. <a href="/privacy" class="text-primary underline-offset-4 hover:underline">Lees onze privacyverklaring</a>.</p>
+                    </div>
+                    <button data-contact-submit type="submit" class="brand-primary-action inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border-[0.5px] border-white/10 bg-primary px-5 text-sm font-medium text-primary-foreground shadow-md shadow-black/15 ring-1 ring-black/10 transition hover:bg-primary/90 active:scale-98 disabled:cursor-wait disabled:opacity-60">
+                      <span data-contact-submit-label>Verstuur bericht</span>
                       <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
                     </button>
                   </div>
@@ -91,13 +95,53 @@ import { siteConfig } from "@/config/site";
 </Layout>
 
 <script>
-  document.querySelector<HTMLFormElement>("[data-contact-form]")?.addEventListener("submit", (event) => {
+  const contactForm = document.querySelector<HTMLFormElement>("[data-contact-form]");
+  const contactMessage = document.querySelector<HTMLElement>("[data-contact-message]");
+  const contactSubmit = document.querySelector<HTMLButtonElement>("[data-contact-submit]");
+  const contactSubmitLabel = document.querySelector<HTMLElement>("[data-contact-submit-label]");
+  const formStartedAt = Date.now();
+
+  contactForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const subject = encodeURIComponent(`${String(form.get("subject"))} — contact via optidigi.nl`);
-    const body = encodeURIComponent(`Naam: ${String(form.get("name"))}\nE-mail: ${String(form.get("email"))}\n\n${String(form.get("message"))}`);
-    window.location.href = `mailto:hey@optidigi.nl?subject=${subject}&body=${body}`;
-    const message = document.querySelector<HTMLElement>("[data-contact-message]");
-    if (message) message.textContent = "Je e-mailprogramma wordt geopend.";
+    if (!contactForm || !contactSubmit) return;
+
+    contactSubmit.disabled = true;
+    if (contactSubmitLabel) contactSubmitLabel.textContent = "Versturen…";
+    if (contactMessage) contactMessage.textContent = "";
+
+    const fields = new FormData(contactForm);
+    const payload = {
+      name: String(fields.get("name") || "").trim(),
+      email: String(fields.get("email") || "").trim(),
+      subject: String(fields.get("subject") || "").trim(),
+      message: String(fields.get("message") || "").trim(),
+      website: String(fields.get("website") || ""),
+      formStartedAt,
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) throw new Error("contact request failed");
+
+      contactForm.reset();
+      if (contactMessage) {
+        contactMessage.textContent = "Bedankt. Je bericht is verstuurd; we reageren doorgaans binnen één werkdag.";
+        contactMessage.classList.remove("text-destructive");
+        contactMessage.classList.add("text-primary");
+      }
+    } catch {
+      if (contactMessage) {
+        contactMessage.textContent = "Versturen lukte niet. Probeer het opnieuw of mail ons rechtstreeks.";
+        contactMessage.classList.remove("text-primary");
+        contactMessage.classList.add("text-destructive");
+      }
+    } finally {
+      contactSubmit.disabled = false;
+      if (contactSubmitLabel) contactSubmitLabel.textContent = "Verstuur bericht";
+    }
   });
 </script>

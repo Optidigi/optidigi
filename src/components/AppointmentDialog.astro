@@ -35,4 +35,13 @@ import AppointmentScheduler from "@/components/AppointmentScheduler";
   bookingDialog?.addEventListener("click", (event) => {
     if (event.target === bookingDialog) bookingDialog.close();
   });
+
+  const openFromHash = () => {
+    if (window.location.hash !== "#afspraak" || !bookingDialog?.isConnected) return;
+    document.dispatchEvent(new CustomEvent("booking-reset"));
+    if (!bookingDialog.open) bookingDialog.showModal();
+  };
+
+  openFromHash();
+  window.addEventListener("hashchange", openFromHash);
 </script>

@@ -5,6 +5,9 @@ dist/
 
 # dependencies
 node_modules/
+.tmp/
+data/
+*.sqlite*
 
 # logs
 npm-debug.log*

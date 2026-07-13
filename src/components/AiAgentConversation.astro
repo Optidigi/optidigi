@@ -72,7 +72,7 @@ const aiText =
   </div>
 </div>
 
-<script define:vars={{ aiText }}>
+<script is:inline define:vars={{ aiText }}>
   function startTypewriter(element, text, speed) {
     const chunkSize =
       speed < 25 ? 1 : Math.max(1, Math.round((speed - 25) / 10));

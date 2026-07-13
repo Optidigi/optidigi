@@ -1,12 +1,45 @@
 ---
 import "../styles/global.css";
+import { siteConfig } from "@/config/site";
 
 interface Props {
   title: string;
   description?: string;
+  canonicalPath?: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  type?: "website" | "article";
 }
 
-const { title, description = "Optidigi" } = Astro.props;
+const {
+  title,
+  description = siteConfig.description,
+  canonicalPath = Astro.url.pathname,
+  image = "/og-image.png",
+  imageAlt = "Optidigi — software, AI en automatisering voor bedrijven",
+  noindex = false,
+  type = "website",
+} = Astro.props;
+
+const canonicalUrl = new URL(canonicalPath, siteConfig.url).toString();
+const socialImageUrl = new URL(image, siteConfig.url).toString();
+const organization = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": `${siteConfig.url}/#organization`,
+  name: siteConfig.name,
+  url: siteConfig.url,
+  logo: `${siteConfig.url}/organization-logo.png`,
+  email: siteConfig.email,
+  telephone: siteConfig.phoneHref,
+  vatID: siteConfig.btw,
+  identifier: {
+    "@type": "PropertyValue",
+    name: "KVK-nummer",
+    value: siteConfig.kvk,
+  },
+};
 ---
 
 <!doctype html>
@@ -16,9 +49,30 @@ const { title, description = "Optidigi" } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <meta
+      name="robots"
+      content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}
+    />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/svg+xml" href="/favicon-od-ribbon.svg" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content={siteConfig.locale} />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(organization)} />
     <title>{title}</title>
   </head>
   <body class="bg-background overflow-x-hidden antialiased [--grid-size:108px] [--subgrid-size:calc(var(--grid-size)/2)]">

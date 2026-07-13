@@ -3,6 +3,9 @@
 .github
 dist
 node_modules
+.tmp
+data
+*.sqlite*
 
 .env
 .env.*

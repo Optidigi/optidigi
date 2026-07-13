@@ -21,8 +21,8 @@ const slidePanelVisibleClass =
 const slideBgImageClass = "size-full object-cover opacity-65 dark:opacity-35";
 
 /** Local background images shared with the homepage service showcase. */
-const slide0Bg = "/feature-slide-1.jpg";
-const slide1Bg = "/feature-slide-0.jpg";
+const slide0Bg = "/feature-slide-1.webp";
+const slide1Bg = "/feature-slide-0.webp";
 
 ---
 
@@ -135,9 +135,9 @@ const slide1Bg = "/feature-slide-0.jpg";
             class:list={[slidePanelBaseClass, slidePanelVisibleClass]}
           >
             <div class="max-w-sm text-balance">
-              <h3 class="text-foreground text-xl font-medium">
+              <h2 class="text-foreground text-xl font-medium">
                 AI die meedenkt in je dagelijkse werk
-              </h3>
+              </h2>
               <p class="text-muted-foreground mb-6 mt-4 text-balance">
                 Van klantvragen en documenten tot interne processen: AI helpt je team sneller
                 antwoorden, betere beslissingen nemen en minder handmatig werk doen.
@@ -224,9 +224,9 @@ const slide1Bg = "/feature-slide-0.jpg";
             class:list={[slidePanelBaseClass, slidePanelHiddenClass]}
           >
             <div class="max-w-sm text-balance">
-              <h3 class="text-foreground text-xl font-medium">
+              <h2 class="text-foreground text-xl font-medium">
                 Automatisering die terugkerend werk overneemt
-              </h3>
+              </h2>
               <p class="text-muted-foreground mb-6 mt-4 text-balance">
                 Laat workflows, opvolging en administratie automatisch lopen, gekoppeld aan de
                 systemen die je team al gebruikt.
@@ -403,7 +403,7 @@ const slide1Bg = "/feature-slide-0.jpg";
     });
 
     let currentSlide = 0;
-    let autoRotateId: ReturnType<typeof setInterval> | undefined;
+    let autoRotateId: number | undefined;
     const slideCount = buttons.length;
     const autoRotateMs = 7000;
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");

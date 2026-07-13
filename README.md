@@ -6,6 +6,9 @@ The public Optidigi marketing website, built with Astro, React and Tailwind CSS.
 
 - `/` — homepage
 - `/contact` — contact form and appointment entry point
+- `/privacy` — privacy statement
+- `/beheer/afspraken` — private appointment and availability management
+- `/api/*` — contact, availability, booking and management endpoints
 
 The pre-green homepage is retained in `src/archive/home-before-green.astro`. Files in `src/archive` are not exposed as routes.
 
@@ -35,12 +38,20 @@ The pre-green homepage is retained in `src/archive/home-before-green.astro`. Fil
 | `npm install` | Install dependencies |
 | `npm run dev` | Start the local site at `localhost:4321` |
 | `npm run build` | Create the production build in `dist` |
+| `npm run check` | Run Astro and TypeScript diagnostics |
+| `npm test` | Run booking and validation tests |
+| `npm run verify` | Run checks, tests and a production build |
+| `npm start` | Run the built Node server |
 | `npm run preview` | Preview the production build locally |
 
 Run `npm run build` after structural or component changes; it validates both Astro routes and client-side React bundles.
 
 ## Container image
 
-The production image is a multi-stage build: Node builds the static Astro site and an unprivileged Nginx container serves the result on port `8080`.
+The production image is a multi-stage Node 24 build. Public pages are prerendered, while the standalone Astro Node server handles the form, booking and private management endpoints on port `8080`.
 
 Pushes to `main` publish `ghcr.io/optidigi/optidigi:latest` plus a commit-specific tag through GitHub Actions. The production Traefik stack routes `optidigi.nl` and `www.optidigi.nl` to this container.
+
+Production mounts a persistent volume at `/data` for SQLite. `scripts/backup-bookings.mjs` creates consistent database backups in `/data/backups` and retains 30 days. The public forms queue Cloudflare Email Service messages in SQLite so temporary mail failures can be retried through `/api/internal/email-outbox`.
+
+Copy `.env.example` to the private deployment environment and set the Cloudflare account/token, admin credentials and outbox cron secret. Never commit the production `.env`.

@@ -14,6 +14,9 @@ import {
 
 export const siteConfig = {
   name: "Optidigi",
+  url: "https://optidigi.nl",
+  locale: "nl_NL",
+  defaultTitle: "Software, AI en automatisering voor bedrijven | Optidigi",
   email: "hey@optidigi.nl",
   phone: "+31 6 25052591",
   phoneHref: "+31625052591",
