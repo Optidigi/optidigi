@@ -53,7 +53,7 @@ async function deliver(row: OutboxRow) {
     body: JSON.stringify({
       to: row.recipient,
       from: { address: config.fromAddress, name: config.fromName },
-      ...(row.reply_to ? { replyTo: row.reply_to } : {}),
+      ...(row.reply_to ? { reply_to: row.reply_to } : {}),
       subject: row.subject,
       text: row.text_body,
       html: row.html_body,
