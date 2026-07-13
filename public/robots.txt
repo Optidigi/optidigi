@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /beheer/
+Disallow: /agenda/
 
 Sitemap: https://optidigi.nl/sitemap.xml

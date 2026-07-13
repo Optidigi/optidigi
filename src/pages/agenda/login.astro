@@ -1,0 +1,71 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Logo from "@/components/Logo.astro";
+import { adminConfigured } from "@/lib/server/admin-auth";
+
+export const prerender = false;
+const configured = adminConfigured();
+---
+
+<Layout title="Inloggen | Optidigi Agenda" description="Beveiligde toegang tot de Optidigi agenda." noindex>
+  <main class="theme-green scheme-light grid min-h-screen place-items-center bg-background px-5 py-10 text-foreground dark:scheme-dark">
+    <div class="w-full max-w-md">
+      <a href="/" aria-label="Terug naar Optidigi" class="mx-auto block w-fit"><Logo class="h-7 dark:invert" /></a>
+
+      <section class="mt-8 rounded-2xl bg-card p-6 shadow-xl shadow-black/5 ring-1 ring-border-illustration sm:p-8" aria-labelledby="login-title">
+        <div class="mb-6">
+          <p class="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">Beveiligde omgeving</p>
+          <h1 id="login-title" class="mt-2 text-2xl font-semibold tracking-tight">Inloggen bij Agenda</h1>
+          <p class="mt-2 text-sm leading-relaxed text-muted-foreground">Bekijk afspraken en beheer wanneer klanten een gesprek kunnen plannen.</p>
+        </div>
+
+        {!configured && (
+          <p class="mb-5 rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive" role="alert">De beheeromgeving is nog niet geconfigureerd.</p>
+        )}
+
+        <form data-login-form class="grid gap-4">
+          <label class="grid gap-1.5 text-sm font-medium">
+            Gebruikersnaam
+            <input name="username" required autocomplete="username" autofocus class="h-11 rounded-lg bg-background px-3.5 font-normal outline-none ring-1 ring-border-illustration transition focus:ring-2 focus:ring-primary/30" />
+          </label>
+          <label class="grid gap-1.5 text-sm font-medium">
+            Wachtwoord
+            <input name="password" required type="password" autocomplete="current-password" class="h-11 rounded-lg bg-background px-3.5 font-normal outline-none ring-1 ring-border-illustration transition focus:ring-2 focus:ring-primary/30" />
+          </label>
+          <p data-login-message class="min-h-5 text-sm text-destructive" role="alert" aria-live="polite"></p>
+          <button type="submit" disabled={!configured} class="inline-flex h-11 cursor-pointer items-center justify-center rounded-lg bg-primary px-5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50">
+            Inloggen
+          </button>
+        </form>
+      </section>
+
+      <p class="mt-5 text-center text-xs text-muted-foreground">Alleen toegankelijk voor Optidigi-beheerders.</p>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>("[data-login-form]");
+  const message = document.querySelector<HTMLElement>("[data-login-message]");
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const fields = new FormData(form);
+    if (button) { button.disabled = true; button.textContent = "Inloggen…"; }
+    if (message) message.textContent = "";
+    try {
+      const response = await fetch("/api/admin/session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: fields.get("username"), password: fields.get("password") }),
+      });
+      const result = await response.json().catch(() => null) as { message?: string } | null;
+      if (!response.ok) throw new Error(result?.message || "Inloggen is mislukt.");
+      window.location.assign("/agenda");
+    } catch (error) {
+      if (message) message.textContent = error instanceof Error ? error.message : "Inloggen is mislukt.";
+      if (button) { button.disabled = false; button.textContent = "Inloggen"; }
+    }
+  });
+</script>

@@ -12,7 +12,7 @@ process.env.BOOKING_START_TIME = "09:00";
 process.env.BOOKING_END_TIME = "10:00";
 
 const { availableSlots, createAppointment } = await import("../src/lib/server/booking.ts");
-const { setAppointmentStatus, createBlock } = await import("../src/lib/server/admin.ts");
+const { setAppointmentStatus, createBlock, deleteAppointment, listAppointments } = await import("../src/lib/server/admin.ts");
 const { resetDatabaseForTests } = await import("../src/lib/server/database.ts");
 
 test.afterEach(() => resetDatabaseForTests());
@@ -62,4 +62,25 @@ test("a blocked period is excluded from public availability", () => {
   createBlock({ startAt: initial.slots[1].startAt, endAt: initial.slots[1].endAt, reason: "Niet beschikbaar" });
   const remaining = availableSlots("2026-07-20", "2026-07-20", now);
   assert.deepEqual(remaining.slots, [initial.slots[0]]);
+});
+
+test("permanent deletion removes the appointment and reopens its slot", () => {
+  const now = new Date("2026-07-13T06:00:00.000Z");
+  const selected = availableSlots("2026-07-20", "2026-07-20", now).slots[0];
+  const appointment = createAppointment({
+    startAt: selected.startAt,
+    type: "video",
+    name: "Te verwijderen",
+    email: "remove@example.com",
+    company: "",
+    phone: "",
+    subject: "Overig",
+    note: "",
+    idempotencyKey: "booking-delete-test",
+  });
+
+  deleteAppointment(appointment.id);
+
+  assert.equal(listAppointments().some((item) => item.id === appointment.id), false);
+  assert.equal(availableSlots("2026-07-20", "2026-07-20", now).slots.length, 2);
 });

@@ -7,7 +7,7 @@ The public Optidigi marketing website, built with Astro, React and Tailwind CSS.
 - `/` — homepage
 - `/contact` — contact form and appointment entry point
 - `/privacy` — privacy statement
-- `/beheer/afspraken` — private appointment and availability management
+- `/agenda` — private appointment and availability management
 - `/api/*` — contact, availability, booking and management endpoints
 
 The pre-green homepage is retained in `src/archive/home-before-green.astro`. Files in `src/archive` are not exposed as routes.

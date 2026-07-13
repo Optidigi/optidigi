@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { requireAdmin, setAppointmentStatus } from "../../../../lib/server/admin";
+import { deleteAppointment, requireAdmin, setAppointmentStatus } from "../../../../lib/server/admin";
 import { apiError, json, readJson, requireSameOrigin } from "../../../../lib/server/http";
 
 export const prerender = false;
@@ -15,3 +15,12 @@ export const PATCH: APIRoute = async ({ request, params }) => {
   }
 };
 
+export const DELETE: APIRoute = async ({ request, params }) => {
+  try {
+    requireAdmin(request);
+    requireSameOrigin(request);
+    return json({ appointment: deleteAppointment(params.id || "") });
+  } catch (error) {
+    return apiError(error);
+  }
+};

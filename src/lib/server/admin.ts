@@ -1,41 +1,10 @@
-import { randomUUID, timingSafeEqual } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import { database } from "./database";
 import { InputError } from "./validation";
-
-function equalSecret(left: string, right: string) {
-  const a = Buffer.from(left);
-  const b = Buffer.from(right);
-  return a.length === b.length && timingSafeEqual(a, b);
-}
+import { hasAdminAccess } from "./admin-auth";
 
 export function requireAdmin(request: Request) {
-  const expectedUser = process.env.ADMIN_USERNAME || "";
-  const expectedPassword = process.env.ADMIN_PASSWORD || "";
-  const basic = request.headers.get("authorization")?.match(/^Basic\s+(.+)$/i)?.[1];
-  if (expectedUser && expectedPassword && basic) {
-    let decoded = "";
-    try {
-      decoded = Buffer.from(basic, "base64").toString("utf8");
-    } catch {
-      decoded = "";
-    }
-    const separator = decoded.indexOf(":");
-    const username = separator >= 0 ? decoded.slice(0, separator) : "";
-    const password = separator >= 0 ? decoded.slice(separator + 1) : "";
-    if (equalSecret(username, expectedUser) && equalSecret(password, expectedPassword)) return;
-  }
-
-  const configuredToken = process.env.ADMIN_API_TOKEN;
-  const bearer = request.headers.get("authorization")?.replace(/^Bearer\s+/i, "") || "";
-  if (configuredToken && bearer && equalSecret(bearer, configuredToken)) return;
-
-  const email = request.headers.get("cf-access-authenticated-user-email")?.toLowerCase();
-  const assertion = request.headers.get("cf-access-jwt-assertion");
-  const allowed = (process.env.ADMIN_EMAILS || process.env.MAIL_CONTACT_TO || "hey@optidigi.nl")
-    .split(",")
-    .map((value) => value.trim().toLowerCase())
-    .filter(Boolean);
-  if (email && assertion && allowed.includes(email)) return;
+  if (hasAdminAccess(request)) return;
   throw new InputError("Niet geautoriseerd.", 401, "unauthorized");
 }
 
@@ -57,6 +26,21 @@ export function setAppointmentStatus(id: string, status: unknown) {
     throw error;
   }
   return { id, status };
+}
+
+export function deleteAppointment(id: string) {
+  const db = database();
+  db.exec("BEGIN IMMEDIATE");
+  try {
+    db.prepare(`DELETE FROM email_outbox WHERE related_type = 'appointment' AND related_id = ?`).run(id);
+    const result = db.prepare(`DELETE FROM appointments WHERE id = ?`).run(id);
+    if (!result.changes) throw new InputError("Afspraak niet gevonden.", 404, "not_found");
+    db.exec("COMMIT");
+  } catch (error) {
+    db.exec("ROLLBACK");
+    throw error;
+  }
+  return { id, deleted: true };
 }
 
 export function listBlocks() {
