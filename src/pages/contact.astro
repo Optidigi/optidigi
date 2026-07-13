@@ -125,7 +125,10 @@ import { siteConfig } from "@/config/site";
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (!response.ok) throw new Error("contact request failed");
+      if (!response.ok) {
+        const error = await response.json().catch(() => null) as { message?: string } | null;
+        throw new Error(error?.message || "contact request failed");
+      }
 
       contactForm.reset();
       if (contactMessage) {
@@ -133,9 +136,11 @@ import { siteConfig } from "@/config/site";
         contactMessage.classList.remove("text-destructive");
         contactMessage.classList.add("text-primary");
       }
-    } catch {
+    } catch (error) {
       if (contactMessage) {
-        contactMessage.textContent = "Versturen lukte niet. Probeer het opnieuw of mail ons rechtstreeks.";
+        contactMessage.textContent = error instanceof Error && error.message !== "contact request failed"
+          ? error.message
+          : "Versturen lukte niet. Probeer het opnieuw of mail ons rechtstreeks.";
         contactMessage.classList.remove("text-primary");
         contactMessage.classList.add("text-destructive");
       }

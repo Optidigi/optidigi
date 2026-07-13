@@ -142,10 +142,15 @@ export default function AppointmentScheduler() {
         setAvailabilityMessage("Dit moment is zojuist geboekt. Kies een ander beschikbaar tijdstip.");
         return;
       }
-      if (!response.ok) throw new Error("booking request failed");
+      if (!response.ok) {
+        const error = await response.json().catch(() => null) as { message?: string } | null;
+        throw new Error(error?.message || "booking request failed");
+      }
       setConfirmation({ name: nextDraft.name, email: nextDraft.email }); setStep(3);
-    } catch {
-      setMessage("Boeken lukte niet. Je gegevens zijn bewaard; probeer het nogmaals.");
+    } catch (error) {
+      setMessage(error instanceof Error && error.message !== "booking request failed"
+        ? error.message
+        : "Boeken lukte niet. Je gegevens zijn bewaard; probeer het nogmaals.");
     } finally { setSubmitting(false); }
   }
 

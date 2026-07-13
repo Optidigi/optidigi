@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { createAppointment } from "../../../lib/server/booking";
-import { flushEmailOutbox } from "../../../lib/server/email";
+import { flushEmailOutbox, requireMailConfiguration } from "../../../lib/server/email";
 import { apiError, json, rateLimit, readJson, requireSameOrigin } from "../../../lib/server/http";
 import { appointmentInput } from "../../../lib/server/validation";
 
@@ -10,6 +10,7 @@ export const POST: APIRoute = async (context) => {
   try {
     requireSameOrigin(context.request);
     rateLimit(context, 8);
+    requireMailConfiguration();
     const result = createAppointment(appointmentInput(await readJson(context.request)));
     // The database commit is the confirmation boundary; email is durable in the outbox and may retry later.
     await flushEmailOutbox(4);
@@ -18,4 +19,3 @@ export const POST: APIRoute = async (context) => {
     return apiError(error);
   }
 };
-

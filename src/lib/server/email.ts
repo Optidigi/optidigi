@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { database } from "./database";
 import { mailConfig } from "./config";
+import { InputError } from "./validation";
 
 type Message = {
   relatedType: "appointment" | "contact";
@@ -14,6 +15,13 @@ type Message = {
 
 export const escapeHtml = (value: string) =>
   value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[character]!);
+
+export function requireMailConfiguration() {
+  const config = mailConfig();
+  if (!config.accountId || !config.apiToken) {
+    throw new InputError("Deze functie is tijdelijk niet beschikbaar. Mail ons via hey@optidigi.nl.", 503, "service_unavailable");
+  }
+}
 
 export function enqueueEmail(message: Message) {
   const id = randomUUID();
