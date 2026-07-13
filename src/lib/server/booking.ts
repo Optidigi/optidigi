@@ -82,7 +82,7 @@ export function createAppointment(input: AppointmentInput) {
     const label = formatDutch(requested, config.timezone);
     const type = input.type === "video" ? "Videogesprek" : "Telefoongesprek";
     const mail = mailConfig();
-    const emails = appointmentEmails({ ...input, id, label, type, contactEmail: mail.contactTo });
+    const emails = appointmentEmails({ ...input, id, label, type });
     enqueueEmail({ relatedType: "appointment", relatedId: id, to: mail.contactTo, replyTo: input.email, ...emails.admin });
     enqueueEmail({ relatedType: "appointment", relatedId: id, to: input.email, replyTo: mail.contactTo, ...emails.customer });
     db.exec("COMMIT");
@@ -104,7 +104,7 @@ export function createContact(input: ContactInput) {
     db.prepare(`INSERT INTO contacts (id, name, email, subject, message, created_at) VALUES (?, ?, ?, ?, ?, ?)`)
       .run(id, input.name, input.email, input.subject, input.message, now);
     const mail = mailConfig();
-    const emails = contactEmails({ id, ...input, contactEmail: mail.contactTo });
+    const emails = contactEmails({ id, ...input });
     enqueueEmail({ relatedType: "contact", relatedId: id, to: mail.contactTo, replyTo: input.email, ...emails.admin });
     enqueueEmail({ relatedType: "contact", relatedId: id, to: input.email, replyTo: mail.contactTo, ...emails.customer });
     db.exec("COMMIT");

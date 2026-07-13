@@ -10,13 +10,11 @@ const appointment = appointmentEmails({
   name: "Sophie de Vries", company: "Northstar Studio", email: "sophie@example.com",
   phone: "+31 6 12345678", subject: "AI-kansen voor onze workflow",
   note: "We willen vooral kijken naar het automatiseren van onze intake en projectplanning.",
-  contactEmail: "hey@optidigi.nl",
 });
 const contact = contactEmails({
   id: "OD-2026-0714", name: "Daan Jansen", email: "daan@example.com",
   subject: "Nieuwe maatwerkapplicatie",
   message: "We zoeken een partner voor een klantportaal dat aansluit op onze bestaande systemen. Kunnen we de aanpak en een eerste inschatting bespreken?",
-  contactEmail: "hey@optidigi.nl",
 });
 
 const previews = {

@@ -2,16 +2,16 @@ export type EmailContent = { subject: string; text: string; html: string };
 
 type AppointmentEmailInput = {
   id: string; label: string; type: string; name: string; company?: string; email: string;
-  phone?: string; subject: string; note?: string; contactEmail: string;
+  phone?: string; subject: string; note?: string;
 };
 
 type ContactEmailInput = {
-  id: string; name: string; email: string; subject: string; message: string; contactEmail: string;
+  id: string; name: string; email: string; subject: string; message: string;
 };
 
 const colors = {
   ink: "#18181b", paper: "#ffffff", canvas: "#fafafa", surface: "#f7f7f7",
-  border: "#e4e4e7", muted: "#71717a", accent: "#05aa74", accentDark: "#038458",
+  border: "#e4e4e7", muted: "#71717a",
 };
 
 export const escapeHtml = (value: string) => value.replace(/[&<>"']/g, (character) => ({
@@ -41,16 +41,17 @@ const messageCard = (label: string, message: string) => `
     </td></tr>
   </table>`;
 
-const button = (href: string, label: string) => `
-  <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin-top:22px;border-collapse:separate;">
-    <tr><td style="background:${colors.accent};border:1px solid ${colors.accentDark};border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.16),0 8px 22px rgba(5,170,116,.16);">
-      <a href="${escapeHtml(href)}" style="display:inline-block;padding:11px 18px;color:#ffffff;font-size:13px;font-weight:700;line-height:20px;text-decoration:none;">${escapeHtml(label)} &nbsp;›</a>
+const appointmentConfirmationCard = (label: string, type: string, email: string) => `
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:22px auto 0;border-collapse:separate;background:${colors.surface};border:1px solid ${colors.border};border-radius:8px;">
+    <tr><td style="padding:13px 16px;text-align:left;">
+      <p style="margin:0;color:${colors.ink};font-size:14px;font-weight:600;line-height:21px;">${escapeHtml(label)}</p>
+      <p style="margin:4px 0 0;color:${colors.muted};font-size:12px;line-height:18px;">${escapeHtml(type)} &middot; ${escapeHtml(email)}</p>
     </td></tr>
   </table>`;
 
 function layout(input: {
-  preheader: string; eyebrow: string; title: string; intro: string; body: string;
-  action?: string; actionHref?: string; footerNote: string;
+  preheader: string; eyebrow?: string; title: string; intro: string; body: string;
+  footerNote: string; centered?: boolean; successMark?: boolean;
 }) {
   return `<!doctype html>
 <html lang="nl">
@@ -73,21 +74,19 @@ function layout(input: {
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background:${colors.canvas};border-collapse:collapse;">
     <tr><td align="center" style="padding:32px 12px;">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:600px;border-collapse:separate;background:${colors.paper};border:1px solid ${colors.border};border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(24,24,27,.06);">
-        <tr><td class="email-pad" style="padding:25px 30px;background:${colors.paper};border-bottom:1px dashed ${colors.border};">
+        <tr><td class="email-pad" style="padding:25px 30px;background:${colors.paper};border-bottom:1px solid ${colors.border};">
           <a href="https://optidigi.nl" style="display:inline-block;text-decoration:none;">
             <img src="https://optidigi.nl/optidigi-logo-email.png" width="116" height="29" alt="Optidigi" style="display:block;width:116px;height:29px;border:0;outline:none;text-decoration:none;">
           </a>
         </td></tr>
-        <tr><td class="email-pad" style="padding:36px 30px 18px;">
-          <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 18px;border-collapse:separate;">
-            <tr><td style="padding:6px 10px;background:#ecfdf5;border:1px solid #bbf7d0;border-radius:999px;color:#166534;font-size:11px;font-weight:700;line-height:16px;">● &nbsp;${escapeHtml(input.eyebrow)}</td></tr>
-          </table>
-          <h1 class="email-title" style="margin:0;max-width:500px;color:${colors.ink};font-size:29px;font-weight:700;letter-spacing:-.035em;line-height:35px;">${escapeHtml(input.title)}</h1>
-          <p style="margin:14px 0 0;max-width:500px;color:${colors.muted};font-size:15px;line-height:24px;">${escapeHtml(input.intro)}</p>
+        <tr><td class="email-pad" style="padding:36px 30px 18px;text-align:${input.centered ? "center" : "left"};">
+          ${input.successMark ? `<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 20px;border-collapse:separate;"><tr><td width="48" height="48" align="center" valign="middle" style="width:48px;height:48px;background:#dcfce7;border:1px solid #bbf7d0;border-radius:999px;color:#166534;font-size:23px;font-weight:700;line-height:48px;">&#10003;</td></tr></table>` : ""}
+          ${input.eyebrow ? `<p style="margin:0 0 10px;color:${colors.muted};font-size:11px;font-weight:700;letter-spacing:.12em;line-height:17px;text-transform:uppercase;">${escapeHtml(input.eyebrow)}</p>` : ""}
+          <h1 class="email-title" style="margin:${input.centered ? "0 auto" : "0"};max-width:500px;color:${colors.ink};font-size:29px;font-weight:700;letter-spacing:-.035em;line-height:35px;">${escapeHtml(input.title)}</h1>
+          <p style="margin:${input.centered ? "14px auto 0" : "14px 0 0"};max-width:500px;color:${colors.muted};font-size:15px;line-height:24px;">${escapeHtml(input.intro)}</p>
         </td></tr>
-        <tr><td class="email-pad" style="padding:12px 30px 38px;">
+        <tr><td class="email-pad" style="padding:12px 30px 38px;text-align:${input.centered ? "center" : "left"};">
           ${input.body}
-          ${input.action && input.actionHref ? button(input.actionHref, input.action) : ""}
           <p style="margin:22px 0 0;max-width:500px;color:${colors.muted};font-size:12px;line-height:20px;">${escapeHtml(input.footerNote)}</p>
         </td></tr>
         <tr><td class="email-pad" style="padding:21px 30px;background:${colors.surface};border-top:1px dashed ${colors.border};">
@@ -114,7 +113,6 @@ export function appointmentEmails(input: AppointmentEmailInput): { admin: EmailC
         eyebrow: "Nieuwe afspraak", title: `Nieuwe afspraak met ${input.name}`,
         intro: "De afspraak staat in de Optidigi-agenda. Hieronder vind je alle gegevens.",
         body: `${detailsCard([["Moment", input.label], ["Type", input.type], ["Naam", input.name], ["Bedrijf", input.company], ["E-mail", input.email], ["Telefoon", input.phone], ["Onderwerp", input.subject], ["Referentie", input.id]])}${messageCard("Opmerking", input.note || "Geen opmerking toegevoegd.")}`,
-        action: `Beantwoord ${input.name}`, actionHref: `mailto:${input.email}`,
         footerNote: "Deze afspraak is automatisch bevestigd. Beheer beschikbaarheid en afspraken via de Optidigi-agenda.",
       }),
     },
@@ -123,11 +121,12 @@ export function appointmentEmails(input: AppointmentEmailInput): { admin: EmailC
       text: customerText,
       html: layout({
         preheader: `Je afspraak met Optidigi staat gepland voor ${input.label}.`,
-        eyebrow: "Afspraak bevestigd", title: "Je afspraak staat gepland",
-        intro: `Hoi ${input.name}, bedankt voor je aanvraag. Hieronder vind je de bevestigde afspraak.`,
-        body: detailsCard([["Moment", input.label], ["Type", input.type], ["Onderwerp", input.subject], ["Referentie", input.id]]),
-        action: "Afspraak wijzigen", actionHref: `mailto:${input.contactEmail}?subject=${encodeURIComponent(`Wijziging afspraak ${input.id}`)}`,
-        footerNote: "Wil je het moment wijzigen of annuleren? Antwoord op deze e-mail; dan helpen we je meteen.",
+        title: "Afspraak bevestigd",
+        intro: `Bedankt, ${input.name}. Het moment staat vast.`,
+        body: appointmentConfirmationCard(input.label, input.type, input.email),
+        footerNote: `Onderwerp: ${input.subject} · Referentie: ${input.id}. Wil je het moment wijzigen of annuleren? Antwoord dan op deze e-mail.`,
+        centered: true,
+        successMark: true,
       }),
     },
   };
@@ -144,7 +143,6 @@ export function contactEmails(input: ContactEmailInput): { admin: EmailContent; 
         preheader: `${input.name} stuurde een nieuw bericht via optidigi.nl.`, eyebrow: "Nieuw contactverzoek",
         title: `Nieuw bericht van ${input.name}`, intro: "Dit bericht is verstuurd via het contactformulier op optidigi.nl.",
         body: `${detailsCard([["Naam", input.name], ["E-mail", input.email], ["Onderwerp", input.subject], ["Referentie", input.id]])}${messageCard("Bericht", input.message)}`,
-        action: `Beantwoord ${input.name}`, actionHref: `mailto:${input.email}?subject=${encodeURIComponent(`Re: ${input.subject}`)}`,
         footerNote: "Door deze e-mail te beantwoorden, reageer je rechtstreeks naar de afzender.",
       }),
     },
@@ -152,10 +150,9 @@ export function contactEmails(input: ContactEmailInput): { admin: EmailContent; 
       subject: "We hebben je bericht ontvangen", text: customerText,
       html: layout({
         preheader: "We hebben je bericht ontvangen en reageren doorgaans binnen één werkdag.",
-        eyebrow: "Bericht ontvangen", title: "Bedankt. Je bericht is verstuurd.",
+        title: "Bedankt. Je bericht is verstuurd.",
         intro: `Hoi ${input.name}, je bericht is goed bij ons aangekomen. We reageren doorgaans binnen één werkdag.`,
         body: `${detailsCard([["Onderwerp", input.subject], ["Referentie", input.id]])}${messageCard("Jouw bericht", input.message)}`,
-        action: "Nog iets toevoegen?", actionHref: `mailto:${input.contactEmail}?subject=${encodeURIComponent(`Aanvulling ${input.id}`)}`,
         footerNote: "Je hoeft niets te doen. Wil je nog iets toevoegen? Antwoord dan gewoon op deze e-mail.",
       }),
     },

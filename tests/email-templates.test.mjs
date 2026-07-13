@@ -7,12 +7,11 @@ const appointment = appointmentEmails({
   id: "afspraak-123", label: "maandag 20 juli 2026 om 09:00", type: "Videogesprek",
   name: "Ada <script>alert(1)</script>\r\nBcc: bad@example.com", company: "Voorbeeld & Co", email: "ada@example.com",
   phone: "+31 6 12345678", subject: "AI & automatisering", note: "Eerste regel\nTweede regel",
-  contactEmail: "hey@optidigi.nl",
 });
 
 const contact = contactEmails({
   id: "contact-123", name: "Grace Hopper", email: "grace@example.com", subject: "Nieuwe website",
-  message: "Kunnen jullie <strong>helpen</strong>?\nGraag snel.", contactEmail: "hey@optidigi.nl",
+  message: "Kunnen jullie <strong>helpen</strong>?\nGraag snel.",
 });
 
 test("all transactional emails use the branded, compatible shell and a plain-text alternative", () => {
@@ -24,23 +23,26 @@ test("all transactional emails use the branded, compatible shell and a plain-tex
     assert.match(email.html, /font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif/);
     assert.match(email.html, /#18181b/);
     assert.match(email.html, /#e4e4e7/);
-    assert.match(email.html, /#05aa74/);
     assert.match(email.html, /optidigi-logo-email\.png/);
     assert.doesNotMatch(email.html, /background:#111318/);
+    assert.doesNotMatch(email.html, /mailto:/);
     assert.ok(email.text.length > 100);
     assert.ok(email.subject.length > 5);
   }
 });
 
-test("customer content and admin reply actions are clear", () => {
+test("customer confirmations and admin instructions are clear", () => {
   assert.match(appointment.customer.html, /Afspraak bevestigd/);
-  assert.match(appointment.customer.html, /Je afspraak staat gepland/);
-  assert.match(appointment.customer.html, /Afspraak wijzigen/);
-  assert.match(appointment.admin.html, /mailto:ada@example\.com/);
+  assert.match(appointment.customer.html, /Het moment staat vast/);
+  assert.match(appointment.customer.html, /#166534/);
+  assert.doesNotMatch(appointment.customer.html, /Afspraak wijzigen/);
+  assert.doesNotMatch(appointment.customer.html, /●/);
+  assert.match(appointment.admin.text, /Beantwoord deze e-mail/);
   assert.doesNotMatch(appointment.admin.subject, /[\r\n]/);
   assert.match(contact.customer.html, /binnen één werkdag/);
   assert.match(contact.customer.html, /Bedankt\. Je bericht is verstuurd\./);
-  assert.match(contact.admin.html, /Beantwoord Grace Hopper/);
+  assert.doesNotMatch(contact.customer.html, /Nog iets toevoegen\?/);
+  assert.match(contact.admin.text, /Beantwoord deze e-mail/);
 });
 
 test("user-provided content is escaped while line breaks remain readable", () => {
