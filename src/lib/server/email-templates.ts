@@ -42,7 +42,7 @@ const messageCard = (label: string, message: string) => `
   </table>`;
 
 const appointmentConfirmationCard = (label: string, type: string, email: string) => `
-  <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:22px auto 0;border-collapse:separate;background:${colors.surface};border:1px solid ${colors.border};border-radius:8px;">
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:20px auto 0;border-collapse:separate;background:${colors.paper};border:1px solid ${colors.border};border-radius:10px;">
     <tr><td style="padding:13px 16px;text-align:left;">
       <p style="margin:0;color:${colors.ink};font-size:14px;font-weight:600;line-height:21px;">${escapeHtml(label)}</p>
       <p style="margin:4px 0 0;color:${colors.muted};font-size:12px;line-height:18px;">${escapeHtml(type)} &middot; ${escapeHtml(email)}</p>
@@ -101,6 +101,52 @@ function layout(input: {
 </html>`;
 }
 
+function customerAppointmentLayout(input: AppointmentEmailInput) {
+  return `<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light only">
+  <title>Afspraak bevestigd</title>
+  <style>
+    @media screen and (max-width:480px) {
+      .site-pad { padding-left:20px !important; padding-right:20px !important; }
+      .success-section { padding-top:52px !important; padding-bottom:52px !important; }
+    }
+  </style>
+</head>
+<body style="margin:0;padding:0;background:${colors.paper};color:${colors.ink};font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-text-size-adjust:100%;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">Je afspraak met Optidigi staat gepland voor ${escapeHtml(input.label)}.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background:${colors.paper};border-collapse:collapse;">
+    <tr><td align="center">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:600px;border-collapse:collapse;background:${colors.paper};">
+        <tr><td class="site-pad" style="height:72px;padding:0 30px;border-bottom:1px solid ${colors.border};vertical-align:middle;">
+          <a href="https://optidigi.nl" style="display:inline-block;text-decoration:none;">
+            <img src="https://optidigi.nl/optidigi-logo-email.png" width="116" height="29" alt="Optidigi" style="display:block;width:116px;height:29px;border:0;outline:none;text-decoration:none;">
+          </a>
+        </td></tr>
+        <tr><td style="border-bottom:1px dashed ${colors.border};font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr><td class="site-pad success-section" style="padding:64px 30px;text-align:center;border-left:1px dashed ${colors.border};border-right:1px dashed ${colors.border};">
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 20px;border-collapse:separate;"><tr><td width="48" height="48" align="center" valign="middle" style="width:48px;height:48px;background:#dcfce7;border:1px solid #bbf7d0;border-radius:999px;color:#166534;font-size:23px;font-weight:700;line-height:48px;">&#10003;</td></tr></table>
+          <h1 style="margin:0;color:${colors.ink};font-size:20px;font-weight:600;letter-spacing:-.025em;line-height:28px;">Afspraak bevestigd</h1>
+          <p style="margin:8px auto 0;max-width:448px;color:${colors.muted};font-size:14px;line-height:22px;">Bedankt, ${escapeHtml(input.name)}. Het moment staat vast.</p>
+          ${appointmentConfirmationCard(input.label, input.type, input.email)}
+          <p style="margin:24px auto 0;max-width:420px;color:${colors.muted};font-size:12px;line-height:19px;">Wil je het moment wijzigen of annuleren? Antwoord dan op deze e-mail.</p>
+        </td></tr>
+        <tr><td style="border-top:1px dashed ${colors.border};font-size:0;line-height:0;">&nbsp;</td></tr>
+        <tr><td class="site-pad" style="padding:24px 30px;background:${colors.surface};">
+          <p style="margin:0;color:${colors.ink};font-size:12px;font-weight:600;line-height:19px;">Optidigi · Nederland</p>
+          <p style="margin:4px 0 0;max-width:430px;color:${colors.muted};font-size:11px;line-height:18px;">Software, AI &amp; automatisering die aansluiten op hoe je bedrijf werkt.</p>
+          <p style="margin:10px 0 0;color:${colors.muted};font-size:11px;line-height:18px;">Referentie ${escapeHtml(input.id)} · <a href="https://optidigi.nl" style="color:${colors.ink};text-decoration:underline;">optidigi.nl</a></p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
+}
+
 export function appointmentEmails(input: AppointmentEmailInput): { admin: EmailContent; customer: EmailContent } {
   const adminText = `Nieuwe afspraak\n\nMoment: ${input.label}\nType: ${input.type}\nNaam: ${input.name}\nBedrijf: ${input.company || "—"}\nE-mail: ${input.email}\nTelefoon: ${input.phone || "—"}\nOnderwerp: ${input.subject}\nOpmerking: ${input.note || "—"}\nReferentie: ${input.id}\n\nBeantwoord deze e-mail om ${input.name} direct te bereiken.`;
   const customerText = `Hoi ${input.name},\n\nJe afspraak met Optidigi is bevestigd.\n\nMoment: ${input.label}\nType: ${input.type}\nOnderwerp: ${input.subject}\nReferentie: ${input.id}\n\nWil je het moment wijzigen of annuleren? Antwoord dan op deze e-mail.\n\nOptidigi`;
@@ -119,15 +165,7 @@ export function appointmentEmails(input: AppointmentEmailInput): { admin: EmailC
     customer: {
       subject: `Je afspraak met Optidigi is bevestigd — ${input.label}`,
       text: customerText,
-      html: layout({
-        preheader: `Je afspraak met Optidigi staat gepland voor ${input.label}.`,
-        title: "Afspraak bevestigd",
-        intro: `Bedankt, ${input.name}. Het moment staat vast.`,
-        body: appointmentConfirmationCard(input.label, input.type, input.email),
-        footerNote: `Onderwerp: ${input.subject} · Referentie: ${input.id}. Wil je het moment wijzigen of annuleren? Antwoord dan op deze e-mail.`,
-        centered: true,
-        successMark: true,
-      }),
+      html: customerAppointmentLayout(input),
     },
   };
 }
