@@ -37,10 +37,9 @@ export const bookingConfig = () => ({
 export const mailConfig = () => ({
   accountId: process.env.CLOUDFLARE_ACCOUNT_ID || "",
   apiToken: process.env.CLOUDFLARE_EMAIL_API_TOKEN || "",
-  fromAddress: process.env.MAIL_FROM_ADDRESS || "website@optidigi.nl",
+  fromAddress: process.env.MAIL_FROM_ADDRESS || "noreply@optidigi.nl",
   fromName: process.env.MAIL_FROM_NAME || "Optidigi",
   contactTo: process.env.MAIL_CONTACT_TO || "hey@optidigi.nl",
 });
 
 export const siteOrigin = () => new URL(process.env.SITE_URL || "https://optidigi.nl").origin;
-
