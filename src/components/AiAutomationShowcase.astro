@@ -2,9 +2,21 @@
 import AiAgentConversation from "./AiAgentConversation.astro";
 import SolutionBuildVisual from "@/components/process/SolutionBuildVisual.astro";
 import DashedSideGuides from "./lines/DashedSideGuides.astro";
+import { localePath, type Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
+const copy = locale === "en" ? {
+  leadStart: "Put", agents: "AI agents", leadMiddle: "to work across your existing systems, and let", automations: "Automations", leadEnd: "handle the recurring work.",
+  aiTitle: "AI that supports your day-to-day work", aiBody: "From customer questions and documents to internal processes: AI helps your team answer faster, make better decisions and do less manual work.", aiLink: "More about AI", aiBullets: ["Designed with GDPR in mind", "Connects with existing tools", "Practical and scalable"],
+  autoTitle: "Automation that takes care of recurring work", autoBody: "Let workflows, follow-up and administration run automatically, connected to the systems your team already uses.", autoLink: "More about automation", autoBullets: ["Starts with a request or change", "Updates CRM, email and calendar automatically", "Involves your team only when needed"],
+} : {
+  leadStart: "Zet", agents: "AI agents", leadMiddle: "aan het werk in je bestaande systemen, en laat", automations: "Automations", leadEnd: "het terugkerende werk afhandelen.",
+  aiTitle: "AI die meedenkt in je dagelijkse werk", aiBody: "Van klantvragen en documenten tot interne processen: AI helpt je team sneller antwoorden, betere beslissingen nemen en minder handmatig werk doen.", aiLink: "Meer over AI", aiBullets: ["AVG-bewust ingericht", "Koppelingen met bestaande tools", "Praktisch en schaalbaar"],
+  autoTitle: "Automatisering die terugkerend werk overneemt", autoBody: "Laat workflows, opvolging en administratie automatisch lopen, gekoppeld aan de systemen die je team al gebruikt.", autoLink: "Meer over automatisering", autoBullets: ["Start bij een aanvraag of wijziging", "Werkt CRM, mail en agenda automatisch bij", "Betrekt je team alleen wanneer dat nodig is"],
+};
 
 const learnMoreClass =
-  "brand-secondary-control cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all focus-visible:outline-none active:scale-98 focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-sm shadow-black/10 border border-transparent bg-card ring-1 ring-foreground/10 duration-200 hover:bg-muted/50 dark:ring-foreground/15 dark:hover:bg-muted/50 h-8 rounded-md px-3 text-xs";
+  "brand-secondary-control cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-[background-color,border-color,box-shadow,color,transform] focus-visible:outline-none active:scale-98 focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-sm shadow-black/10 border border-transparent bg-card ring-1 ring-foreground/10 duration-200 hover:bg-muted/50 dark:ring-foreground/15 dark:hover:bg-muted/50 h-8 rounded-md px-3 text-xs";
 
 const expandButtonBaseClass =
   "text-foreground not-data-expanded:hover:text-foreground/80 data-expanded:bg-clip-text data-expanded:text-transparent pl-12.5 sm:pl-13.5 relative cursor-pointer";
@@ -18,7 +30,7 @@ const slidePanelHiddenClass =
 const slidePanelVisibleClass =
   "pointer-events-auto visible opacity-100 transition-opacity duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none";
 
-const slideBgImageClass = "size-full object-cover opacity-65 dark:opacity-35";
+const slideBgImageClass = "size-full object-cover opacity-65 dark:opacity-80";
 
 /** Local background images shared with the homepage service showcase. */
 const slide0Bg = "/feature-slide-1.webp";
@@ -30,7 +42,7 @@ const slide1Bg = "/feature-slide-0.webp";
   <div class="border-foreground/10 border-b border-dashed pb-8 sm:pb-12">
     <div class="sm:px-18 mx-auto max-w-5xl px-8">
       <p class="text-foreground/60 text-4xl font-medium leading-[1.2] sm:text-5xl">
-        Zet
+        {copy.leadStart}
         <button
           type="button"
           data-expandable
@@ -77,9 +89,9 @@ const slide1Bg = "/feature-slide-0.webp";
               </svg>
             </span>
           </span>
-          <span class="in-data-expanded:text-transparent duration-200">AI agents</span>
+          <span class="in-data-expanded:text-transparent duration-200">{copy.agents}</span>
         </button>
-        aan het werk in je bestaande systemen, en laat
+        {copy.leadMiddle}
         <button
           type="button"
           data-expandable
@@ -118,9 +130,9 @@ const slide1Bg = "/feature-slide-0.webp";
               </svg>
             </span>
           </span>
-          <span class="in-data-expanded:text-transparent duration-200">Automations</span>
+          <span class="in-data-expanded:text-transparent duration-200">{copy.automations}</span>
         </button>
-        het terugkerende werk afhandelen.
+        {copy.leadEnd}
       </p>
     </div>
   </div>
@@ -136,14 +148,13 @@ const slide1Bg = "/feature-slide-0.webp";
           >
             <div class="max-w-sm text-balance">
               <h2 class="text-foreground text-xl font-medium">
-                AI die meedenkt in je dagelijkse werk
+                {copy.aiTitle}
               </h2>
               <p class="text-muted-foreground mb-6 mt-4 text-balance">
-                Van klantvragen en documenten tot interne processen: AI helpt je team sneller
-                antwoorden, betere beslissingen nemen en minder handmatig werk doen.
+                {copy.aiBody}
               </p>
-              <a class={learnMoreClass} href="/#diensten">
-                Meer over AI
+              <a class={learnMoreClass} href={localePath(locale, locale === "en" ? "/#services" : "/#diensten")}>
+                {copy.aiLink}
                 <span
                   class="border-l-foreground/50 ml-0.5 block size-0 border-y-4 border-l-4 border-y-transparent"
                 ></span>
@@ -170,7 +181,7 @@ const slide1Bg = "/feature-slide-0.webp";
                     ></path>
                     <path d="m9 12 2 2 4-4"></path>
                   </svg>
-                  <span class="text-foreground font-medium">AVG-bewust ingericht</span>
+                  <span class="text-foreground font-medium">{copy.aiBullets[0]}</span>
                 </li>
                 <li class="flex items-center gap-3">
                   <svg
@@ -191,7 +202,7 @@ const slide1Bg = "/feature-slide-0.webp";
                     ></path>
                     <path d="m9 12 2 2 4-4"></path>
                   </svg>
-                  <span class="text-foreground font-medium">Koppelingen met bestaande tools</span>
+                  <span class="text-foreground font-medium">{copy.aiBullets[1]}</span>
                 </li>
                 <li class="flex items-center gap-3">
                   <svg
@@ -212,7 +223,7 @@ const slide1Bg = "/feature-slide-0.webp";
                     ></path>
                     <path d="m9 12 2 2 4-4"></path>
                   </svg>
-                  <span class="text-foreground font-medium">Praktisch en schaalbaar</span>
+                  <span class="text-foreground font-medium">{copy.aiBullets[2]}</span>
                 </li>
               </ul>
             </div>
@@ -225,14 +236,13 @@ const slide1Bg = "/feature-slide-0.webp";
           >
             <div class="max-w-sm text-balance">
               <h2 class="text-foreground text-xl font-medium">
-                Automatisering die terugkerend werk overneemt
+                {copy.autoTitle}
               </h2>
               <p class="text-muted-foreground mb-6 mt-4 text-balance">
-                Laat workflows, opvolging en administratie automatisch lopen, gekoppeld aan de
-                systemen die je team al gebruikt.
+                {copy.autoBody}
               </p>
-              <a class={learnMoreClass} href="/#diensten">
-                Meer over automatisering
+              <a class={learnMoreClass} href={localePath(locale, locale === "en" ? "/#services" : "/#diensten")}>
+                {copy.autoLink}
                 <span
                   class="border-l-foreground/50 ml-0.5 block size-0 border-y-4 border-l-4 border-y-transparent"
                 ></span>
@@ -240,9 +250,7 @@ const slide1Bg = "/feature-slide-0.webp";
             </div>
             <div class="mt-auto max-w-sm">
               <ul class="text-muted-foreground space-y-3 pt-8 text-sm">
-                <li class="flex items-center gap-3"><span class="flex size-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">1</span><span class="text-foreground font-medium">Start bij een aanvraag of wijziging</span></li>
-                <li class="flex items-center gap-3"><span class="flex size-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">2</span><span class="text-foreground font-medium">Werkt CRM, mail en agenda automatisch bij</span></li>
-                <li class="flex items-center gap-3"><span class="flex size-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">3</span><span class="text-foreground font-medium">Betrekt je team alleen wanneer dat nodig is</span></li>
+                {copy.autoBullets.map((bullet, index) => <li class="flex items-center gap-3"><span class="flex size-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary">{index + 1}</span><span class="text-foreground font-medium">{bullet}</span></li>)}
               </ul>
             </div>
           </div>
@@ -251,7 +259,7 @@ const slide1Bg = "/feature-slide-0.webp";
 
       <div class="relative h-fit">
         <DashedSideGuides scale="frame" />
-        <div class="aspect-7/8 relative overflow-hidden rounded-xl">
+        <div data-nosnippet data-slide-image-frame class="aspect-7/8 relative overflow-hidden rounded-xl">
           <div
             data-slide-illustration="0"
             class:list={[
@@ -260,7 +268,7 @@ const slide1Bg = "/feature-slide-0.webp";
             ]}
           >
             <div class="min-w-xs w-full">
-              <AiAgentConversation />
+              <AiAgentConversation locale={locale} />
             </div>
           </div>
 
@@ -275,14 +283,14 @@ const slide1Bg = "/feature-slide-0.webp";
           >
             <div aria-hidden="true" class="flex h-full w-full items-center justify-center">
               <div class="scale-145 sm:scale-160">
-                <SolutionBuildVisual />
+                <SolutionBuildVisual locale={locale} />
               </div>
             </div>
           </div>
 
           <div data-slide-bg="0" class:list={["absolute inset-0", slideEnterClass]}>
             <img
-              alt="feature background image"
+              alt=""
               loading="lazy"
               decoding="async"
               class={slideBgImageClass}
@@ -301,7 +309,7 @@ const slide1Bg = "/feature-slide-0.webp";
             ]}
           >
             <img
-              alt="feature background image"
+              alt=""
               loading="lazy"
               decoding="async"
               class={slideBgImageClass}

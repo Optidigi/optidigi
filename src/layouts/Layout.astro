@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
-import { siteConfig } from "@/config/site";
+import { getSiteConfig } from "@/config/site";
+import { alternatePath, localeMeta, sharedCopy, type Locale } from "@/i18n";
 
 interface Props {
   title: string;
@@ -10,20 +11,27 @@ interface Props {
   imageAlt?: string;
   noindex?: boolean;
   type?: "website" | "article";
+  locale?: Locale;
 }
 
 const {
+  locale = "nl",
   title,
-  description = siteConfig.description,
+  description,
   canonicalPath = Astro.url.pathname,
   image = "/og-image.png",
-  imageAlt = "Optidigi — software, AI en automatisering voor bedrijven",
+  imageAlt,
   noindex = false,
   type = "website",
 } = Astro.props;
+const siteConfig = getSiteConfig(locale);
+const resolvedDescription = description ?? siteConfig.description;
+const resolvedImageAlt = imageAlt ?? sharedCopy[locale].imageAlt;
 
 const canonicalUrl = new URL(canonicalPath, siteConfig.url).toString();
 const socialImageUrl = new URL(image, siteConfig.url).toString();
+const dutchUrl = new URL(alternatePath(canonicalPath, "nl"), siteConfig.url).toString();
+const englishUrl = new URL(alternatePath(canonicalPath, "en"), siteConfig.url).toString();
 const organization = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -36,46 +44,63 @@ const organization = {
   vatID: siteConfig.btw,
   identifier: {
     "@type": "PropertyValue",
-    name: "KVK-nummer",
+    name: locale === "nl" ? "KVK-nummer" : "Dutch Chamber of Commerce number",
     value: siteConfig.kvk,
   },
 };
 ---
 
 <!doctype html>
-<html lang="nl">
+<html lang={localeMeta[locale].htmlLang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
+    <meta name="description" content={resolvedDescription} />
     <meta
       name="robots"
       content={noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"}
     />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="icon" type="image/svg+xml" href="/favicon-od-ribbon.svg" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
+    <link rel="alternate" hreflang="nl" href={dutchUrl} />
+    <link rel="alternate" hreflang="en" href={englishUrl} />
+    <link rel="alternate" hreflang="x-default" href={dutchUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon-od.svg" />
+    <meta name="theme-color" content="#ffffff" />
+    <script is:inline>
+      (() => {
+        let saved = null;
+        try { saved = localStorage.getItem("optidigi-theme"); } catch {}
+        const dark = saved ? saved === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.classList.toggle("dark", dark);
+        document.documentElement.style.colorScheme = dark ? "dark" : "light";
+        document.querySelector('meta[name="theme-color"]')?.setAttribute("content", dark ? "#09090b" : "#ffffff");
+      })();
+    </script>
     <meta property="og:type" content={type} />
     <meta property="og:locale" content={siteConfig.locale} />
+    <meta property="og:locale:alternate" content={locale === "nl" ? "en_GB" : "nl_NL"} />
     <meta property="og:site_name" content={siteConfig.name} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={resolvedDescription} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={socialImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:image:alt" content={resolvedImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={resolvedDescription} />
     <meta name="twitter:image" content={socialImageUrl} />
-    <meta name="twitter:image:alt" content={imageAlt} />
+    <meta name="twitter:image:alt" content={resolvedImageAlt} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(organization)} />
     <title>{title}</title>
   </head>
   <body class="bg-background overflow-x-hidden antialiased [--grid-size:108px] [--subgrid-size:calc(var(--grid-size)/2)]">
+    <a href="#main-content" class="bg-background text-foreground focus:ring-ring fixed top-3 left-3 z-[100] -translate-y-20 rounded-md px-4 py-2 text-sm font-medium shadow-lg transition-transform focus:translate-y-0 focus:ring-2 focus:outline-none">
+      {locale === "en" ? "Skip to main content" : "Naar hoofdinhoud"}
+    </a>
     <slot />
   </body>
 </html>

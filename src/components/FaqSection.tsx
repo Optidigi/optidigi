@@ -6,13 +6,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import type { Locale } from "@/i18n";
 
 type FaqItem = {
   question: string;
   answer: string | string[];
 };
 
-const faqItems: FaqItem[] = [
+const faqItemsNl: FaqItem[] = [
   {
     question: "We weten nog niet precies wat we nodig hebben. Kunnen jullie meedenken?",
     answer:
@@ -61,6 +62,17 @@ const faqItems: FaqItem[] = [
   },
 ];
 
+const faqItemsEn: FaqItem[] = [
+  { question: "We do not know exactly what we need yet. Can you help us figure it out?", answer: "Yes. We first identify where work gets stuck, takes unnecessary time or could be improved. Then we determine which combination of software, AI, automation or custom development best fits your situation." },
+  { question: "Can you work with our existing software and systems?", answer: "Yes. We start with what already works and explore how your current software can be configured or connected more effectively. We only recommend a different or custom solution when the existing systems genuinely fall short." },
+  { question: "Do we always need custom software?", answer: "No. When existing software is a good fit, configuring, implementing or connecting it is often smarter than building something entirely new. We use custom development when standard solutions do not support an important process well enough." },
+  { question: "Can we start with a single process or solution?", answer: "Yes. We can begin with one clearly defined process, integration, automation or application. This keeps the project manageable and lets you see the value before expanding further." },
+  { question: "How long does a typical project take?", answer: ["Standard automations and the implementation or integration of new or existing software often take one to four weeks. This includes configuration, testing, guidance and any onboarding or training.", "Larger custom solutions, team environments, websites, portals and dashboards usually take several weeks to a few months. Where possible, we work in phases and plan around your daily operations to minimise disruption."] },
+  { question: "Can we see a no-obligation demo?", answer: ["Yes. In many cases we can show a no-obligation demo or a simple example beforehand. What we can demonstrate depends on the solution and the complexity of the question.", "For more complex custom work, we first identify a representative part that can be shown in a short demo. We scope extensive prototypes or purpose-built demonstrations separately."] },
+  { question: "What happens after launch?", answer: "After launch, we help with rollout, guidance and, where needed, onboarding or training. We can then support maintenance, improvements and further development according to the solution and your needs." },
+  { question: "What is the digital opportunity review?", answer: ["The digital opportunity review is a no-obligation 15-to-30-minute session about your current way of working, systems and main bottlenecks. Its purpose is to understand the need and identify a sensible starting point.", "For a broader or more complex question, we can continue in a follow-up session or by email. This gives us enough context to offer focused advice."] },
+];
+
 function FaqAnswer({ answer }: { answer: string | string[] }) {
   const paragraphs = Array.isArray(answer) ? answer : [answer];
 
@@ -75,18 +87,19 @@ function FaqAnswer({ answer }: { answer: string | string[] }) {
   );
 }
 
-function ContactPrompt({ className }: { className?: string }) {
+function ContactPrompt({ className, locale }: { className?: string; locale: Locale }) {
   return (
     <p className={className}>
-      Staat je vraag er niet bij?{" "}
-      <a className="text-primary font-medium hover:underline" href="/contact">
-        Neem contact met ons op
+      {locale === "en" ? "Still have a question?" : "Staat je vraag er niet bij?"}{" "}
+      <a className="text-primary font-medium hover:underline" href={locale === "en" ? "/en/contact" : "/contact"}>
+        {locale === "en" ? "Contact us" : "Neem contact met ons op"}
       </a>
     </p>
   );
 }
 
-export default function FaqSection() {
+export default function FaqSection({ locale = "nl" }: { locale?: Locale }) {
+  const faqItems = locale === "en" ? faqItemsEn : faqItemsNl;
   return (
     <section id="faq" className="bg-background py-16 md:py-24">
       <div className="mx-auto max-w-5xl px-6">
@@ -98,9 +111,9 @@ export default function FaqSection() {
           <div className="max-w-lg max-md:px-6 pt-6 md:col-span-2 md:p-10 lg:p-12">
             <h2 className="text-foreground text-4xl font-semibold">FAQ</h2>
             <p className="text-muted-foreground mt-4 text-balance text-lg">
-              Antwoorden op veelgestelde vragen
+              {locale === "en" ? "Answers to frequently asked questions" : "Antwoorden op veelgestelde vragen"}
             </p>
-            <ContactPrompt className="text-muted-foreground mt-6 max-md:hidden" />
+            <ContactPrompt locale={locale} className="text-muted-foreground mt-6 max-md:hidden" />
           </div>
 
           <div className="md:col-span-3 md:px-4 md:pb-4 md:pt-10 lg:pt-12">
@@ -118,7 +131,7 @@ export default function FaqSection() {
         </div>
         </div>
 
-        <ContactPrompt className="text-muted-foreground mt-12 px-6 md:hidden" />
+        <ContactPrompt locale={locale} className="text-muted-foreground mt-12 px-6 md:hidden" />
       </div>
     </section>
   );

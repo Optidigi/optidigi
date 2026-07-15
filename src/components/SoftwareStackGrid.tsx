@@ -8,6 +8,7 @@ import claudeLogo from "@/assets/brand-logos/claude-ai-icon.svg?url";
 import microsoftCopilotLogo from "@/assets/brand-logos/microsoft-copilot.svg?url";
 import { Magnetic } from "@/components/ui/magnetic";
 import { cn } from "@/lib/utils";
+import type { Locale } from "@/i18n";
 
 type IntegrationBrand =
   | "microsoft-365"
@@ -69,6 +70,7 @@ function IntegrationLogo({
       draggable={false}
       className={cn(
         "size-6 shrink-0 select-none",
+        brand === "chatgpt" && "dark:brightness-0 dark:invert",
         className,
       )}
     />
@@ -126,7 +128,7 @@ function GridRow({ cells, className }: { cells: GridCell[]; className?: string }
   );
 }
 
-export function SoftwareStackGrid() {
+export function SoftwareStackGrid({ locale: _locale = "nl" }: { locale?: Locale }) {
   return (
     <>
       <GridRow cells={rowOne} />

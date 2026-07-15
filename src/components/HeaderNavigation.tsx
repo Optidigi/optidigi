@@ -20,14 +20,10 @@ import {
   navigationMenuMegaLinkClass,
 } from "@/components/ui/navigation-menu";
 import {
-  navAanpakFeatured,
-  navAanpakItems,
-  navDienstenFeatured,
-  navDienstenPrimary,
-  navDienstenSecondary,
-  navPlainLinks,
+  getNavigation,
   type NavMegaItem,
 } from "@/config/site";
+import type { Locale } from "@/i18n";
 import { cn } from "@/lib/utils";
 
 const mobileAccordionItemClass =
@@ -106,21 +102,13 @@ function useNavViewportHeight(isOpen: boolean) {
         return;
       }
 
-      const loop = () => {
-        sync();
-        if (document.querySelector("[data-nav]")?.getAttribute("data-menu-open") === "true") {
-          frame = window.requestAnimationFrame(loop);
-        }
-      };
-
       sync();
       resizeObserver = new ResizeObserver(sync);
       resizeObserver.observe(viewport);
 
       mutationObserver = new MutationObserver(() => {
-        sync();
         cancelAnimationFrame(frame);
-        frame = window.requestAnimationFrame(loop);
+        frame = window.requestAnimationFrame(sync);
       });
       mutationObserver.observe(viewport, {
         attributes: true,
@@ -190,7 +178,7 @@ function FeaturedCard({
 }) {
   return (
     <div
-      className="bg-linear-to-br inset-ring-foreground/10 inset-ring-1 relative mt-3 grid min-h-44 grid-rows-[1fr_auto] overflow-hidden rounded-xl bg-blue-200 from-pink-50 via-white/50 to-emerald-200 p-1 transition-colors duration-200 hover:bg-blue-300"
+      className="bg-card inset-ring-foreground/10 inset-ring-1 relative mt-3 grid min-h-40 grid-rows-[1fr_auto] overflow-hidden rounded-xl p-1 shadow-sm transition-[background-color,box-shadow] duration-200 before:pointer-events-none before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_82%_8%,color-mix(in_oklab,var(--primary)_10%,transparent),transparent_42%)] hover:bg-muted/70 hover:shadow-md"
     >
       <div
         aria-hidden="true"
@@ -216,15 +204,22 @@ function FeaturedCard({
   );
 }
 
-function DienstenPanel({ onNavigate }: { onNavigate: () => void }) {
+const labels = {
+  nl: { services: "Diensten", moreServices: "Meer diensten", startHere: "Start hier", approach: "Aanpak", nextStep: "Volgende stap", main: "Hoofdnavigatie", mobile: "Mobiel menu" },
+  en: { services: "Services", moreServices: "More services", startHere: "Start here", approach: "Approach", nextStep: "Next step", main: "Main navigation", mobile: "Mobile menu" },
+} as const;
+
+function DienstenPanel({ onNavigate, locale }: { onNavigate: () => void; locale: Locale }) {
+  const nav = getNavigation(locale);
+  const copy = labels[locale];
   return (
     <div className="min-w-5xl divide-foreground/10 mx-auto grid w-full max-w-5xl grid-cols-4 gap-4 divide-x pl-10">
       <div className="row-span-2 -mr-2 grid grid-rows-subgrid gap-1 pr-2">
-        <span className="text-muted-foreground ml-2 text-xs font-medium uppercase">
-          Diensten
+        <span className="text-muted-foreground ml-2 text-[11px] font-medium tracking-wide">
+          {copy.services}
         </span>
         <ul className="mt-2 space-y-2">
-          {navDienstenPrimary.map((item) => (
+          {nav.dienstenPrimary.map((item) => (
             <li key={item.title}>
               <MegaMenuLink item={item} onNavigate={onNavigate} />
             </li>
@@ -233,11 +228,11 @@ function DienstenPanel({ onNavigate }: { onNavigate: () => void }) {
       </div>
 
       <div className="col-span-2 row-span-2 grid grid-rows-subgrid gap-1 border-r-0">
-        <span className="text-muted-foreground ml-2 text-xs font-medium uppercase">
-          Meer diensten
+        <span className="text-muted-foreground ml-2 text-[11px] font-medium tracking-wide">
+          {copy.moreServices}
         </span>
         <ul className="mt-2 grid grid-cols-2 gap-2">
-          {navDienstenSecondary.map((item) => (
+          {nav.dienstenSecondary.map((item) => (
             <li key={item.title}>
               <MegaMenuLink item={item} onNavigate={onNavigate} />
             </li>
@@ -246,24 +241,26 @@ function DienstenPanel({ onNavigate }: { onNavigate: () => void }) {
       </div>
 
       <div className="row-span-2 grid grid-rows-subgrid gap-1">
-        <span className="text-muted-foreground ml-2 text-xs font-medium uppercase">
-          Start hier
+        <span className="text-muted-foreground ml-2 text-[11px] font-medium tracking-wide">
+          {copy.startHere}
         </span>
-        <FeaturedCard {...navDienstenFeatured} onNavigate={onNavigate} />
+        <FeaturedCard {...nav.dienstenFeatured} onNavigate={onNavigate} />
       </div>
     </div>
   );
 }
 
-function AanpakPanel({ onNavigate }: { onNavigate: () => void }) {
+function AanpakPanel({ onNavigate, locale }: { onNavigate: () => void; locale: Locale }) {
+  const nav = getNavigation(locale);
+  const copy = labels[locale];
   return (
     <div className="min-w-5xl divide-foreground/10 mx-auto grid w-full max-w-5xl grid-cols-4 gap-4 divide-x pl-10">
       <div className="col-span-2 row-span-2 -mr-4 grid grid-rows-subgrid gap-1 pr-2">
-        <span className="text-muted-foreground ml-2 text-xs font-medium uppercase">
-          Aanpak
+        <span className="text-muted-foreground ml-2 text-[11px] font-medium tracking-wide">
+          {copy.approach}
         </span>
         <ul className="mt-2 grid grid-cols-2 gap-2">
-          {navAanpakItems.map((item) => (
+          {nav.aanpakItems.map((item) => (
             <li key={item.title}>
               <MegaMenuLink item={item} onNavigate={onNavigate} />
             </li>
@@ -272,16 +269,18 @@ function AanpakPanel({ onNavigate }: { onNavigate: () => void }) {
       </div>
 
       <div className="col-span-2 row-span-2 grid grid-rows-subgrid gap-1">
-        <span className="text-muted-foreground ml-2 text-xs font-medium uppercase">
-          Volgende stap
+        <span className="text-muted-foreground ml-2 text-[11px] font-medium tracking-wide">
+          {copy.nextStep}
         </span>
-        <FeaturedCard {...navAanpakFeatured} onNavigate={onNavigate} />
+        <FeaturedCard {...nav.aanpakFeatured} onNavigate={onNavigate} />
       </div>
     </div>
   );
 }
 
-export function HeaderNavigationDesktop() {
+export function HeaderNavigationDesktop({ locale = "nl" }: { locale?: Locale }) {
+  const nav = getNavigation(locale);
+  const copy = labels[locale];
   const [value, setValue] = React.useState("");
   useNavViewportHeight(Boolean(value));
 
@@ -292,7 +291,7 @@ export function HeaderNavigationDesktop() {
 
   return (
     <NavigationMenu
-      aria-label="Main"
+      aria-label={copy.main}
       value={value}
       onValueChange={setValue}
       className="**:data-[slot=navigation-menu-viewport]:bg-transparent **:data-[slot=navigation-menu-viewport]:rounded-none **:data-[slot=navigation-menu-viewport]:ring-0 **:data-[slot=navigation-menu-viewport]:border-0 **:data-[slot=navigation-menu-viewport]:shadow-none [--viewport-outer-px:2rem] max-lg:hidden"
@@ -300,20 +299,20 @@ export function HeaderNavigationDesktop() {
       <div style={{ position: "relative" }}>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Diensten</NavigationMenuTrigger>
+            <NavigationMenuTrigger>{copy.services}</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <DienstenPanel onNavigate={closeMenu} />
+              <DienstenPanel onNavigate={closeMenu} locale={locale} />
             </NavigationMenuContent>
           </NavigationMenuItem>
 
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Aanpak</NavigationMenuTrigger>
+            <NavigationMenuTrigger>{copy.approach}</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <AanpakPanel onNavigate={closeMenu} />
+              <AanpakPanel onNavigate={closeMenu} locale={locale} />
             </NavigationMenuContent>
           </NavigationMenuItem>
 
-          {navPlainLinks.map((link) => (
+          {nav.plainLinks.map((link) => (
             <NavigationMenuItem key={link.title}>
               <NavigationMenuLink asChild className={navigationMenuTopLinkClass}>
                 <a href={link.href} onClick={closeMenu}>{link.title}</a>
@@ -368,26 +367,29 @@ function MobileAccordionGroup({
   );
 }
 
-export function HeaderNavigationMobile() {
+export function HeaderNavigationMobile({ locale = "nl" }: { locale?: Locale }) {
+  const nav = getNavigation(locale);
+  const copy = labels[locale];
   return (
     <nav
-      aria-label="Mobiel menu"
+      id="mobile-navigation"
+      aria-label={copy.mobile}
       className="max-lg:in-data-[state=active]:block mb-6 hidden w-full lg:hidden"
     >
       <Accordion
         type="multiple"
         className="**:hover:no-underline -mx-4 mt-0.5 space-y-0.5"
       >
-        <MobileAccordionGroup title="Diensten" items={navDienstenPrimary} value="diensten" />
+        <MobileAccordionGroup title={copy.services} items={nav.dienstenPrimary} value="diensten" />
         <MobileAccordionGroup
-          title="Meer diensten"
-          items={navDienstenSecondary}
+          title={copy.moreServices}
+          items={nav.dienstenSecondary}
           value="meer-diensten"
         />
-        <MobileAccordionGroup title="Aanpak" items={navAanpakItems} value="aanpak" />
+        <MobileAccordionGroup title={copy.approach} items={nav.aanpakItems} value="aanpak" />
       </Accordion>
 
-      {navPlainLinks.map((link) => (
+      {nav.plainLinks.map((link) => (
         <a
           key={link.title}
           href={link.href}

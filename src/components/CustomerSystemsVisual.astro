@@ -1,14 +1,17 @@
 ---
+import type { Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
 const actions = [
   {
-    label: "Aanvraag indienen",
-    detail: "Nieuw formulier ontvangen",
+    label: locale === "en" ? "Submit request" : "Aanvraag indienen",
+    detail: locale === "en" ? "New form received" : "Nieuw formulier ontvangen",
     accent: "bg-emerald-500",
     icon: "form",
   },
   {
-    label: "Document uploaden",
-    detail: "2 bestanden ontvangen",
+    label: locale === "en" ? "Upload document" : "Document uploaden",
+    detail: locale === "en" ? "2 files received" : "2 bestanden ontvangen",
     accent: "bg-sky-500",
     icon: "upload",
   },
@@ -17,6 +20,7 @@ const actions = [
 
 <div
   aria-hidden="true"
+  data-customer-systems-visual
   class="bg-illustration ring-border-illustration shadow-black/6.5 relative z-10 rounded-2xl border border-transparent px-6 pt-4 pb-4 text-xs shadow-lg ring-1"
 >
   <div class="mb-2 flex items-center gap-2 border-b border-border-illustration pb-2">
@@ -45,12 +49,12 @@ const actions = [
         <path d="M2 12h20"></path>
         <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
       </svg>
-      <span class="truncate">mijnbedrijf.nl/mijn-omgeving</span>
+      <span class="truncate">{locale === "en" ? "mycompany.com/customer-portal" : "mijnbedrijf.nl/mijn-omgeving"}</span>
     </div>
   </div>
 
   <div class="mb-0.5 flex items-center gap-2">
-    <div class="text-foreground text-sm font-semibold">Klantomgeving</div>
+    <div class="text-foreground text-sm font-semibold">{locale === "en" ? "Customer portal" : "Klantomgeving"}</div>
     <div
       class="bg-sky-500/10 text-sky-700 dark:text-sky-400 ml-auto rounded px-2 py-0.5 text-[10px] font-medium"
     >
@@ -61,7 +65,7 @@ const actions = [
   <div class="text-muted-foreground mb-3 flex flex-wrap items-center gap-x-1.5 text-sm">
     <span>Webapp</span>
     <span class="text-foreground/25">·</span>
-    <span>Portaal</span>
+    <span>{locale === "en" ? "Portal" : "Portaal"}</span>
     <span class="text-foreground/25">·</span>
     <span>Plugin</span>
   </div>

@@ -1,0 +1,24 @@
+---
+import LegalDocumentLayout from "@/components/pages/LegalDocumentLayout.astro";
+import { localePath, type Locale } from "@/i18n";
+import * as terms from "@/content/legal/algemene-voorwaarden.nl.md";
+
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
+const en = locale === "en";
+const { Content } = terms;
+---
+
+<LegalDocumentLayout
+  locale={locale}
+  title={en ? "General terms and conditions" : "Algemene voorwaarden"}
+  description={en ? "The general terms and conditions that apply to Optidigi's business assignments." : "De algemene voorwaarden die van toepassing zijn op zakelijke opdrachten van Optidigi."}
+  canonicalPath={localePath(locale, en ? "/legal/general-terms" : "/juridisch/algemene-voorwaarden")}
+  version="1.0"
+  effectiveDate={en ? "15 July 2026" : "15 juli 2026"}
+  note={en ? "The official text is currently available in Dutch and applies exclusively to business customers (B2B)." : "Uitsluitend voor zakelijke opdrachtgevers (B2B)."}
+>
+  <div lang="nl">
+    <Content />
+  </div>
+</LegalDocumentLayout>

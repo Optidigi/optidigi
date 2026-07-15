@@ -2,6 +2,9 @@
 import BusinessScanVisual from "@/components/process/BusinessScanVisual.astro";
 import SolutionBuildVisual from "@/components/process/SolutionBuildVisual.astro";
 import EfficiencyResultVisual from "@/components/process/EfficiencyResultVisual.astro";
+import { localePath, type Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
 
 const plusIconClass =
   "lucide lucide-plus fill-illustration stroke-illustration absolute inset-y-0 right-0 my-auto hidden translate-x-[75%] drop-shadow @3xl:block";
@@ -19,7 +22,11 @@ const stepCopyClass = "mx-auto max-w-[14.5rem] text-pretty leading-relaxed";
 const stepTitleClass = "text-foreground mb-2.5 text-balance font-medium";
 const stepBodyClass = "text-muted-foreground text-pretty text-sm leading-relaxed";
 
-const steps = [
+const steps = locale === "en" ? [
+  { title: "Process review", body: "We map your processes, tools and bottlenecks so you can see where improvements will have the greatest impact.", Visual: BusinessScanVisual, desktopConnector: "plus" as const, mobileConnector: "plus" as const },
+  { title: "Design & implementation", body: "We build and connect automation, software and portals that fit the way your business works.", Visual: SolutionBuildVisual, desktopConnector: "equal" as const, mobileConnector: "equal" as const },
+  { title: "Less manual work, better results", titleClass: "text-foreground mb-2.5 font-medium whitespace-nowrap", body: "Your team gets more done through smoother processes and more room to grow.", Visual: EfficiencyResultVisual, desktopConnector: null, mobileConnector: null },
+] : [
   {
     title: "Bedrijfsscan",
     body: "We brengen processen, tools en knelpunten in kaart, zodat je direct ziet waar je kunt verbeteren.",
@@ -45,29 +52,29 @@ const steps = [
 ];
 ---
 
-<section id="aanpak" class="bg-background overflow-hidden">
-  <div class="relative m-4 overflow-hidden rounded-[2rem] py-24">
+<section id={locale === "en" ? "approach" : "aanpak"} class="bg-background overflow-hidden">
+  <div data-process-panel class="relative m-4 overflow-hidden rounded-[2rem] py-24">
     <div
+      data-process-dots
       class="absolute inset-0 bg-[radial-gradient(black_1px,transparent_1px)] mix-blend-overlay [background-size:16px_16px]"
     >
     </div>
 
     <div class="@container relative mx-auto w-full max-w-5xl px-6">
       <div class="mx-auto max-w-2xl text-center">
-        <h2 class="text-foreground text-4xl font-semibold">In drie stappen naar betere processen</h2>
+        <h2 class="text-foreground text-4xl font-semibold">{locale === "en" ? "Better processes in three steps" : "In drie stappen naar betere processen"}</h2>
         <p class="text-muted-foreground mt-4 text-balance text-lg">
-          Van inzicht in je bedrijf tot werkende oplossingen, helder, praktisch en zonder
-          onnodige complexiteit.
+          {locale === "en" ? "From insight into your business to working solutions—clear, practical and without unnecessary complexity." : "Van inzicht in je bedrijf tot werkende oplossingen, helder, praktisch en zonder onnodige complexiteit."}
         </p>
       </div>
 
       <div class="my-20 grid gap-12 @3xl:grid-cols-3">
         {
           steps.map((step) => (
-            <div class="row-span-3 grid grid-rows-subgrid gap-8 text-center">
-              <div class="relative flex h-28 items-center justify-center self-center">
+            <div data-process-step class="row-span-3 grid grid-rows-subgrid gap-8 text-center">
+              <div data-nosnippet data-process-visual class="relative flex h-28 items-center justify-center self-center">
                 <div class="mx-auto size-fit">
-                  <step.Visual />
+                  <step.Visual locale={locale} />
                 </div>
                 {step.desktopConnector === "plus" && (
                   <svg
@@ -152,11 +159,11 @@ const steps = [
       </div>
 
       <a
-        href="/contact#afspraak"
+        href={localePath(locale, locale === "en" ? "/contact#appointment" : "/contact#afspraak")}
         data-booking-trigger
-        class="brand-secondary-control cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all focus-visible:outline-none active:scale-98 focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-sm shadow-black/10 border border-transparent bg-card/75 ring-1 ring-foreground/10 duration-200 hover:bg-card dark:ring-foreground/15 dark:hover:bg-card/80 h-9 px-4 py-2 mx-auto flex w-fit backdrop-blur-md"
+        class="brand-secondary-control cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[background-color,border-color,box-shadow,color,transform] focus-visible:outline-none active:scale-98 focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 shadow-sm shadow-black/10 border border-transparent bg-card/75 ring-1 ring-foreground/10 duration-200 hover:bg-card dark:ring-foreground/15 dark:hover:bg-card/80 h-9 px-4 py-2 mx-auto flex w-fit backdrop-blur-md"
       >
-        Plan een gesprek
+        {locale === "en" ? "Book a call" : "Plan een gesprek"}
       </a>
     </div>
   </div>

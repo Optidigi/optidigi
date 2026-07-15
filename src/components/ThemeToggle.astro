@@ -1,0 +1,85 @@
+---
+import { cn } from "@/lib/utils";
+import type { Locale } from "@/i18n";
+
+interface Props {
+  class?: string;
+  locale?: Locale;
+}
+
+const { class: className, locale = "nl" } = Astro.props;
+const copy = locale === "en"
+  ? { dark: "Enable dark mode", light: "Enable light mode", title: "Switch between light and dark mode" }
+  : { dark: "Donkere modus inschakelen", light: "Lichte modus inschakelen", title: "Wissel tussen lichte en donkere modus" };
+---
+
+<button
+  type="button"
+  data-theme-toggle
+  aria-label={copy.dark}
+  aria-pressed="false"
+  title={copy.title}
+  data-label-dark={copy.dark}
+  data-label-light={copy.light}
+  class={cn(
+    "brand-secondary-control text-muted-foreground hover:text-foreground relative inline-flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-md transition active:scale-98 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60",
+    className,
+  )}
+>
+  <svg data-theme-icon="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="size-4" aria-hidden="true">
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+  </svg>
+  <svg data-theme-icon="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="hidden size-4" aria-hidden="true">
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+  </svg>
+</button>
+
+<script>
+  const themeStorageKey = "optidigi-theme";
+
+  const syncThemeControls = () => {
+    const isDark = document.documentElement.classList.contains("dark");
+    document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]").forEach((button) => {
+      button.setAttribute("aria-pressed", String(isDark));
+      button.setAttribute("aria-label", isDark ? button.dataset.labelLight || "Enable light mode" : button.dataset.labelDark || "Enable dark mode");
+      button.querySelector<HTMLElement>('[data-theme-icon="moon"]')?.classList.toggle("hidden", isDark);
+      button.querySelector<HTMLElement>('[data-theme-icon="sun"]')?.classList.toggle("hidden", !isDark);
+    });
+  };
+
+  const applyTheme = (isDark: boolean) => {
+    document.documentElement.classList.toggle("dark", isDark);
+    document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+    document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')?.setAttribute("content", isDark ? "#09090b" : "#ffffff");
+    syncThemeControls();
+  };
+
+  if (document.documentElement.dataset.themeToggleReady !== "true") {
+    document.documentElement.dataset.themeToggleReady = "true";
+    document.addEventListener("click", (event) => {
+      const button = (event.target as HTMLElement | null)?.closest<HTMLButtonElement>("[data-theme-toggle]");
+      if (!button) return;
+
+      const nextDark = !document.documentElement.classList.contains("dark");
+      try {
+        localStorage.setItem(themeStorageKey, nextDark ? "dark" : "light");
+      } catch {}
+      applyTheme(nextDark);
+    });
+
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
+    systemTheme.addEventListener("change", (event) => {
+      let savedTheme = null;
+      try { savedTheme = localStorage.getItem(themeStorageKey); } catch {}
+      if (!savedTheme) applyTheme(event.matches);
+    });
+
+    window.addEventListener("storage", (event) => {
+      if (event.key !== themeStorageKey) return;
+      applyTheme(event.newValue ? event.newValue === "dark" : systemTheme.matches);
+    });
+  }
+
+  syncThemeControls();
+</script>

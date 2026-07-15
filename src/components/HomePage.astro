@@ -6,38 +6,64 @@ import HeroServicesPreview from "@/components/HeroServicesPreview.astro";
 import ProcessSteps from "@/components/ProcessSteps.astro";
 import ServicesGrid from "@/components/ServicesGrid.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
-import ValueProposition from "@/components/ValueProposition.astro";
+import type { Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
+const copy = locale === "en" ? {
+  title: "Better systems. Less manual work. More room to grow.",
+  description: "Optidigi builds and integrates software, AI and automation around the way your business works.",
+} : {
+  title: "Meer groei, minder handwerk, betere digitale processen.",
+  description: "Optidigi ontwikkelt en integreert software, AI en automatisering die aansluiten op hoe je bedrijf werkt.",
+};
 ---
 
-<main class="overflow-x-clip">
-  <section class="bg-background relative">
-    <div class="mask-b-from-55% mask-b-to-75% mask-t-from-35% mask-t-to-65% dark:mask-t-to-55% absolute inset-0">
-      <img alt="" loading="lazy" decoding="async" class="not-dark:hidden size-full object-cover object-bottom" src="/gradient-dark.webp" width="1143" height="1600" />
-      <img alt="" loading="lazy" decoding="async" class="size-full object-cover object-bottom dark:hidden" src="/gradient-light.webp" width="1600" height="1194" />
+<main id="main-content" class="overflow-x-clip">
+  <section class="bg-background relative overflow-hidden" data-home-hero>
+    <div class="mask-b-from-55% mask-b-to-75% mask-t-from-35% mask-t-to-65% absolute inset-0 dark:hidden">
+      <img alt="" loading="lazy" decoding="async" class="size-full object-cover object-bottom" src="/gradient-light.webp" width="1600" height="1194" />
+    </div>
+
+    <div aria-hidden="true" class="hero-atmosphere-layer hero-atmosphere-clean pointer-events-none absolute inset-0 hidden dark:block">
+      <picture>
+        <source media="(max-width: 639px)" srcset="/hero-aurora-mobile.webp" />
+        <img alt="" loading="eager" decoding="async" fetchpriority="high" class="size-full object-cover object-bottom" src="/hero-aurora-wide.webp" width="2400" height="1602" />
+      </picture>
+    </div>
+
+    <div aria-hidden="true" class="hero-atmosphere-layer hero-atmosphere-dither pointer-events-none absolute inset-0 hidden dark:block">
+      <picture>
+        <source media="(max-width: 639px)" srcset="/hero-aurora-mobile.webp" />
+        <img alt="" loading="lazy" decoding="async" class="size-full object-cover object-bottom" src="/hero-aurora-wide.webp" width="2400" height="1602" />
+      </picture>
     </div>
 
     <div class="pb-20 pt-24 md:pt-32 lg:pt-40">
       <div class="relative z-10 mx-auto grid max-w-5xl items-end gap-4 px-6">
-        <h1 class="text-balance text-4xl font-semibold sm:text-5xl md:max-w-4xl lg:text-6xl">
-          Meer groei, minder handwerk, betere digitale processen.
+        <h1 class="text-balance text-4xl font-semibold sm:text-5xl md:max-w-5xl lg:text-6xl">
+          {locale === "en" ? (
+            <>
+              <span class="lg:block">Better systems. Less manual work.</span>{" "}
+              <span class="lg:block">More room to grow.</span>
+            </>
+          ) : copy.title}
         </h1>
         <div class="max-w-lg">
           <p class="text-muted-foreground mb-6 text-balance text-lg lg:text-xl">
-            Optidigi ontwikkelt en integreert software, AI en automatisering die aansluiten op hoe je bedrijf werkt.
+            {copy.description}
           </p>
-          <AppointmentCta />
+          <AppointmentCta locale={locale} />
         </div>
       </div>
 
-      <HeroServicesPreview />
+      <HeroServicesPreview locale={locale} />
     </div>
   </section>
 
-  <AiAutomationShowcase />
-  <ValueProposition />
-  <ServicesGrid />
-  <ProcessSteps />
-  <FaqSection client:visible />
+  <ServicesGrid locale={locale} />
+  <AiAutomationShowcase locale={locale} />
+  <ProcessSteps locale={locale} />
+  <FaqSection client:visible locale={locale} />
 </main>
 
-<SiteFooter showBrandMark />
+<SiteFooter showBrandMark locale={locale} />

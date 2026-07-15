@@ -79,3 +79,24 @@ export const automationOverviewPanel: AutomationOverviewData = {
     },
   ],
 };
+
+export const automationOverviewPanelEn: AutomationOverviewData = {
+  mobileTitle: "Automation", activeNav: "workflows",
+  nav: [
+    { id: "dashboard", label: "Dashboard", icon: "house" }, { id: "workflows", label: "Workflows", icon: "chart-pie" },
+    { id: "ai", label: "AI insights", icon: "lightbulb" }, { id: "integrations", label: "Integrations", icon: "plug" }, { id: "customers", label: "Customers", icon: "users" },
+  ],
+  projects: [{ label: "quote-follow-up", active: true }, { label: "customer-email" }, { label: "crm-sync" }],
+  filters: ["Workflows", "This week", "Daily"],
+  overviewTitle: "This week", overviewDescription: "Quote follow-up, customer email and CRM synchronisation",
+  kpis: [
+    { type: "trend", label: "New enquiries", value: "18", trend: "+3" }, { type: "trend", label: "Processed automatically", value: "47", trend: "+12%" },
+    { type: "plain", label: "Follow-ups scheduled", value: "9" }, { type: "plain", label: "Active integrations", value: "6" },
+  ],
+  activityTitle: "Completed this week", activityDescription: "Tasks completed automatically and manually",
+  insightsTitle: "In your queue", insightsDescription: "Practical updates for today",
+  insights: [
+    { tone: "primary", label: "Processed automatically", text: "7 new enquiries were enriched with company data and added to the right workflow.", cta: "View enquiries" },
+    { tone: "primary", label: "Ready to review", text: "3 draft follow-up emails are ready. You only need to review and send them.", cta: "Open drafts" },
+  ],
+};

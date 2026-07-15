@@ -1,4 +1,5 @@
 import { BorderBeam } from "@/components/ui/border-beam"
+import type { Locale } from "@/i18n"
 
 function GmailIcon() {
   return (
@@ -36,7 +37,7 @@ function GmailIcon() {
   )
 }
 
-export function EmailConfirmationCard() {
+export function EmailConfirmationCard({ locale = "nl" }: { locale?: Locale }) {
   return (
     <div className="bg-card ring-border-illustration relative flex items-center gap-2 overflow-hidden rounded-xl p-3 shadow ring-1">
       <BorderBeam
@@ -47,8 +48,8 @@ export function EmailConfirmationCard() {
       />
       <GmailIcon />
       <span className="text-muted-foreground relative z-10 text-xs font-medium">
-        Bevestiging sturen{" "}
-        <span className="text-foreground/50 pl-0.5 text-xs">nu</span>
+        {locale === "en" ? "Send confirmation" : "Bevestiging sturen"}{" "}
+        <span className="text-foreground/50 pl-0.5 text-xs">{locale === "en" ? "now" : "nu"}</span>
       </span>
     </div>
   )

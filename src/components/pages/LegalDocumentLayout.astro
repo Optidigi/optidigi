@@ -1,0 +1,73 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import { localePath, type Locale } from "@/i18n";
+
+interface Props {
+  locale?: Locale;
+  title: string;
+  description: string;
+  canonicalPath: string;
+  version: string;
+  effectiveDate: string;
+  note?: string;
+}
+
+const {
+  locale = "nl",
+  title,
+  description,
+  canonicalPath,
+  version,
+  effectiveDate,
+  note,
+} = Astro.props;
+const en = locale === "en";
+---
+
+<Layout
+  locale={locale}
+  title={`${title} | Optidigi`}
+  description={description}
+  canonicalPath={canonicalPath}
+>
+  <div class="theme-green scheme-light min-h-screen bg-background text-foreground dark:scheme-dark">
+    <SiteHeader locale={locale} />
+
+    <main id="main-content" class="relative overflow-hidden pt-14 lg:pt-18">
+      <div class="mx-auto max-w-5xl px-6">
+        <div class="border-foreground/10 relative pt-14 md:border-x md:border-dashed lg:pt-18">
+          <article class="mx-auto max-w-3xl px-0 pb-24 md:px-10 md:pb-32 lg:px-14">
+            <header class="after:border-foreground/10 relative pb-10 after:absolute after:bottom-0 after:left-1/2 after:w-screen after:-translate-x-1/2 after:border-t after:border-dashed sm:pb-12">
+              <h1 class="max-w-2xl text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
+                {title}
+              </h1>
+              <p class="text-muted-foreground mt-5 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
+                <span>{en ? "Version" : "Versie"} {version}</span>
+                <span aria-hidden="true">·</span>
+                <span>{effectiveDate}</span>
+              </p>
+              {note && <p class="text-muted-foreground mt-4 max-w-xl text-sm leading-relaxed">{note}</p>}
+            </header>
+
+            <div class="legal-prose pt-10 sm:pt-12">
+              <slot />
+            </div>
+
+            <div class="before:border-foreground/10 relative mt-16 pt-8 before:absolute before:top-0 before:left-1/2 before:w-screen before:-translate-x-1/2 before:border-t before:border-dashed">
+              <a
+                href={localePath(locale, en ? "/legal" : "/juridisch")}
+                class="text-muted-foreground hover:text-foreground inline-flex text-sm font-medium transition-colors"
+              >
+                {en ? "View all legal documents" : "Bekijk alle juridische documenten"}
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </main>
+
+    <SiteFooter showLead={false} compact locale={locale} />
+  </div>
+</Layout>

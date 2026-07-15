@@ -2,11 +2,14 @@
 import microsoftOfficeLogo from "@/assets/brand-logos/microsoft-office.svg?url";
 import microsoftDefenderLogo from "@/assets/brand-logos/microsoft-defender.svg?url";
 import googleWorkspaceLogo from "@/assets/brand-logos/google-workspace.svg?url";
+import type { Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
 
 const setupItems = [
-  { label: "Microsoft 365", detail: "12 accounts ingericht", logo: microsoftOfficeLogo, tone: "emerald" },
-  { label: "Beveiliging", detail: "MFA staat aan", logo: microsoftDefenderLogo, tone: "sky" },
-  { label: "Google Workspace", detail: "Bestanden overgezet", logo: googleWorkspaceLogo, tone: "violet" },
+  { label: "Microsoft 365", detail: locale === "en" ? "12 accounts configured" : "12 accounts ingericht", logo: microsoftOfficeLogo, tone: "emerald" },
+  { label: locale === "en" ? "Security" : "Beveiliging", detail: locale === "en" ? "MFA enabled" : "MFA staat aan", logo: microsoftDefenderLogo, tone: "sky" },
+  { label: "Google Workspace", detail: locale === "en" ? "Files migrated" : "Bestanden overgezet", logo: googleWorkspaceLogo, tone: "violet" },
 ];
 ---
 
@@ -16,17 +19,17 @@ const setupItems = [
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" /></svg>
     </div>
     <div>
-      <div class="text-foreground text-sm font-medium">Digitale werkplek</div>
-      <div class="text-muted-foreground text-[10px]">Implementatieoverzicht</div>
+      <div class="text-foreground text-sm font-medium">{locale === "en" ? "Digital workplace" : "Digitale werkplek"}</div>
+      <div class="text-muted-foreground text-[10px]">{locale === "en" ? "Implementation overview" : "Implementatieoverzicht"}</div>
     </div>
-    <div class="ml-auto rounded-full bg-[var(--brand-action)]/10 px-2.5 py-1 text-[10px] font-medium text-[var(--brand-action)]">4 van 5 klaar</div>
+    <div class="ml-auto rounded-full bg-[var(--brand-action)]/10 px-2.5 py-1 text-[10px] font-medium text-[var(--brand-action)]">{locale === "en" ? "4 of 5 complete" : "4 van 5 klaar"}</div>
   </div>
 
   <div class="grid h-[calc(100%-3.25rem)] min-h-0 lg:grid-cols-[1.05fr_.95fr]">
     <section class="min-h-0 p-4 sm:p-5">
-      <div class="text-muted-foreground text-xs font-medium">Werkplek klaarzetten</div>
-      <div class="text-foreground mt-1 text-lg font-semibold tracking-tight">De basis staat goed voor je team</div>
-      <div class="text-muted-foreground mt-1 text-xs">Software, toegang en beveiliging worden in één keer goed ingericht.</div>
+      <div class="text-muted-foreground text-xs font-medium">{locale === "en" ? "Set up the workplace" : "Werkplek klaarzetten"}</div>
+      <div class="text-foreground mt-1 text-lg font-semibold tracking-tight">{locale === "en" ? "A solid foundation for your team" : "De basis staat goed voor je team"}</div>
+      <div class="text-muted-foreground mt-1 text-xs">{locale === "en" ? "Software, access and security are configured properly from the start." : "Software, toegang en beveiliging worden in één keer goed ingericht."}</div>
 
       <div class="mt-4 space-y-2">
         {setupItems.map((item) => (
@@ -50,8 +53,8 @@ const setupItems = [
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4"><path d="M12 2v20" /><path d="M2 12h20" /></svg>
         </div>
         <div>
-          <div class="text-foreground text-xs font-medium">Volgende stap</div>
-          <div class="text-muted-foreground mt-0.5 text-[10px]">Teams en gedeelde mappen klaarzetten</div>
+          <div class="text-foreground text-xs font-medium">{locale === "en" ? "Next step" : "Volgende stap"}</div>
+          <div class="text-muted-foreground mt-0.5 text-[10px]">{locale === "en" ? "Set up Teams and shared folders" : "Teams en gedeelde mappen klaarzetten"}</div>
         </div>
       </div>
     </section>
@@ -60,8 +63,8 @@ const setupItems = [
       <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(var(--color-foreground)_1px,transparent_1px)] opacity-[0.06] [background-size:13px_13px]"></div>
       <div class="absolute inset-0 bg-linear-to-b from-background/10 via-transparent to-background/70"></div>
       <div class="relative mx-auto max-w-xs">
-        <div class="text-muted-foreground text-xs font-medium">Nieuwe collega</div>
-        <div class="text-foreground mt-1 text-base font-semibold">Toegang in één keer geregeld</div>
+        <div class="text-muted-foreground text-xs font-medium">{locale === "en" ? "New team member" : "Nieuwe collega"}</div>
+        <div class="text-foreground mt-1 text-base font-semibold">{locale === "en" ? "Access set up in one go" : "Toegang in één keer geregeld"}</div>
 
         <div class="bg-card/95 ring-border-illustration mt-5 rounded-2xl p-4 shadow-xl shadow-black/8 ring-1 backdrop-blur">
           <div class="flex items-center gap-3">
@@ -70,18 +73,18 @@ const setupItems = [
             </div>
             <div>
               <div class="text-foreground text-sm font-medium">Jesse Visser</div>
-              <div class="text-muted-foreground text-[11px]">jesse@mijnbedrijf.nl</div>
+              <div class="text-muted-foreground text-[11px]">{locale === "en" ? "jesse@mycompany.com" : "jesse@mijnbedrijf.nl"}</div>
             </div>
           </div>
           <div class="mt-4 border-t border-border-illustration pt-3">
-            <div class="text-muted-foreground text-[10px] font-medium">TOEGANG</div>
+            <div class="text-muted-foreground text-[10px] font-medium">{locale === "en" ? "ACCESS" : "TOEGANG"}</div>
             <div class="mt-2 flex flex-wrap gap-1.5">
               <span class="rounded-md bg-illustration px-2 py-1 text-[10px] text-foreground/75 ring-1 ring-border-illustration">E-mail</span>
               <span class="rounded-md bg-illustration px-2 py-1 text-[10px] text-foreground/75 ring-1 ring-border-illustration">Teams</span>
-              <span class="rounded-md bg-illustration px-2 py-1 text-[10px] text-foreground/75 ring-1 ring-border-illustration">Bestanden</span>
+              <span class="rounded-md bg-illustration px-2 py-1 text-[10px] text-foreground/75 ring-1 ring-border-illustration">{locale === "en" ? "Files" : "Bestanden"}</span>
             </div>
           </div>
-          <div class="mt-4 flex items-center gap-2 rounded-lg bg-emerald-500/10 px-2.5 py-2 text-[11px] font-medium text-emerald-700 dark:text-emerald-400"><span class="size-1.5 rounded-full bg-emerald-500"></span>Klaar om te starten</div>
+          <div class="mt-4 flex items-center gap-2 rounded-lg bg-emerald-500/10 px-2.5 py-2 text-[11px] font-medium text-emerald-700 dark:text-emerald-400"><span class="size-1.5 rounded-full bg-emerald-500"></span>{locale === "en" ? "Ready to start" : "Klaar om te starten"}</div>
         </div>
       </div>
     </aside>

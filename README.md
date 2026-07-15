@@ -5,12 +5,17 @@ The public Optidigi marketing website, built with Astro, React and Tailwind CSS.
 ## Routes
 
 - `/` — homepage
+- `/en/` — English homepage
 - `/contact` — contact form and appointment entry point
+- `/en/contact` — English contact page
 - `/privacy` — privacy statement
+- `/en/privacy` — English privacy statement
+- `/juridisch` — legal document index
+- `/juridisch/algemene-voorwaarden` — Dutch general terms and conditions
+- `/en/legal` — English legal document index
+- `/en/legal/general-terms` — English index page for the Dutch terms
 - `/agenda` — private appointment and availability management
 - `/api/*` — contact, availability, booking and management endpoints
-
-The pre-green homepage is retained in `src/archive/home-before-green.astro`. Files in `src/archive` are not exposed as routes.
 
 ## Component structure
 
@@ -48,7 +53,7 @@ Run `npm run build` after structural or component changes; it validates both Ast
 
 ## Container image
 
-The production image is a multi-stage Node 24 build. Public pages are prerendered, while the standalone Astro Node server handles the form, booking and private management endpoints on port `8080`.
+The production image is a multi-stage Node 24 build. Most public pages are prerendered; the Dutch root route is rendered on demand so the server can respect a visitor's explicit or browser-preferred language. The standalone Astro Node server also handles the form, booking and private management endpoints on port `8080`.
 
 Pushes to `main` publish `ghcr.io/optidigi/optidigi:latest` plus a commit-specific tag through GitHub Actions. The production Traefik stack routes `optidigi.nl` and `www.optidigi.nl` to this container.
 

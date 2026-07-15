@@ -1,13 +1,22 @@
 ---
 import Logo from "@/components/Logo.astro";
 import AppointmentDialog from "@/components/AppointmentDialog.astro";
+import ThemeToggle from "@/components/ThemeToggle.astro";
 import { HeaderNavigationDesktop, HeaderNavigationMobile } from "@/components/HeaderNavigation";
-import { siteConfig } from "@/config/site";
+import { getSiteConfig } from "@/config/site";
+import { alternatePath, localeMeta, sharedCopy, type Locale } from "@/i18n";
+
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
+const siteConfig = getSiteConfig(locale);
+const copy = sharedCopy[locale];
+const otherLocale: Locale = locale === "nl" ? "en" : "nl";
+const languageHref = alternatePath(Astro.url.pathname, otherLocale) + Astro.url.search + Astro.url.hash;
 
 const navControlHeight = "h-8";
 const navLogoHeight = "h-6";
 const getStartedClass =
-  "cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-all focus-visible:outline-none active:scale-98 focus-visible:ring-1 focus-visible:ring-ring shadow-md border-[0.5px] border-white/10 shadow-black/15 [&_svg]:drop-shadow-sm text-shadow-sm bg-primary ring-1 ring-(--ring-color) [--ring-color:color-mix(in_oklab,black_15%,var(--color-primary))] dark:border-transparent dark:[--ring-color:color-mix(in_oklab,white_15%,var(--color-primary))] text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 text-xs";
+  "cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-[background-color,border-color,box-shadow,transform] focus-visible:outline-none active:scale-98 focus-visible:ring-1 focus-visible:ring-ring shadow-md border-[0.5px] border-white/10 shadow-black/15 [&_svg]:drop-shadow-sm text-shadow-sm bg-primary ring-1 ring-(--ring-color) [--ring-color:color-mix(in_oklab,black_15%,var(--color-primary))] dark:border-transparent dark:[--ring-color:color-mix(in_oklab,white_15%,var(--color-primary))] text-primary-foreground hover:bg-primary/90 h-8 rounded-md px-3 text-xs";
 
 ---
 
@@ -18,7 +27,7 @@ const getStartedClass =
   class="data-[menu-open=true]:h-screen data-[menu-open=true]:backdrop-blur data-[menu-open=true]:bg-background/50 fixed inset-x-0 top-0 z-50"
 >
   <div
-    class="h-18 absolute inset-x-0 top-0 z-50 border-b ring-1 ring-transparent transition-all duration-300 in-data-scrolled:bg-background/75 in-data-scrolled:backdrop-blur in-data-[menu-open=true]:border-transparent lg:in-data-[menu-open=true]:ring-border lg:in-data-[menu-open=true]:bg-card/75 lg:in-data-[menu-open=true]:shadow-lg lg:in-data-[menu-open=true]:backdrop-blur lg:in-data-[menu-open=true]:border-b lg:in-data-[menu-open=true]:shadow-black/6.5 lg:in-data-[menu-open=true]:h-[calc(var(--nav-viewport-height,0px)+3.4rem)] max-lg:in-data-[state=active]:h-screen max-lg:in-data-[state=active]:bg-background/75 max-lg:in-data-[state=active]:backdrop-blur max-lg:h-14 max-lg:overflow-hidden max-lg:border-b"
+    class="h-18 absolute inset-x-0 top-0 z-50 border-b ring-1 ring-transparent transition-[height,background-color,border-color,box-shadow,backdrop-filter] duration-300 in-data-scrolled:bg-background/75 in-data-scrolled:backdrop-blur in-data-[menu-open=true]:border-transparent lg:in-data-[menu-open=true]:ring-border lg:in-data-[menu-open=true]:bg-card/75 lg:in-data-[menu-open=true]:shadow-lg lg:in-data-[menu-open=true]:backdrop-blur lg:in-data-[menu-open=true]:border-b lg:in-data-[menu-open=true]:shadow-black/6.5 lg:in-data-[menu-open=true]:h-[calc(var(--nav-viewport-height,0px)+3.4rem)] max-lg:in-data-[state=active]:h-screen max-lg:in-data-[state=active]:bg-background/75 max-lg:in-data-[state=active]:backdrop-blur max-lg:h-14 max-lg:overflow-hidden max-lg:border-b"
   >
     <div class="mx-auto max-w-5xl px-6">
       <div class="relative flex flex-wrap items-center justify-between lg:py-5">
@@ -32,23 +41,29 @@ const getStartedClass =
           class="flex items-center justify-between gap-8 max-lg:h-14 max-lg:w-full max-lg:border-b"
         >
           <a
-            aria-label="home"
+            aria-label={copy.home}
             class:list={[
               "inline-flex shrink-0 items-center justify-center",
               navControlHeight,
             ]}
-            href="/"
+            href={locale === "nl" ? "/" : "/en/"}
           >
             <Logo class:list={[navLogoHeight, "w-auto"]} />
           </a>
 
-          <HeaderNavigationDesktop client:load />
+          <HeaderNavigationDesktop client:load locale={locale} />
+
+          <ThemeToggle class="ml-auto lg:hidden" locale={locale} />
 
           <button
             type="button"
             data-nav-toggle
-            aria-label="Menu openen"
-            class="relative z-20 -m-2.5 -mr-3 block cursor-pointer p-2.5 lg:hidden"
+            aria-label={copy.openMenu}
+            aria-expanded="false"
+            aria-controls="mobile-navigation"
+            data-label-open={copy.openMenu}
+            data-label-close={copy.closeMenu}
+            class="focus-visible:ring-ring relative z-20 -m-2.5 -mr-3 block cursor-pointer rounded-md p-2.5 focus-visible:ring-2 focus-visible:outline-none lg:hidden"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -84,14 +99,16 @@ const getStartedClass =
           </button>
         </div>
 
-        <HeaderNavigationMobile client:load />
+        <HeaderNavigationMobile client:load locale={locale} />
 
         <div
           class="max-lg:in-data-[state=active]:mt-6 in-data-[state=active]:flex mb-6 hidden w-full flex-wrap items-center justify-end space-y-8 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent"
         >
           <div
-            class="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit"
+            class="flex w-full items-center gap-3 md:w-fit"
           >
+            <a data-locale-switch={otherLocale} class="brand-secondary-control inline-flex h-8 items-center rounded-md px-2.5 text-xs font-medium text-muted-foreground transition hover:text-foreground" href={languageHref} lang={otherLocale} hreflang={otherLocale} aria-label={`${localeMeta[otherLocale].label} — ${locale === "nl" ? "switch language" : "taal wijzigen"}`}>{localeMeta[otherLocale].shortLabel}</a>
+            <ThemeToggle class="hidden lg:inline-flex" locale={locale} />
             <a href={siteConfig.ctaHref} data-booking-trigger class:list={[getStartedClass, "brand-primary-action max-sm:w-full"]}>
               {siteConfig.ctaLabel}
             </a>
@@ -102,32 +119,42 @@ const getStartedClass =
   </div>
 </header>
 
-<AppointmentDialog />
+<AppointmentDialog locale={locale} />
 
 <script>
   const header = document.querySelector<HTMLElement>("[data-nav]");
   const toggle = document.querySelector<HTMLButtonElement>("[data-nav-toggle]");
 
+  const setMobileNavigation = (active: boolean) => {
+    header?.setAttribute("data-state", active ? "active" : "inactive");
+    toggle?.setAttribute("aria-expanded", String(active));
+    toggle?.setAttribute("aria-label", active ? toggle.dataset.labelClose || "Close menu" : toggle.dataset.labelOpen || "Open menu");
+    document.documentElement.classList.toggle("overflow-hidden", active);
+  };
+
   toggle?.addEventListener("click", () => {
     const active = header?.getAttribute("data-state") === "active";
-    header?.setAttribute("data-state", active ? "inactive" : "active");
-    toggle.setAttribute("aria-label", active ? "Menu openen" : "Menu sluiten");
+    setMobileNavigation(!active);
   });
 
   document.addEventListener("nav-close", () => {
-    header?.setAttribute("data-state", "inactive");
-    toggle?.setAttribute("aria-label", "Menu openen");
+    setMobileNavigation(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && header?.getAttribute("data-state") === "active") {
+      setMobileNavigation(false);
+      toggle?.focus();
+    }
   });
 
   const forceCloseDesktopNav = () => {
     header?.removeAttribute("data-menu-open");
     const bar = document.querySelector<HTMLElement>("[data-nav] > div");
     const menu = document.querySelector<HTMLElement>('[data-slot="navigation-menu"]');
-    const main = document.querySelector<HTMLElement>("main");
     bar?.style.removeProperty("--nav-viewport-height");
     bar?.style.removeProperty("height");
     menu?.style.removeProperty("--nav-viewport-height");
-    if (main?.scrollTop) main.scrollTop = 0;
   };
 
   header?.addEventListener("click", (event) => {
@@ -147,5 +174,17 @@ const getStartedClass =
   };
   onScroll();
   window.addEventListener("scroll", onScroll, { passive: true });
+
+  window.matchMedia("(min-width: 1024px)").addEventListener("change", (event) => {
+    if (event.matches) setMobileNavigation(false);
+  });
+
+  document.querySelectorAll<HTMLAnchorElement>("[data-locale-switch]").forEach((link) => {
+    link.addEventListener("click", () => {
+      const nextLocale = link.dataset.localeSwitch;
+      if (nextLocale !== "nl" && nextLocale !== "en") return;
+      document.cookie = `optidigi-locale=${nextLocale}; Max-Age=31536000; Path=/; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+    });
+  });
 
 </script>
