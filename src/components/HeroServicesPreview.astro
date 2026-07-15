@@ -19,7 +19,7 @@ const tabs = [
 const defaultTabId = tabs[0].id;
 ---
 
-<div data-nosnippet class="@container relative z-10 border-b pt-12 [mask-image:radial-gradient(ellipse_80%_95%_at_50%_0%,#000_80%,transparent_100%)] lg:pt-20" data-hero-services-preview data-default-tab={defaultTabId}>
+<div data-nosnippet class="@container relative z-10 border-b pt-12 lg:pt-20" data-hero-services-preview data-default-tab={defaultTabId}>
   <div class="border-foreground/10 border-y border-dashed pb-2">
     <div class="mx-auto max-w-4xl px-6 sm:px-11">
       <div class="divide-foreground/10 relative z-20 grid grid-cols-3 items-center justify-center gap-px divide-x divide-dashed *:h-16" role="tablist" aria-label={locale === "en" ? "Examples of our services" : "Voorbeelden van onze diensten"}>
@@ -36,7 +36,7 @@ const defaultTabId = tabs[0].id;
   </div>
 
   <div class="relative mx-auto -mt-2 max-w-6xl max-md:mx-1 lg:px-10">
-    <div data-hero-dashboard-shell class="bg-card ring-foreground/10 relative isolate overflow-hidden rounded-2xl p-1 shadow-2xl shadow-black/25 ring-1 backdrop-blur">
+    <div data-hero-dashboard-shell class="bg-card ring-foreground/10 relative isolate overflow-hidden rounded-2xl p-1 shadow-2xl shadow-black/25 ring-1">
       <div class="bg-card dark:bg-background ring-foreground/5 aspect-3/4 overflow-hidden rounded-xl border-4 border-l-8 border-transparent shadow ring-1 sm:aspect-3/2">
         <div class="shadow-black/6.5 relative z-10 size-full overflow-hidden">
           {tabs.map((tab, index) => (
