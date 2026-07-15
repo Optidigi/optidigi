@@ -13,7 +13,7 @@ export const navigationMenuTopLinkClass = cn(
 );
 
 export const navigationMenuMegaLinkClass =
-  "data-[active=true]:focus:bg-foreground/5 data-[active=true]:hover:bg-foreground/5 data-[active=true]:bg-foreground/2.5 data-[active=true]:text-foreground hover:bg-foreground/5 hover:text-foreground focus:bg-foreground/5 focus:text-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground grid grid-cols-[auto_1fr] gap-2.5 rounded-[11px] p-2 text-sm outline-none transition-all focus-visible:outline-1 focus-visible:ring-[3px] [&_svg:not([class*='size-'])]:size-4";
+  "data-[active=true]:focus:bg-foreground/5 data-[active=true]:hover:bg-foreground/5 data-[active=true]:bg-foreground/2.5 data-[active=true]:text-foreground hover:bg-foreground/5 hover:text-foreground focus:bg-foreground/5 focus:text-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground grid grid-cols-[auto_1fr] gap-2.5 rounded-[11px] p-2 text-sm outline-none transition-[background-color,color,box-shadow] focus-visible:outline-1 focus-visible:ring-[3px] [&_svg:not([class*='size-'])]:size-4";
 
 function NavigationMenu({
   className,

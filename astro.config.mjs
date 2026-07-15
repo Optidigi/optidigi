@@ -8,6 +8,11 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://optidigi.nl',
+  i18n: {
+    defaultLocale: 'nl',
+    locales: ['nl', 'en'],
+    routing: { prefixDefaultLocale: false }
+  },
   adapter: node({ mode: 'standalone', bodySizeLimit: 32 * 1024 }),
   integrations: [react()],
 

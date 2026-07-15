@@ -31,11 +31,13 @@ const antiSpam = (input: Record<string, unknown>) => {
   }
 };
 
+const locale = (value: unknown) => value === "en" ? "en" as const : "nl" as const;
+
 export function contactInput(input: unknown) {
   if (!input || typeof input !== "object" || Array.isArray(input)) throw new InputError("Ongeldige aanvraag.");
   const value = input as Record<string, unknown>;
   antiSpam(value);
-  const allowed = new Set(["AI & automatisering", "Maatwerk software", "Cloud & software", "Overig"]);
+  const allowed = new Set(["AI & automatisering", "Maatwerk software", "Cloud & software", "Overig", "AI & automation", "Custom software", "Other"]);
   const subject = text(value.subject, "Onderwerp", 1, 80);
   if (!allowed.has(subject)) throw new InputError("Kies een geldig onderwerp.");
   return {
@@ -43,6 +45,7 @@ export function contactInput(input: unknown) {
     email: email(value.email),
     subject,
     message: text(value.message, "Bericht", 10, 5_000),
+    locale: locale(value.locale),
   };
 }
 
@@ -67,6 +70,7 @@ export function appointmentInput(input: unknown) {
     subject: text(value.subject, "Onderwerp", 1, 100),
     note: optional(value.note, "Opmerking", 2_000),
     idempotencyKey: optional(value.idempotencyKey, "Idempotency key", 100),
+    locale: locale(value.locale),
   };
 }
 

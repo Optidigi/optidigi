@@ -2,6 +2,9 @@
 import EmailConfirmationCard from "@/components/EmailConfirmationCard";
 import GoogleCalendarIcon from "@/components/workflow/GoogleCalendarIcon.astro";
 import SalesforceIcon from "@/components/workflow/SalesforceIcon.astro";
+import type { Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
 ---
 
 <div aria-hidden="true" class="w-full max-w-[18rem]">
@@ -25,12 +28,12 @@ import SalesforceIcon from "@/components/workflow/SalesforceIcon.astro";
         <circle cx="12" cy="12" r="10"></circle>
         <path d="m9 12 2 2 4-4"></path>
       </svg>
-      <span class="text-foreground text-sm font-medium">Aanvraag verwerkt</span>
+      <span class="text-foreground text-sm font-medium">{locale === "en" ? "Request processed" : "Aanvraag verwerkt"}</span>
     </div>
 
     <div class="relative space-y-4 pl-6 pt-6">
       <div
-        class="border-foreground/15 absolute bottom-8 left-6 top-0 border-l border-dashed"
+        class="border-foreground/15 absolute bottom-6 left-6 top-0 border-l border-dashed"
       >
       </div>
 
@@ -44,7 +47,7 @@ import SalesforceIcon from "@/components/workflow/SalesforceIcon.astro";
         >
           <SalesforceIcon />
           <span class="text-muted-foreground text-xs font-medium">
-            CRM bijgewerkt <span class="text-foreground/50 pl-0.5 text-xs">12 sec</span>
+            {locale === "en" ? "CRM updated" : "CRM bijgewerkt"} <span class="text-foreground/50 pl-0.5 text-xs">12 sec</span>
           </span>
         </div>
       </div>
@@ -59,7 +62,7 @@ import SalesforceIcon from "@/components/workflow/SalesforceIcon.astro";
         >
           <GoogleCalendarIcon />
           <span class="text-muted-foreground text-xs font-medium">
-            Opvolging gepland <span class="text-foreground/50 pl-0.5 text-xs">3 sec</span>
+            {locale === "en" ? "Follow-up scheduled" : "Opvolging gepland"} <span class="text-foreground/50 pl-0.5 text-xs">3 sec</span>
           </span>
         </div>
       </div>
@@ -69,7 +72,7 @@ import SalesforceIcon from "@/components/workflow/SalesforceIcon.astro";
           class="border-foreground/15 absolute bottom-1/2 left-0 top-0 w-6 rounded-bl-full border-b border-l border-dashed"
         >
         </div>
-        <EmailConfirmationCard client:visible />
+        <EmailConfirmationCard client:visible locale={locale} />
       </div>
     </div>
   </div>

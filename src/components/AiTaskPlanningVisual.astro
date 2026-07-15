@@ -1,9 +1,12 @@
 ---
 import IntegrationBadgeIcon from "@/components/IntegrationBadgeIcon.astro";
+import type { Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
 
 const brands = ["gmail", "salesforce", "calendar", "notion", "website", "docs"] as const;
 
-const tasks = [
+const tasksNl = [
   {
     title: "7 klantvragen via mail binnen",
     completedTitle: "7 mails beantwoord en CRM bijgewerkt",
@@ -121,6 +124,34 @@ const tasks = [
   },
 ] as const;
 
+const tasksEn = [
+  { title: "7 customer questions received by email", completedTitle: "7 emails answered and CRM updated", durationMs: 4250, completedLabel: "Completed", steps: [
+    { brand: "gmail", doing: "Retrieving customer emails", done: "7 unread threads", resolvedLabel: "Retrieved", durationMs: 750 },
+    { brand: "docs", doing: "Searching the internal knowledge base", done: "12 relevant articles", resolvedLabel: "Found", durationMs: 950 },
+    { brand: "website", doing: "Checking product information", done: "4 pages checked", resolvedLabel: "Checked", durationMs: 850 },
+    { brand: "gmail", doing: "Sending replies", done: "7 emails sent", resolvedLabel: "Sent", durationMs: 800 },
+    { brand: "salesforce", doing: "Updating CRM", done: "Activities logged", resolvedLabel: "Updated", durationMs: 900 },
+  ] },
+  { title: "8 customer records are missing documents", completedTitle: "3 documents found, 5 customers reminded", durationMs: 4500, completedLabel: "Completed", steps: [
+    { brand: "notion", doing: "Scanning records", done: "8 records checked", resolvedLabel: "Checked", durationMs: 1100 },
+    { brand: "docs", doing: "Searching internal documentation", done: "3 documents found", resolvedLabel: "Found", durationMs: 1200 },
+    { brand: "salesforce", doing: "Matching customers", done: "5 incomplete records", resolvedLabel: "Matched", durationMs: 1000 },
+    { brand: "gmail", doing: "Sending reminders", done: "5 emails sent", resolvedLabel: "Sent", durationMs: 1200 },
+  ] },
+  { title: "3 appointments awaiting confirmation", completedTitle: "Appointments confirmed and calendar updated", durationMs: 3900, completedLabel: "Completed", steps: [
+    { brand: "calendar", doing: "Loading pending appointments", done: "3 awaiting confirmation", resolvedLabel: "Loaded", durationMs: 900 },
+    { brand: "website", doing: "Checking availability", done: "3 time slots available", resolvedLabel: "Checked", durationMs: 950 },
+    { brand: "gmail", doing: "Sending confirmations", done: "3 invitations sent", resolvedLabel: "Sent", durationMs: 1100 },
+    { brand: "calendar", doing: "Updating calendar", done: "3 appointments scheduled", resolvedLabel: "Updated", durationMs: 950 },
+  ] },
+] as const;
+const tasks = locale === "en" ? tasksEn : tasksNl;
+const taskWord = locale === "en" ? "tasks completed" : "taken voltooid";
+const remainingWord = locale === "en" ? "remaining" : "resterend";
+const workingWord = locale === "en" ? "Working…" : "Bezig…";
+const pendingWord = locale === "en" ? "Pending" : "Wachtend";
+const approximateWord = locale === "en" ? "Approx." : "Ca.";
+
 const circleDashedPaths = [
   "M10.1 2.182a10 10 0 0 1 3.8 0",
   "M13.9 21.818a10 10 0 0 1-3.8 0",
@@ -154,13 +185,13 @@ const stepFadeMs = 150;
   </div>
 
   <div class="flex items-center gap-2">
-    <div class="text-foreground text-sm font-medium">Taakplanning</div>
-    <div class="bg-violet-500/10 text-violet-600 ml-auto rounded px-2 py-0.5 text-[10px]">
+    <div class="text-foreground text-sm font-medium">{locale === "en" ? "Task planning" : "Taakplanning"}</div>
+    <div class="bg-primary/10 text-primary ml-auto rounded px-2 py-0.5 text-[10px]">
       Auto-generated
     </div>
   </div>
   <p class="text-muted-foreground mt-0.5 text-balance text-sm">
-    Open werk wordt automatisch herkend en opgepakt.
+    {locale === "en" ? "Open work is identified and picked up automatically." : "Open werk wordt automatisch herkend en opgepakt."}
   </p>
 
   <div class="mt-2 space-y-1" data-task-list>
@@ -177,7 +208,7 @@ const stepFadeMs = 150;
             class:list={[
               "pointer-events-none absolute inset-0 rounded-lg ring-1 transition-colors duration-200",
               index === 0
-                ? "bg-violet-500/5 shadow-sm ring-violet-500/20"
+                ? "bg-primary/5 shadow-sm ring-primary/20"
                 : "bg-transparent ring-transparent",
             ]}
             aria-hidden="true"
@@ -222,7 +253,7 @@ const stepFadeMs = 150;
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="text-violet-600 size-4 animate-spin"
+                  class="text-primary size-4 animate-spin"
                   style="animation-duration: 3s"
                   aria-hidden="true"
                 >
@@ -238,7 +269,7 @@ const stepFadeMs = 150;
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="text-violet-600 absolute left-1/2 top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 fill-current"
+                  class="text-primary absolute left-1/2 top-1/2 size-2 -translate-x-1/2 -translate-y-1/2 fill-current"
                   aria-hidden="true"
                 >
                   <polygon points="6 3 20 12 6 21 6 3" />
@@ -266,7 +297,7 @@ const stepFadeMs = 150;
                 data-task-title
                 class:list={[
                   "line-clamp-1 truncate text-xs font-medium leading-tight",
-                  index === 0 ? "text-violet-600" : "text-foreground",
+                  index === 0 ? "text-primary" : "text-foreground",
                 ]}
               >
                 {task.title}
@@ -275,10 +306,10 @@ const stepFadeMs = 150;
                 data-task-status
                 class:list={[
                   "text-[10px] leading-tight tabular-nums sm:min-w-[6.5rem]",
-                  index === 0 ? "text-violet-600/70" : "text-muted-foreground",
+                  index === 0 ? "text-primary/70" : "text-muted-foreground",
                 ]}
               >
-                {index === 0 ? "Bezig... 0.0s" : "Wachtend"}
+                {index === 0 ? `${workingWord} 0.0s` : pendingWord}
               </div>
             </div>
             </div>
@@ -294,7 +325,7 @@ const stepFadeMs = 150;
                 data-task-pill
                 class:list={[
                   "ring-border-illustration shadow-black/6.5 relative flex h-8 items-center gap-1.5 overflow-hidden rounded-md py-0.5 pl-1 pr-2 shadow-sm ring-1 transition-colors duration-200",
-                  index === 0 ? "bg-violet-500/5 ring-violet-500/15" : "bg-illustration",
+                  index === 0 ? "bg-primary/5 ring-primary/15" : "bg-illustration",
                 ]}
               >
                 <div
@@ -321,10 +352,10 @@ const stepFadeMs = 150;
                       data-step-state
                       class:list={[
                         "truncate text-[9px] leading-none",
-                        index === 0 ? "text-violet-600/70" : "text-transparent",
+                        index === 0 ? "text-primary/70" : "text-transparent",
                       ]}
                     >
-                      Bezig...
+                      {locale === "en" ? "Working…" : "Bezig…"}
                     </span>
                     <svg
                       data-step-check
@@ -355,9 +386,9 @@ const stepFadeMs = 150;
     class="text-muted-foreground mt-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 border-t border-dashed pt-1.5 pb-0.5 text-[10px] tabular-nums"
     aria-live="polite"
   >
-    <span data-complete-count class="min-w-0 sm:min-w-[6.75rem]">0/{tasks.length} taken voltooid</span>
+    <span data-complete-count class="min-w-0 sm:min-w-[6.75rem]">0/{tasks.length} {taskWord}</span>
     <span data-est-remaining class="min-w-0 text-right sm:min-w-[7.5rem]">
-      Ca. {Math.ceil(totalDurationMs / 1000)}s resterend
+      {locale === "en" ? "Approx." : "Ca."} {Math.ceil(totalDurationMs / 1000)}s {remainingWord}
     </span>
   </div>
 </div>
@@ -377,6 +408,11 @@ const stepFadeMs = 150;
     stepSolvedMs,
     taskGapMs,
     stepFadeMs,
+    taskWord,
+    remainingWord,
+    workingWord,
+    pendingWord,
+    approximateWord,
   }}
 >
   function formatElapsed(ms) {
@@ -409,10 +445,10 @@ const stepFadeMs = 150;
       return;
     }
 
-    completeCount.textContent = `${completedCount}/${tasks.length} taken voltooid`;
+    completeCount.textContent = `${completedCount}/${tasks.length} ${taskWord}`;
 
     const remainingMs = remainingSeconds(completedCount, activeIndex, activeElapsedMs);
-    estRemaining.textContent = `Ca. ${Math.ceil(remainingMs / 1000)}s resterend`;
+    estRemaining.textContent = `${approximateWord} ${Math.ceil(remainingMs / 1000)}s ${remainingWord}`;
   }
 
   async function transitionStepContent(row, root, step, playback) {
@@ -448,15 +484,15 @@ const stepFadeMs = 150;
       "bg-illustration",
       "bg-card",
       "bg-background",
-      "bg-violet-500/5",
+      "bg-primary/5",
       "bg-green-500/5",
       "ring-border-illustration",
-      "ring-violet-500/15",
+      "ring-primary/15",
       "ring-green-500/15",
     );
 
     if (mode === "working") {
-      pill.classList.add("bg-violet-500/5", "ring-violet-500/15");
+      pill.classList.add("bg-primary/5", "ring-primary/15");
     } else if (mode === "solved") {
       pill.classList.add("bg-green-500/5", "ring-green-500/15");
     } else {
@@ -492,9 +528,9 @@ const stepFadeMs = 150;
     }
 
     if (state) {
-      state.textContent = "Bezig...";
+      state.textContent = workingWord;
       state.classList.remove("text-green-600/75", "text-transparent");
-      state.classList.add("text-violet-600/70");
+      state.classList.add("text-primary/70");
     }
 
     check?.classList.add("hidden");
@@ -515,7 +551,7 @@ const stepFadeMs = 150;
 
     if (state) {
       state.textContent = resolvedLabel;
-      state.classList.remove("text-violet-600/70", "text-transparent");
+      state.classList.remove("text-primary/70", "text-transparent");
       state.classList.add("text-green-600/75");
     }
 
@@ -547,10 +583,10 @@ const stepFadeMs = 150;
 
     highlight?.classList.remove(
       "bg-background",
-      "bg-violet-500/5",
+      "bg-primary/5",
       "bg-muted/30",
       "bg-green-500/5",
-      "ring-violet-500/20",
+      "ring-primary/20",
       "ring-border-illustration",
       "ring-green-500/20",
       "bg-transparent",
@@ -560,16 +596,16 @@ const stepFadeMs = 150;
     content?.classList.remove("opacity-40");
 
     if (state === "active") {
-      highlight?.classList.add("bg-violet-500/5", "shadow-sm", "ring-violet-500/20");
+      highlight?.classList.add("bg-primary/5", "shadow-sm", "ring-primary/20");
       title?.classList.remove("text-foreground", "line-through", "opacity-50");
-      title?.classList.add("text-violet-600");
+      title?.classList.add("text-primary");
       const taskIndex = Number(row.dataset.index);
       if (title && tasks[taskIndex]) {
         title.textContent = tasks[taskIndex].title;
       }
       setActivityHidden(row, false);
       status?.classList.remove("text-muted-foreground");
-      status?.classList.add("text-violet-600/70");
+      status?.classList.add("text-primary/70");
       pendingIcon?.classList.add("hidden");
       activeIcon?.classList.remove("hidden");
       completeIcon?.classList.add("hidden");
@@ -579,9 +615,9 @@ const stepFadeMs = 150;
       if (title && tasks[taskIndex]?.completedTitle) {
         title.textContent = tasks[taskIndex].completedTitle;
       }
-      title?.classList.remove("text-violet-600");
+      title?.classList.remove("text-primary");
       title?.classList.add("text-foreground", "line-through", "opacity-50");
-      status?.classList.remove("text-violet-600/70");
+      status?.classList.remove("text-primary/70");
       status?.classList.add("text-muted-foreground");
       pendingIcon?.classList.add("hidden");
       activeIcon?.classList.add("hidden");
@@ -590,9 +626,9 @@ const stepFadeMs = 150;
     } else {
       highlight?.classList.add("bg-transparent", "ring-transparent");
       content?.classList.add("opacity-40");
-      title?.classList.remove("text-violet-600", "line-through", "opacity-50");
+      title?.classList.remove("text-primary", "line-through", "opacity-50");
       title?.classList.add("text-foreground");
-      status?.classList.remove("text-violet-600/70");
+      status?.classList.remove("text-primary/70");
       status?.classList.add("text-muted-foreground");
       pendingIcon?.classList.remove("hidden");
       activeIcon?.classList.add("hidden");
@@ -609,7 +645,7 @@ const stepFadeMs = 150;
     rows.forEach((row, index) => {
       if (index === 0) {
         const firstStep = tasks[0].steps[0];
-        setRowState(row, "active", "Bezig... 0.0s");
+        setRowState(row, "active", `${workingWord} 0.0s`);
         setActivityBrand(row, root, firstStep.brand);
         setActivityWorking(row, firstStep.doing);
         row.querySelector("[data-step-surface]")?.classList.remove("opacity-0");
@@ -693,7 +729,7 @@ const stepFadeMs = 150;
         }
 
         if (status) {
-          status.textContent = `Bezig... ${formatElapsed(taskElapsed)}`;
+          status.textContent = `${workingWord} ${formatElapsed(taskElapsed)}`;
         }
 
         const footerRoot = row.closest("[data-task-planning]");
@@ -743,7 +779,7 @@ const stepFadeMs = 150;
 
         const nextRow = rows[index + 1];
         const firstStep = tasks[index + 1].steps[0];
-        setRowState(nextRow, "active", "Bezig... 0.0s");
+        setRowState(nextRow, "active", `${workingWord} 0.0s`);
         setActivityBrand(nextRow, root, firstStep.brand);
         setActivityWorking(nextRow, firstStep.doing);
         nextRow.querySelector("[data-step-surface]")?.classList.remove("opacity-0");

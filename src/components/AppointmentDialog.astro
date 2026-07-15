@@ -1,5 +1,8 @@
 ---
 import AppointmentScheduler from "@/components/AppointmentScheduler";
+import { sharedCopy, type Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
 ---
 
 <dialog
@@ -10,13 +13,13 @@ import AppointmentScheduler from "@/components/AppointmentScheduler";
   <button
     type="button"
     data-booking-close
-    aria-label="Venster sluiten"
+    aria-label={sharedCopy[locale].closeDialog}
     class="bg-card/90 hover:bg-muted absolute right-3 top-3 z-30 flex size-9 cursor-pointer items-center justify-center rounded-full text-muted-foreground shadow-sm ring-1 ring-foreground/10 backdrop-blur transition hover:text-foreground"
   >
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="size-4" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
   </button>
 
-  <AppointmentScheduler client:load />
+  <AppointmentScheduler client:load locale={locale} />
 </dialog>
 
 <script>
@@ -37,7 +40,7 @@ import AppointmentScheduler from "@/components/AppointmentScheduler";
   });
 
   const openFromHash = () => {
-    if (window.location.hash !== "#afspraak" || !bookingDialog?.isConnected) return;
+    if (!["#afspraak", "#appointment"].includes(window.location.hash) || !bookingDialog?.isConnected) return;
     document.dispatchEvent(new CustomEvent("booking-reset"));
     if (!bookingDialog.open) bookingDialog.showModal();
   };

@@ -2,11 +2,11 @@ export type EmailContent = { subject: string; text: string; html: string };
 
 type AppointmentEmailInput = {
   id: string; label: string; type: string; name: string; company?: string; email: string;
-  phone?: string; subject: string; note?: string;
+  phone?: string; subject: string; note?: string; locale?: "nl" | "en";
 };
 
 type ContactEmailInput = {
-  id: string; name: string; email: string; subject: string; message: string;
+  id: string; name: string; email: string; subject: string; message: string; locale?: "nl" | "en";
 };
 
 const colors = {
@@ -51,10 +51,11 @@ const appointmentConfirmationCard = (label: string, type: string, email: string)
 
 function layout(input: {
   preheader: string; eyebrow?: string; title: string; intro: string; body: string;
-  footerNote: string; centered?: boolean; successMark?: boolean;
+  footerNote: string; centered?: boolean; successMark?: boolean; locale?: "nl" | "en";
 }) {
+  const en = input.locale === "en";
   return `<!doctype html>
-<html lang="nl">
+<html lang="${en ? "en" : "nl"}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -90,9 +91,9 @@ function layout(input: {
           <p style="margin:22px 0 0;max-width:500px;color:${colors.muted};font-size:12px;line-height:20px;">${escapeHtml(input.footerNote)}</p>
         </td></tr>
         <tr><td class="email-pad" style="padding:21px 30px;background:${colors.surface};border-top:1px dashed ${colors.border};">
-          <p style="margin:0;color:${colors.ink};font-size:12px;font-weight:700;line-height:19px;">Optidigi · Nederland</p>
-          <p style="margin:3px 0 0;color:${colors.muted};font-size:11px;line-height:18px;">Software, AI &amp; automatisering die aansluiten op hoe je bedrijf werkt.</p>
-          <p style="margin:9px 0 0;color:${colors.muted};font-size:11px;line-height:18px;">Automatisch verzonden via <a href="https://optidigi.nl" style="color:${colors.ink};text-decoration:underline;">optidigi.nl</a></p>
+          <p style="margin:0;color:${colors.ink};font-size:12px;font-weight:700;line-height:19px;">Optidigi · ${en ? "Netherlands" : "Nederland"}</p>
+          <p style="margin:3px 0 0;color:${colors.muted};font-size:11px;line-height:18px;">${en ? "Software, AI &amp; automation built around the way your business works." : "Software, AI &amp; automatisering die aansluiten op hoe je bedrijf werkt."}</p>
+          <p style="margin:9px 0 0;color:${colors.muted};font-size:11px;line-height:18px;">${en ? "Automatically sent via" : "Automatisch verzonden via"} <a href="https://optidigi.nl" style="color:${colors.ink};text-decoration:underline;">optidigi.nl</a></p>
         </td></tr>
       </table>
     </td></tr>
@@ -102,13 +103,14 @@ function layout(input: {
 }
 
 function customerAppointmentLayout(input: AppointmentEmailInput) {
+  const en = input.locale === "en";
   return `<!doctype html>
-<html lang="nl">
+<html lang="${en ? "en" : "nl"}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="color-scheme" content="light only">
-  <title>Afspraak bevestigd</title>
+  <title>${en ? "Appointment confirmed" : "Afspraak bevestigd"}</title>
   <style>
     @media screen and (max-width:480px) {
       .site-pad { padding-left:20px !important; padding-right:20px !important; }
@@ -117,7 +119,7 @@ function customerAppointmentLayout(input: AppointmentEmailInput) {
   </style>
 </head>
 <body style="margin:0;padding:0;background:${colors.paper};color:${colors.ink};font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-text-size-adjust:100%;">
-  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">Je afspraak met Optidigi staat gepland voor ${escapeHtml(input.label)}.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${en ? "Your appointment with Optidigi is scheduled for" : "Je afspraak met Optidigi staat gepland voor"} ${escapeHtml(input.label)}.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;background:${colors.paper};border-collapse:collapse;">
     <tr><td align="center">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="width:100%;max-width:600px;border-collapse:collapse;background:${colors.paper};">
@@ -129,16 +131,16 @@ function customerAppointmentLayout(input: AppointmentEmailInput) {
         <tr><td style="border-bottom:1px dashed ${colors.border};font-size:0;line-height:0;">&nbsp;</td></tr>
         <tr><td class="site-pad success-section" style="padding:64px 30px;text-align:center;border-left:1px dashed ${colors.border};border-right:1px dashed ${colors.border};">
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:0 auto 20px;border-collapse:separate;"><tr><td width="48" height="48" align="center" valign="middle" style="width:48px;height:48px;background:#dcfce7;border:1px solid #bbf7d0;border-radius:999px;color:#166534;font-size:23px;font-weight:700;line-height:48px;">&#10003;</td></tr></table>
-          <h1 style="margin:0;color:${colors.ink};font-size:20px;font-weight:600;letter-spacing:-.025em;line-height:28px;">Afspraak bevestigd</h1>
-          <p style="margin:8px auto 0;max-width:448px;color:${colors.muted};font-size:14px;line-height:22px;">Bedankt, ${escapeHtml(input.name)}. Het moment staat vast.</p>
+          <h1 style="margin:0;color:${colors.ink};font-size:20px;font-weight:600;letter-spacing:-.025em;line-height:28px;">${en ? "Appointment confirmed" : "Afspraak bevestigd"}</h1>
+          <p style="margin:8px auto 0;max-width:448px;color:${colors.muted};font-size:14px;line-height:22px;">${en ? "Thank you" : "Bedankt"}, ${escapeHtml(input.name)}. ${en ? "Your appointment is booked." : "Het moment staat vast."}</p>
           ${appointmentConfirmationCard(input.label, input.type, input.email)}
-          <p style="margin:24px auto 0;max-width:420px;color:${colors.muted};font-size:12px;line-height:19px;">Wil je het moment wijzigen of annuleren? Antwoord dan op deze e-mail.</p>
+          <p style="margin:24px auto 0;max-width:420px;color:${colors.muted};font-size:12px;line-height:19px;">${en ? "Need to reschedule or cancel? Reply to this email." : "Wil je het moment wijzigen of annuleren? Antwoord dan op deze e-mail."}</p>
         </td></tr>
         <tr><td style="border-top:1px dashed ${colors.border};font-size:0;line-height:0;">&nbsp;</td></tr>
         <tr><td class="site-pad" style="padding:24px 30px;background:${colors.surface};">
-          <p style="margin:0;color:${colors.ink};font-size:12px;font-weight:600;line-height:19px;">Optidigi · Nederland</p>
-          <p style="margin:4px 0 0;max-width:430px;color:${colors.muted};font-size:11px;line-height:18px;">Software, AI &amp; automatisering die aansluiten op hoe je bedrijf werkt.</p>
-          <p style="margin:10px 0 0;color:${colors.muted};font-size:11px;line-height:18px;">Referentie ${escapeHtml(input.id)} · <a href="https://optidigi.nl" style="color:${colors.ink};text-decoration:underline;">optidigi.nl</a></p>
+          <p style="margin:0;color:${colors.ink};font-size:12px;font-weight:600;line-height:19px;">Optidigi · ${en ? "Netherlands" : "Nederland"}</p>
+          <p style="margin:4px 0 0;max-width:430px;color:${colors.muted};font-size:11px;line-height:18px;">${en ? "Software, AI &amp; automation built around the way your business works." : "Software, AI &amp; automatisering die aansluiten op hoe je bedrijf werkt."}</p>
+          <p style="margin:10px 0 0;color:${colors.muted};font-size:11px;line-height:18px;">${en ? "Reference" : "Referentie"} ${escapeHtml(input.id)} · <a href="https://optidigi.nl" style="color:${colors.ink};text-decoration:underline;">optidigi.nl</a></p>
         </td></tr>
       </table>
     </td></tr>
@@ -148,8 +150,11 @@ function customerAppointmentLayout(input: AppointmentEmailInput) {
 }
 
 export function appointmentEmails(input: AppointmentEmailInput): { admin: EmailContent; customer: EmailContent } {
+  const en = input.locale === "en";
   const adminText = `Nieuwe afspraak\n\nMoment: ${input.label}\nType: ${input.type}\nNaam: ${input.name}\nBedrijf: ${input.company || "—"}\nE-mail: ${input.email}\nTelefoon: ${input.phone || "—"}\nOnderwerp: ${input.subject}\nOpmerking: ${input.note || "—"}\nReferentie: ${input.id}\n\nBeantwoord deze e-mail om ${input.name} direct te bereiken.`;
-  const customerText = `Hoi ${input.name},\n\nJe afspraak met Optidigi is bevestigd.\n\nMoment: ${input.label}\nType: ${input.type}\nOnderwerp: ${input.subject}\nReferentie: ${input.id}\n\nWil je het moment wijzigen of annuleren? Antwoord dan op deze e-mail.\n\nOptidigi`;
+  const customerText = en
+    ? `Hi ${input.name},\n\nYour appointment with Optidigi is confirmed.\n\nTime: ${input.label}\nType: ${input.type}\nTopic: ${input.subject}\nReference: ${input.id}\n\nNeed to reschedule or cancel? Reply to this email.\n\nOptidigi`
+    : `Hoi ${input.name},\n\nJe afspraak met Optidigi is bevestigd.\n\nMoment: ${input.label}\nType: ${input.type}\nOnderwerp: ${input.subject}\nReferentie: ${input.id}\n\nWil je het moment wijzigen of annuleren? Antwoord dan op deze e-mail.\n\nOptidigi`;
   return {
     admin: {
       subject: `[Afspraak] ${input.label} — ${headerText(input.name)}`,
@@ -163,7 +168,7 @@ export function appointmentEmails(input: AppointmentEmailInput): { admin: EmailC
       }),
     },
     customer: {
-      subject: `Je afspraak met Optidigi is bevestigd — ${input.label}`,
+      subject: `${en ? "Your appointment with Optidigi is confirmed" : "Je afspraak met Optidigi is bevestigd"} — ${input.label}`,
       text: customerText,
       html: customerAppointmentLayout(input),
     },
@@ -171,8 +176,11 @@ export function appointmentEmails(input: AppointmentEmailInput): { admin: EmailC
 }
 
 export function contactEmails(input: ContactEmailInput): { admin: EmailContent; customer: EmailContent } {
+  const en = input.locale === "en";
   const adminText = `Nieuw contactbericht\n\nNaam: ${input.name}\nE-mail: ${input.email}\nOnderwerp: ${input.subject}\nReferentie: ${input.id}\n\nBericht:\n${input.message}\n\nBeantwoord deze e-mail om ${input.name} direct te bereiken.`;
-  const customerText = `Hoi ${input.name},\n\nBedankt voor je bericht aan Optidigi. We reageren doorgaans binnen één werkdag.\n\nOnderwerp: ${input.subject}\nJouw bericht:\n${input.message}\n\nReferentie: ${input.id}\n\nOptidigi`;
+  const customerText = en
+    ? `Hi ${input.name},\n\nThank you for contacting Optidigi. We usually respond within one business day.\n\nTopic: ${input.subject}\nYour message:\n${input.message}\n\nReference: ${input.id}\n\nOptidigi`
+    : `Hoi ${input.name},\n\nBedankt voor je bericht aan Optidigi. We reageren doorgaans binnen één werkdag.\n\nOnderwerp: ${input.subject}\nJouw bericht:\n${input.message}\n\nReferentie: ${input.id}\n\nOptidigi`;
   return {
     admin: {
       subject: `[Website] ${headerText(input.subject)} — ${headerText(input.name)}`,
@@ -185,13 +193,14 @@ export function contactEmails(input: ContactEmailInput): { admin: EmailContent; 
       }),
     },
     customer: {
-      subject: "We hebben je bericht ontvangen", text: customerText,
+      subject: en ? "We’ve received your message" : "We hebben je bericht ontvangen", text: customerText,
       html: layout({
-        preheader: "We hebben je bericht ontvangen en reageren doorgaans binnen één werkdag.",
-        title: "Bedankt. Je bericht is verstuurd.",
-        intro: `Hoi ${input.name}, je bericht is goed bij ons aangekomen. We reageren doorgaans binnen één werkdag.`,
-        body: `${detailsCard([["Onderwerp", input.subject], ["Referentie", input.id]])}${messageCard("Jouw bericht", input.message)}`,
-        footerNote: "Je hoeft niets te doen. Wil je nog iets toevoegen? Antwoord dan gewoon op deze e-mail.",
+        preheader: en ? "We’ve received your message and usually respond within one business day." : "We hebben je bericht ontvangen en reageren doorgaans binnen één werkdag.",
+        title: en ? "Thank you. Your message has been sent." : "Bedankt. Je bericht is verstuurd.",
+        intro: en ? `Hi ${input.name}, your message reached us successfully. We usually respond within one business day.` : `Hoi ${input.name}, je bericht is goed bij ons aangekomen. We reageren doorgaans binnen één werkdag.`,
+        body: en ? `${detailsCard([["Topic", input.subject], ["Reference", input.id]])}${messageCard("Your message", input.message)}` : `${detailsCard([["Onderwerp", input.subject], ["Referentie", input.id]])}${messageCard("Jouw bericht", input.message)}`,
+        footerNote: en ? "No action is needed. Want to add something? Simply reply to this email." : "Je hoeft niets te doen. Wil je nog iets toevoegen? Antwoord dan gewoon op deze e-mail.",
+        locale: input.locale,
       }),
     },
   };

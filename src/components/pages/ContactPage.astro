@@ -1,0 +1,164 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import ContactShowcase from "@/components/ContactShowcase.astro";
+import { getSiteConfig } from "@/config/site";
+import { isLocale, localePath, type Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const locale: Locale = Astro.props.locale ?? (isLocale(Astro.currentLocale) ? Astro.currentLocale : "nl");
+const siteConfig = getSiteConfig(locale);
+const copy = locale === "en" ? {
+  title: "Contact and book a call | Optidigi", description: "Contact Optidigi or book a no-obligation call about software, AI and automation.", hero: "Let’s find a smarter way forward", heroBody: "Tell us where work is getting stuck, which systems do not work well together or which digital idea you want to bring to life. We’ll help you identify the most sensible next step.",
+  formTitle: "Send us a message", formIntro: "A short explanation is enough. We usually respond within one business day.", name: "Name", yourName: "Your name", email: "Email address", emailPlaceholder: "name@company.com", help: "How can we help?", subjects: ["AI & automation", "Custom software", "Cloud & software", "Other"], message: "Message", messagePlaceholder: "What is getting in the way, or what would you like to build?", submit: "Send message", sending: "Sending…", privacyLead: "We only use your details to respond.", privacyLink: "Read our privacy policy", direct: "Prefer to contact us directly?", directBody: "Feel free to email or call. Your question does not need to be fully worked out yet.", quote: "“They listened carefully and quickly identified the most logical first step for our business.”", author: "SME owner", response: "Customer feedback", success: "Thank you. Your message has been sent; we usually respond within one business day.", error: "We couldn’t send your message. Please try again or email us directly.",
+} : {
+  title: "Contact en afspraak plannen | Optidigi", description: "Neem contact op met Optidigi of plan direct een vrijblijvend gesprek over software, AI en automatisering.", hero: "Samen kijken wat er slimmer kan", heroBody: "Vertel waar werk blijft liggen, welke systemen niet goed samenwerken of welk digitaal idee je wilt realiseren. We helpen je de logische volgende stap te bepalen.",
+  formTitle: "Stuur een bericht", formIntro: "Een korte uitleg is genoeg. We reageren doorgaans binnen één werkdag.", name: "Naam", yourName: "Jouw naam", email: "E-mailadres", emailPlaceholder: "naam@bedrijf.nl", help: "Waar kunnen we bij helpen?", subjects: ["AI & automatisering", "Maatwerk software", "Cloud & software", "Overig"], message: "Bericht", messagePlaceholder: "Waar loop je tegenaan of wat wil je realiseren?", submit: "Verstuur bericht", sending: "Versturen…", privacyLead: "We gebruiken je gegevens alleen om te reageren.", privacyLink: "Lees onze privacyverklaring", direct: "Liever direct contact?", directBody: "Mail of bel ons gerust. Je vraag hoeft nog niet volledig uitgewerkt te zijn.", quote: "“Er werd goed geluisterd en snel teruggebracht wat voor ons echt de logische eerste stap was.”", author: "MKB-ondernemer", response: "Klantreactie", success: "Bedankt. Je bericht is verstuurd; we reageren doorgaans binnen één werkdag.", error: "Versturen lukte niet. Probeer het opnieuw of mail ons rechtstreeks.",
+};
+---
+
+<Layout locale={locale} title={copy.title} description={copy.description} canonicalPath={localePath(locale, "/contact")}>
+  <div class="theme-green scheme-light selection:bg-primary/15 selection:text-foreground bg-background dark:scheme-dark">
+    <SiteHeader locale={locale} />
+    <main id="main-content">
+      <section class="mx-auto max-w-5xl px-6 pb-4 pt-32 lg:pt-40">
+        <div class="max-w-2xl text-balance">
+          <h1 class="text-foreground text-4xl font-semibold sm:text-5xl">{copy.hero}</h1>
+          <p class="text-muted-foreground mt-4 text-lg leading-relaxed">{copy.heroBody}</p>
+        </div>
+      </section>
+
+      <section id="contact" class="bg-background @container overflow-hidden py-24">
+        <div aria-hidden="true" class="h-px border-b border-dashed"></div>
+
+        <div class="mx-auto my-1 max-w-5xl px-2 sm:px-6">
+          <div class="grid sm:gap-6 md:grid-cols-2">
+            <div class="relative">
+              <div aria-hidden="true" class="mask-y-from-85% border-foreground/10 pointer-events-none absolute -inset-x-1 -bottom-96 -top-24 border-x border-dashed"></div>
+              <div class="flex h-full flex-col gap-12 px-6 pt-6 sm:p-12 sm:pb-6">
+                <div>
+                  <h2 class="text-foreground text-xl font-medium">{copy.formTitle}</h2>
+                  <p class="text-muted-foreground mt-2 text-sm">{copy.formIntro}</p>
+                </div>
+
+                <form data-contact-form data-locale={locale} data-label-submit={copy.submit} data-label-sending={copy.sending} data-message-success={copy.success} data-message-error={copy.error} class="grid gap-4">
+                  <input type="text" name="website" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true" />
+                  <div class="grid gap-4 sm:grid-cols-2">
+                    <label class="grid gap-1.5 text-xs font-medium">{copy.name}<input required name="name" autocomplete="name" placeholder={copy.yourName} class="h-10 rounded-md bg-card px-3 text-sm font-normal outline-none ring-1 ring-border-illustration transition placeholder:text-muted-foreground/60 focus-visible:ring-2 focus-visible:ring-primary/50" /></label>
+                    <label class="grid gap-1.5 text-xs font-medium">{copy.email}<input required name="email" type="email" autocomplete="email" spellcheck="false" placeholder={copy.emailPlaceholder} class="h-10 rounded-md bg-card px-3 text-sm font-normal outline-none ring-1 ring-border-illustration transition placeholder:text-muted-foreground/60 focus-visible:ring-2 focus-visible:ring-primary/50" /></label>
+                  </div>
+                  <label class="grid gap-1.5 text-xs font-medium">{copy.help}
+                    <select name="subject" autocomplete="off" class="h-10 cursor-pointer rounded-md bg-card px-3 text-sm font-normal outline-none ring-1 ring-border-illustration transition focus-visible:ring-2 focus-visible:ring-primary/50">
+                      {copy.subjects.map((subject) => <option>{subject}</option>)}
+                    </select>
+                  </label>
+                  <label class="grid gap-1.5 text-xs font-medium">{copy.message}<textarea required name="message" rows="5" placeholder={copy.messagePlaceholder} class="resize-none rounded-md bg-card px-3 py-2.5 text-sm font-normal leading-relaxed outline-none ring-1 ring-border-illustration transition placeholder:text-muted-foreground/60 focus-visible:ring-2 focus-visible:ring-primary/50"></textarea></label>
+                  <div class="mt-1 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div class="text-muted-foreground text-xs">
+                      <p data-contact-message class="min-h-4" aria-live="polite"></p>
+                      <p>{copy.privacyLead} <a href={localePath(locale, "/privacy")} class="text-primary underline-offset-4 hover:underline">{copy.privacyLink}</a>.</p>
+                    </div>
+                    <button data-contact-submit type="submit" class="brand-primary-action inline-flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border-[0.5px] border-white/10 bg-primary px-5 text-sm font-medium text-primary-foreground shadow-md shadow-black/15 ring-1 ring-black/10 transition hover:bg-primary/90 active:scale-98 disabled:cursor-wait disabled:opacity-60">
+                      <span data-contact-submit-label>{copy.submit}</span>
+                      <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div class="aspect-4/5 relative sm:aspect-square md:aspect-auto">
+              <div aria-hidden="true" class="mask-y-from-85% border-foreground/10 pointer-events-none absolute -inset-x-1 -bottom-96 -top-24 border-x border-dashed"></div>
+              <ContactShowcase locale={locale} />
+            </div>
+          </div>
+        </div>
+
+        <div aria-hidden="true" class="h-px border-t border-dashed"></div>
+
+        <div class="mx-auto max-w-5xl px-2 py-6 sm:px-6 sm:py-12">
+          <div class="@xl:grid-cols-2 @xl:gap-6 grid gap-12 px-6 sm:px-12">
+            <div>
+              <p class="text-sm font-medium">{copy.direct}</p>
+              <p class="text-muted-foreground mt-2 max-w-sm text-sm leading-relaxed">{copy.directBody}</p>
+              <div class="mt-4 grid gap-2 text-sm">
+                <a class="flex w-fit items-center gap-2 text-muted-foreground transition hover:text-primary" href={`mailto:${siteConfig.email}`}><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg>{siteConfig.email}</a>
+                <a class="flex w-fit items-center gap-2 text-muted-foreground transition hover:text-primary" href={`tel:${siteConfig.phoneHref}`}><svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.33 1.78.62 2.63a2 2 0 0 1-.45 2.11L8 9.73a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.85.29 1.73.5 2.63.62A2 2 0 0 1 22 16.92z"></path></svg>{siteConfig.phone}</a>
+              </div>
+            </div>
+
+            <div class="@2xl:pl-12 flex flex-col justify-end">
+              <figure class="relative mt-auto max-w-xl">
+                <blockquote class="text-foreground max-w-xs text-balance">{copy.quote}</blockquote>
+                <figcaption class="mt-4 flex items-center gap-2">
+                  <span class="before:border-foreground/10 relative flex size-10 items-center justify-center overflow-hidden rounded-lg bg-illustration text-sm font-semibold text-primary shadow before:absolute before:inset-0 before:rounded-lg before:border">M</span>
+                  <span class="space-y-0.5"><strong class="text-foreground block text-sm font-medium">{copy.author}</strong><span class="text-muted-foreground block text-xs">{copy.response}</span></span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+        <div aria-hidden="true" class="h-px border-t border-dashed"></div>
+      </section>
+    </main>
+    <SiteFooter showBrandMark showLead={false} compact locale={locale} />
+  </div>
+</Layout>
+
+<script>
+  const contactForm = document.querySelector<HTMLFormElement>("[data-contact-form]");
+  const contactMessage = document.querySelector<HTMLElement>("[data-contact-message]");
+  const contactSubmit = document.querySelector<HTMLButtonElement>("[data-contact-submit]");
+  const contactSubmitLabel = document.querySelector<HTMLElement>("[data-contact-submit-label]");
+  const formStartedAt = Date.now();
+
+  contactForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!contactForm || !contactSubmit) return;
+
+    contactSubmit.disabled = true;
+    if (contactSubmitLabel) contactSubmitLabel.textContent = contactForm.dataset.labelSending || "Sending…";
+    if (contactMessage) contactMessage.textContent = "";
+
+    const fields = new FormData(contactForm);
+    const payload = {
+      name: String(fields.get("name") || "").trim(),
+      email: String(fields.get("email") || "").trim(),
+      subject: String(fields.get("subject") || "").trim(),
+      message: String(fields.get("message") || "").trim(),
+      website: String(fields.get("website") || ""),
+      formStartedAt,
+      locale: contactForm.dataset.locale || "nl",
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        const error = await response.json().catch(() => null) as { message?: string } | null;
+        throw new Error(error?.message || "contact request failed");
+      }
+
+      contactForm.reset();
+      if (contactMessage) {
+        contactMessage.textContent = contactForm.dataset.messageSuccess || "Thank you. Your message has been sent.";
+        contactMessage.classList.remove("text-destructive");
+        contactMessage.classList.add("text-primary");
+      }
+    } catch (error) {
+      if (contactMessage) {
+        contactMessage.textContent = error instanceof Error && error.message !== "contact request failed"
+          ? error.message
+          : contactForm.dataset.messageError || "We couldn’t send your message. Please try again.";
+        contactMessage.classList.remove("text-primary");
+        contactMessage.classList.add("text-destructive");
+      }
+    } finally {
+      contactSubmit.disabled = false;
+      if (contactSubmitLabel) contactSubmitLabel.textContent = contactForm.dataset.labelSubmit || "Send message";
+    }
+  });
+</script>

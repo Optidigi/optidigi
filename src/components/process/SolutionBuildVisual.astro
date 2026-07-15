@@ -1,10 +1,13 @@
 ---
 /** Connected-systems illustration for the solution build step. */
 import IntegrationBadgeIcon from "@/components/IntegrationBadgeIcon.astro";
+import type { Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
 
 const destinations = [
   { label: "Gmail", brand: "gmail" as const, tint: "bg-red-500/10" },
-  { label: "Agenda", brand: "calendar" as const, tint: "bg-violet-500/10" },
+  { label: locale === "en" ? "Calendar" : "Agenda", brand: "calendar" as const, tint: "bg-violet-500/10" },
   { label: "Website", brand: "website" as const, tint: "bg-emerald-500/10" },
 ];
 ---
@@ -84,7 +87,7 @@ const destinations = [
         </div>
         <div class="min-w-0 text-left">
           <div class="text-foreground text-[10px] font-semibold leading-tight">AI Agent</div>
-          <div class="text-foreground/50 text-[9px] leading-tight">Taken</div>
+          <div class="text-foreground/50 text-[9px] leading-tight">{locale === "en" ? "Tasks" : "Taken"}</div>
         </div>
       </div>
       <div class="space-y-1">

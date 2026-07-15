@@ -79,8 +79,10 @@ export function createAppointment(input: AppointmentInput) {
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).run(id, valid.startAt, valid.endAt, config.timezone, input.type, input.name, input.company || null, input.email, input.phone || null, input.subject, input.note || null, input.idempotencyKey || null, now, now);
 
-    const label = formatDutch(requested, config.timezone);
-    const type = input.type === "video" ? "Videogesprek" : "Telefoongesprek";
+    const label = input.locale === "en"
+      ? new Intl.DateTimeFormat("en-GB", { timeZone: config.timezone, weekday: "long", day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: false }).format(requested)
+      : formatDutch(requested, config.timezone);
+    const type = input.type === "video" ? (input.locale === "en" ? "Video call" : "Videogesprek") : (input.locale === "en" ? "Phone call" : "Telefoongesprek");
     const mail = mailConfig();
     const emails = appointmentEmails({ ...input, id, label, type });
     enqueueEmail({ relatedType: "appointment", relatedId: id, to: mail.contactTo, replyTo: input.email, ...emails.admin });

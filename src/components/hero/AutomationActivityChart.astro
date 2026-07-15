@@ -2,17 +2,18 @@
 /** Static activity chart for the automation overview. */
 interface Props {
   statement?: boolean;
+  locale?: "nl" | "en";
 }
 
-const { statement = false } = Astro.props;
+const { statement = false, locale = "nl" } = Astro.props;
 ---
 
 {
   statement ? (
     <div aria-hidden="true" class="relative w-full pt-2">
       <div class="absolute top-1 right-2 z-10 flex items-center gap-4 text-[10px] text-muted-foreground">
-        <span class="flex items-center gap-1.5"><span class="size-1.5 rounded-full bg-[var(--brand-action)]" />Automatisch</span>
-        <span class="flex items-center gap-1.5"><span class="size-1.5 rounded-full bg-muted-foreground/45" />Handwerk</span>
+        <span class="flex items-center gap-1.5"><span class="size-1.5 rounded-full bg-[var(--brand-action)]" />{locale === "en" ? "Automated" : "Automatisch"}</span>
+        <span class="flex items-center gap-1.5"><span class="size-1.5 rounded-full bg-muted-foreground/45" />{locale === "en" ? "Manual" : "Handwerk"}</span>
       </div>
       <svg width="100%" viewBox="0 0 600 170" class="overflow-visible">
         <defs>

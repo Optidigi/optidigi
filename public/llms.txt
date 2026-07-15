@@ -1,0 +1,33 @@
+# Optidigi
+
+> Optidigi is a Dutch digital partner for small and medium-sized businesses. It designs, builds and integrates software, AI applications and automation around existing business processes.
+
+Optidigi serves business customers in the Netherlands. The website is available in Dutch and English. Use the Dutch pages as the default source and the English pages for English-language answers.
+
+## Main pages
+
+- [Optidigi homepage](https://optidigi.nl/): Dutch overview of Optidigi's services, approach and frequently asked questions.
+- [Optidigi homepage in English](https://optidigi.nl/en/): English overview of the same services and approach.
+- [Contact Optidigi](https://optidigi.nl/contact): Send a business enquiry or arrange a no-obligation call.
+- [Contact Optidigi in English](https://optidigi.nl/en/contact): English contact and appointment page.
+
+## Legal and privacy
+
+- [Legal documents](https://optidigi.nl/juridisch): Current legal documents and publication status in Dutch.
+- [Legal documents in English](https://optidigi.nl/en/legal): English index of the legal documents.
+- [General terms and conditions](https://optidigi.nl/juridisch/algemene-voorwaarden): Official Dutch business-to-business terms, version 1.0.
+- [Privacy policy](https://optidigi.nl/privacy): How Optidigi processes personal data.
+- [Privacy policy in English](https://optidigi.nl/en/privacy): English version of the privacy policy.
+
+## Contact
+
+- Email: hey@optidigi.nl
+- Privacy enquiries: privacy@optidigi.nl
+- Phone: +31 6 25052591
+- Website: https://optidigi.nl/
+
+## Notes
+
+- Optidigi works with software, websites and portals, cloud software, AI applications, integrations and workflow automation.
+- Product names and interface data shown in visual demonstrations are illustrative examples, not separate Optidigi products or customer claims.
+- Documents marked as coming soon on the legal index have not yet been published.

@@ -1,0 +1,101 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import { localePath, type Locale } from "@/i18n";
+
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
+const en = locale === "en";
+
+const copy = en ? {
+  title: "Legal",
+  description: "The documents that explain the agreements, privacy choices and legal details behind working with Optidigi.",
+  pageDescription: "Find Optidigi's legal documents, policies and company information.",
+  available: "Version 1.0",
+  comingSoon: "Coming soon",
+  documents: [
+    ["General terms and conditions", "Conditions applying to Optidigi assignments", "/legal/general-terms"],
+    ["Privacy policy", "How Optidigi processes personal data", "/privacy"],
+    ["Cookie statement", "Cookies and website tracking", null],
+    ["Data processing agreement", "Processing conditions for customers", null],
+    ["Subprocessors", "Hetzner, Cloudflare and other relevant providers", null],
+    ["Responsible disclosure", "Reporting security vulnerabilities", null],
+    ["Company details", "Legal name, address, Dutch Chamber of Commerce, VAT and contact details", null],
+  ],
+} : {
+  title: "Juridisch",
+  description: "De documenten die de afspraken, privacykeuzes en juridische gegevens achter een samenwerking met Optidigi toelichten.",
+  pageDescription: "Bekijk de juridische documenten, verklaringen en bedrijfsgegevens van Optidigi.",
+  available: "Versie 1.0",
+  comingSoon: "Binnenkort",
+  documents: [
+    ["Algemene voorwaarden", "Voorwaarden die gelden voor opdrachten van Optidigi", "/juridisch/algemene-voorwaarden"],
+    ["Privacyverklaring", "Hoe Optidigi persoonsgegevens verwerkt", "/privacy"],
+    ["Cookieverklaring", "Cookies en tracking op de website", null],
+    ["Verwerkersovereenkomst", "Verwerkingsvoorwaarden voor klanten", null],
+    ["Subverwerkers", "Hetzner, Cloudflare en andere relevante leveranciers", null],
+    ["Responsible disclosure", "Het melden van beveiligingskwetsbaarheden", null],
+    ["Bedrijfsgegevens", "Juridische naam, adres, KvK, btw en contactgegevens", null],
+  ],
+};
+---
+
+<Layout
+  locale={locale}
+  title={`${copy.title} | Optidigi`}
+  description={copy.pageDescription}
+  canonicalPath={localePath(locale, en ? "/legal" : "/juridisch")}
+>
+  <div class="theme-green scheme-light min-h-screen bg-background text-foreground dark:scheme-dark">
+    <SiteHeader locale={locale} />
+
+    <main id="main-content" class="relative overflow-hidden pb-24 pt-32 sm:pb-32 sm:pt-40">
+      <div class="mx-auto max-w-5xl px-6">
+        <header class="mx-auto max-w-2xl text-center">
+          <h1 class="text-balance text-4xl font-semibold tracking-tight sm:text-5xl">{copy.title}</h1>
+          <p class="text-muted-foreground mx-auto mt-5 max-w-xl text-balance text-lg leading-relaxed">
+            {copy.description}
+          </p>
+        </header>
+
+        <section
+          data-slot="card"
+          aria-label={en ? "Legal documents" : "Juridische documenten"}
+          class="border-foreground/10 bg-card mx-auto mt-14 max-w-3xl overflow-hidden rounded-xl border shadow-lg shadow-black/5 dark:border-transparent sm:mt-16"
+        >
+          <ul class="divide-foreground/10 divide-y">
+            {copy.documents.map(([title, purpose, href]) => (
+              <li>
+                {href ? (
+                  <a
+                    href={localePath(locale, href)}
+                    class="group grid min-h-24 gap-3 px-6 py-5 transition-colors hover:bg-foreground/[0.025] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:px-8"
+                  >
+                    <div class="min-w-0">
+                      <h2 class="font-semibold text-foreground transition-colors group-hover:text-primary">{title}</h2>
+                      <p class="text-muted-foreground mt-1 text-sm leading-relaxed">{purpose}</p>
+                    </div>
+                    <span class="text-muted-foreground whitespace-nowrap text-xs font-medium">{copy.available}</span>
+                  </a>
+                ) : (
+                  <div class="grid min-h-24 gap-3 px-6 py-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:px-8">
+                    <div class="min-w-0">
+                      <h2 class="font-semibold text-foreground/80">{title}</h2>
+                      <p class="text-muted-foreground mt-1 text-sm leading-relaxed">{purpose}</p>
+                    </div>
+                    <span class="ring-foreground/8 bg-foreground/[0.025] text-muted-foreground w-fit whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium ring-1">
+                      {copy.comingSoon}
+                    </span>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </main>
+
+    <SiteFooter showLead={false} compact locale={locale} />
+  </div>
+</Layout>

@@ -1,4 +1,7 @@
 ---
+import type { Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
 /** AI-assisted efficiency illustration for the result step. */
 ---
 
@@ -8,9 +11,10 @@
 >
   <div class="absolute inset-x-6 top-6 z-[1]">
     <div
-      class="absolute inset-0 scale-100 opacity-75 blur-lg transition-all duration-300 dark:opacity-50"
+      class="absolute inset-0 scale-100 opacity-75 blur-lg transition-[opacity,transform] duration-300 dark:opacity-50"
     >
       <div
+        data-process-result-glow
         class="bg-linear-to-r/increasing animate-hue-rotate absolute inset-x-6 top-12 bottom-0 -translate-y-3 from-pink-400 to-purple-400"
       >
       </div>
@@ -34,7 +38,7 @@
         <path d="M18 6 6 18"></path>
         <path d="m6 6 12 12"></path>
       </svg>
-      <span class="text-muted-foreground block p-3 text-xs">Wat pakken we eerst aan?</span>
+      <span class="text-muted-foreground block p-3 text-xs">{locale === "en" ? "What should we tackle first?" : "Wat pakken we eerst aan?"}</span>
       <div class="flex justify-between border-t p-2">
         <span
           class="hover:bg-foreground/5 text-muted-foreground hover:text-foreground flex h-6 cursor-pointer items-center gap-1.5 rounded-md p-2 duration-100"
@@ -86,16 +90,16 @@
 
   <div class="mask-b-from-25% mask-b-to-85% space-y-3 text-left text-sm leading-relaxed">
     <div class="text-muted-foreground">
-      Leads krijgen nu met
+      {locale === "en" ? "Leads now receive" : "Leads krijgen nu met"}
       <span
         class="result-highlight bg-linear-to-r from-primary to-emerald-500 bg-clip-text px-0.5 text-transparent"
       >
-        directe opvolging
+        {locale === "en" ? "immediate follow-up" : "directe opvolging"}
       </span>
-      binnen een uur antwoord.
+      {locale === "en" ? "and an answer within an hour." : "binnen een uur antwoord."}
     </div>
     <div class="text-muted-foreground">
-      Niets glipt meer weg tussen mail, telefoon en je dagelijkse agenda.
+      {locale === "en" ? "Nothing falls through the cracks between email, phone and your daily schedule." : "Niets glipt meer weg tussen mail, telefoon en je dagelijkse agenda."}
     </div>
   </div>
 </div>

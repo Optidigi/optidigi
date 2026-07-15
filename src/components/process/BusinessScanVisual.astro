@@ -1,4 +1,7 @@
 ---
+import type { Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale: _locale = "nl" } = Astro.props;
 /** Document-analysis illustration for the business scan step. */
 ---
 

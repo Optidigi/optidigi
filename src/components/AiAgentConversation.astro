@@ -1,11 +1,14 @@
 ---
 import IntegrationBadgeIcon from "@/components/IntegrationBadgeIcon.astro";
+import type { Locale } from "@/i18n";
+interface Props { locale?: Locale; }
+const { locale = "nl" } = Astro.props;
 
 const userMessage =
-  "Welke offertes wachten nog op opvolging?";
+  locale === "en" ? "Which quotes still need a follow-up?" : "Welke offertes wachten nog op opvolging?";
 
 const aiText =
-  "Er staan 3 offertes open. Twee klanten hebben de prijsopgave bekeken; ik heb conceptmails klaargezet voor controle.";
+  locale === "en" ? "There are 3 open quotes. Two customers have viewed the proposal; I’ve prepared draft follow-up emails for review." : "Er staan 3 offertes open. Twee klanten hebben de prijsopgave bekeken; ik heb conceptmails klaargezet voor controle.";
 ---
 
 <div class="ai-agent-conversation" data-ai-chat>
@@ -16,6 +19,7 @@ const aiText =
       >
         <div class="relative mx-auto max-w-lg">
           <div
+            data-chat-bubble="user"
             class="max-w-3/4 bg-linear-to-b from-card/88 ring-foreground/10 inset-ring inset-ring-background/75 ml-auto w-fit rounded-t-2xl rounded-bl-2xl rounded-br to-indigo-500/17 p-3 text-sm text-indigo-950 shadow-md shadow-indigo-600/10 ring-1 selection:bg-indigo-900/10 selection:text-indigo-700 dark:text-indigo-50/65 dark:selection:text-indigo-300"
           >
             {userMessage}
@@ -54,6 +58,7 @@ const aiText =
 
           <div data-response class="hidden">
             <div
+              data-chat-bubble="assistant"
               class="max-w-3/4 bg-linear-to-b from-card/88 ring-foreground/10 inset-ring inset-ring-background/75 w-fit rounded-t-2xl rounded-bl rounded-br-2xl to-emerald-500/17 p-3 text-sm text-emerald-950 shadow-md shadow-emerald-600/10 ring-1 selection:bg-emerald-900/10 selection:text-emerald-700 dark:text-emerald-50/65 dark:selection:text-emerald-300"
             >
               <div class="text-sm" data-response-text></div>

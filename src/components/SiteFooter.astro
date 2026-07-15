@@ -2,34 +2,50 @@
 import Logo from "@/components/Logo.astro";
 import AppointmentCta from "@/components/AppointmentCta.astro";
 import { FlickeringGrid } from "@/components/effects/FlickeringGrid";
-import { siteConfig } from "@/config/site";
+import { getSiteConfig } from "@/config/site";
+import { localePath, type Locale } from "@/i18n";
 
 interface Props {
   showBrandMark?: boolean;
   showLead?: boolean;
   compact?: boolean;
+  locale?: Locale;
 }
 
-const { showBrandMark = false, showLead = true, compact = false } = Astro.props;
+const { showBrandMark = false, showLead = true, compact = false, locale = "nl" } = Astro.props;
+const siteConfig = getSiteConfig(locale);
+const copy = locale === "en" ? {
+  lead: "Ready to work smarter?", leadBody: "In a no-obligation session, we discuss where work gets stuck and which digital improvements could make the greatest difference to your business.",
+  about: "Optidigi helps businesses work smarter with software, AI and automation designed around their existing processes.", services: "Services", company: "Company", approach: "Approach", faq: "Frequently asked questions", contact: "Contact",
+  serviceLinks: ["Automation", "AI applications", "Websites & portals", "Custom software"], rights: "All rights reserved.", chamber: "Dutch Chamber of Commerce:", vat: "VAT ID:", status: "Operational", statusLabel: "View Optidigi system status",
+} : {
+  lead: "Klaar om slimmer te werken?", leadBody: "In een vrijblijvende sessie bespreken we waar werk vastloopt en welke digitale verbeteringen het meeste verschil kunnen maken voor je bedrijf.",
+  about: "Optidigi helpt bedrijven slimmer werken met software, AI en automatisering die aansluiten op bestaande processen.", services: "Diensten", company: "Bedrijf", approach: "Aanpak", faq: "Veelgestelde vragen", contact: "Contact",
+  serviceLinks: ["Automatisering", "AI-toepassingen", "Websites & portalen", "Software op maat"], rights: "Alle rechten voorbehouden.", chamber: "KvK-nummer:", vat: "Btw-id:", status: "Operationeel", statusLabel: "Bekijk de systeemstatus van Optidigi",
+};
 
 const year = new Date().getFullYear();
 ---
 
 {showLead && <section
+  data-footer-cta
   class:list={[
     "brand-footer-lead",
     "bg-linear-to-b from-background to-muted dark:to-card relative from-50% to-50% overflow-hidden pt-12 md:pt-24",
   ]}
 >
-  <div class="mx-auto max-w-5xl px-6">
+  <div class="relative z-10 mx-auto max-w-5xl px-6">
     <div
       data-slot="card"
+      data-footer-cta-card
       class:list={[
         "bg-card text-card-foreground relative overflow-hidden p-12 md:px-32 md:py-20",
-        "ring-border shadow-black/6.5 rounded-xl ring-1 shadow-lg",
+        "border-foreground/10 shadow-black/6.5 rounded-xl border shadow-lg dark:border-transparent",
       ]}
     >
+      <div aria-hidden="true" data-footer-cta-glow class="pointer-events-none absolute inset-0 hidden dark:block"></div>
       <svg
+        data-footer-cta-mark
         class="text-muted pointer-events-none absolute inset-0 size-full translate-y-3/4"
         viewBox="0 0 180 220"
         fill="none"
@@ -51,13 +67,12 @@ const year = new Date().getFullYear();
 
       <div class="relative text-center">
         <h2 class="text-balance text-3xl font-semibold md:text-4xl">
-          Klaar om slimmer te werken?
+          {copy.lead}
         </h2>
         <p class="text-muted-foreground mb-6 mt-4 text-balance">
-          In een vrijblijvende sessie bespreken we waar werk vastloopt en welke digitale
-          verbeteringen het meeste verschil kunnen maken voor je bedrijf.
+          {copy.leadBody}
         </p>
-        <AppointmentCta align="center" class="mt-2" />
+        <AppointmentCta align="center" class="mt-2" locale={locale} />
       </div>
     </div>
   </div>
@@ -67,54 +82,59 @@ const year = new Date().getFullYear();
   <div class:list={["relative z-10 mx-auto max-w-5xl px-6", compact ? "space-y-10" : "space-y-16"]}>
     <div class="grid gap-12 md:grid-cols-5">
       <div class="space-y-6 md:col-span-2 md:space-y-12">
-        <a aria-label="go home" class="inline-flex h-8 items-center" href="/">
+        <a aria-label={locale === "en" ? "Go to homepage" : "Ga naar de homepage"} class="inline-flex h-8 items-center" href={localePath(locale, "/")}>
           <Logo class="h-6 w-auto" />
         </a>
         <p class="text-muted-foreground text-balance text-sm">
-          Optidigi helpt bedrijven slimmer werken met software, AI en automatisering die
-          aansluiten op bestaande processen.
+          {copy.about}
         </p>
       </div>
 
       <div class="col-span-3 grid gap-6 sm:grid-cols-3">
         <div class="space-y-4 text-sm">
-          <span class="block font-medium">Diensten</span>
+          <span class="block font-medium">{copy.services}</span>
           <div class="flex flex-wrap gap-4 sm:flex-col">
-            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#diensten">
-              <span>Automatisering</span>
+            <a class="text-muted-foreground hover:text-primary block duration-150" href={localePath(locale, locale === "en" ? "/#services" : "/#diensten")}>
+              <span>{copy.serviceLinks[0]}</span>
             </a>
-            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#diensten">
-              <span>AI-toepassingen</span>
+            <a class="text-muted-foreground hover:text-primary block duration-150" href={localePath(locale, locale === "en" ? "/#services" : "/#diensten")}>
+              <span>{copy.serviceLinks[1]}</span>
             </a>
-            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#diensten">
-              <span>Websites & portalen</span>
+            <a class="text-muted-foreground hover:text-primary block duration-150" href={localePath(locale, locale === "en" ? "/#services" : "/#diensten")}>
+              <span>{copy.serviceLinks[2]}</span>
             </a>
-            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#diensten">
-              <span>Software op maat</span>
+            <a class="text-muted-foreground hover:text-primary block duration-150" href={localePath(locale, locale === "en" ? "/#services" : "/#diensten")}>
+              <span>{copy.serviceLinks[3]}</span>
             </a>
           </div>
         </div>
 
         <div class="space-y-4 text-sm">
-          <span class="block font-medium">Bedrijf</span>
+          <span class="block font-medium">{copy.company}</span>
           <div class="flex flex-wrap gap-4 sm:flex-col">
-            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#aanpak">
-              <span>Aanpak</span>
+            <a class="text-muted-foreground hover:text-primary block duration-150" href={localePath(locale, locale === "en" ? "/#approach" : "/#aanpak")}>
+              <span>{copy.approach}</span>
             </a>
-            <a class="text-muted-foreground hover:text-primary block duration-150" href="/#faq">
-              <span>Veelgestelde vragen</span>
+            <a class="text-muted-foreground hover:text-primary block duration-150" href={localePath(locale, "/#faq")}>
+              <span>{copy.faq}</span>
             </a>
             <a
               class="text-muted-foreground hover:text-primary block duration-150"
-              href="/contact"
+              href={localePath(locale, "/contact")}
             >
               <span>Contact</span>
+            </a>
+            <a
+              class="text-muted-foreground hover:text-primary block duration-150"
+              href={localePath(locale, locale === "en" ? "/legal" : "/juridisch")}
+            >
+              <span>{locale === "en" ? "Legal" : "Juridisch"}</span>
             </a>
           </div>
         </div>
 
         <div class="space-y-4">
-          <span class="block text-sm font-medium">Contact</span>
+          <span class="block text-sm font-medium">{copy.contact}</span>
           <div class="flex flex-wrap gap-3 text-sm">
             <a
               aria-label="E-mail"
@@ -160,36 +180,42 @@ const year = new Date().getFullYear();
 
     <div class="flex flex-wrap items-end justify-between gap-4">
       <div class:list={["text-muted-foreground text-sm", showBrandMark ? "space-y-2" : "space-y-1"]}>
-        <p>© {year}&nbsp;{siteConfig.name}. Alle rechten voorbehouden. <a href="/privacy" class="hover:text-foreground underline-offset-4 hover:underline">Privacy</a></p>
+        <p>
+          © {year}&nbsp;{siteConfig.name}. {copy.rights}
+        </p>
         {showBrandMark ? (
           <dl class="text-muted-foreground/75 flex flex-wrap gap-x-4 gap-y-1 text-xs">
             <div class="flex gap-1.5">
-              <dt>KvK-nummer:</dt>
+              <dt>{copy.chamber}</dt>
               <dd class="tabular-nums">{siteConfig.kvk}</dd>
             </div>
             <div class="flex gap-1.5">
-              <dt>Btw-id:</dt>
+              <dt>{copy.vat}</dt>
               <dd class="tabular-nums">{siteConfig.btw}</dd>
             </div>
           </dl>
         ) : (
           <p class="text-muted-foreground/75 text-xs">
-            KVK {siteConfig.kvk} · BTW {siteConfig.btw}
+            {locale === "en" ? "Dutch Chamber of Commerce" : "KVK"} {siteConfig.kvk} · {locale === "en" ? "VAT" : "BTW"} {siteConfig.btw}
           </p>
         )}
       </div>
-      <div
+      <a
+        href="https://status.optidigi.nl"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={copy.statusLabel}
         class:list={[
-          "ring-foreground/5 bg-card flex items-center gap-2 rounded-full border border-transparent py-1 pl-2 shadow ring-1",
+          "ring-foreground/5 bg-card hover:bg-muted/70 focus-visible:ring-ring flex items-center gap-2 rounded-full border border-transparent py-1 pl-2 shadow ring-1 transition-colors focus-visible:outline-none focus-visible:ring-2",
           showBrandMark ? "shrink-0 whitespace-nowrap pr-3" : "pr-4",
         ]}
       >
-        <div class="relative flex size-3">
-          <span class="absolute inset-0 block size-full rounded-full bg-foreground/10"></span>
-          <span class="relative m-auto block size-1 rounded-full bg-foreground/45"></span>
-        </div>
-        <span class="text-sm">Optidigi · Nederland</span>
-      </div>
+        <span class="relative flex size-3" aria-hidden="true">
+          <span class="absolute inset-0 block size-full rounded-full bg-emerald-500/15 dark:bg-emerald-400/15"></span>
+          <span class="relative m-auto block size-1.5 rounded-full bg-emerald-500 shadow-[0_0_6px_color-mix(in_oklab,var(--color-emerald-500)_55%,transparent)] dark:bg-emerald-400"></span>
+        </span>
+        <span class="text-sm">{copy.status}</span>
+      </a>
     </div>
   </div>
 
@@ -197,13 +223,24 @@ const year = new Date().getFullYear();
     <div aria-hidden="true" class:list={["relative z-0 overflow-hidden", compact ? "-mt-20 h-56 sm:-mt-24 sm:h-64" : "-mt-28 h-72 sm:-mt-32 sm:h-80 md:-mt-36 md:h-96"]}>
       <FlickeringGrid
         client:visible
-        className="absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent_0%,transparent_7%,#000_43%,#000_100%)]"
+        className="absolute inset-0 dark:hidden [mask-image:linear-gradient(to_bottom,transparent_0%,transparent_7%,#000_43%,#000_100%)]"
         squareSize={3}
         gridGap={7}
         flickerChance={0.3}
         maxOpacity={0.085}
         maskImageSrc="/optidigi-logo.svg"
         maskMaxOpacity={0.42}
+      />
+      <FlickeringGrid
+        client:visible
+        className="absolute inset-0 hidden dark:block [mask-image:linear-gradient(to_bottom,transparent_0%,transparent_7%,#000_43%,#000_100%)]"
+        squareSize={3}
+        gridGap={7}
+        flickerChance={0.24}
+        color="rgb(94, 231, 179)"
+        maxOpacity={0.055}
+        maskImageSrc="/optidigi-logo.svg"
+        maskMaxOpacity={0.3}
       />
     </div>
   )}
