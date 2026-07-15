@@ -145,7 +145,7 @@ function NavIconTile({
   iconFill: string;
 }) {
   return (
-    <div className="bg-illustration ring-foreground/10 before:bg-radial before:to-foreground/3 *:drop-shadow-black/6.5 relative flex size-9 items-center justify-center rounded-lg border border-transparent shadow-sm ring-1 *:drop-shadow before:absolute before:inset-0 before:rounded-lg">
+    <div className="bg-illustration ring-foreground/10 dark:ring-foreground/16 before:bg-radial before:to-foreground/3 *:drop-shadow-black/6.5 relative flex size-9 items-center justify-center rounded-lg border border-transparent shadow-sm ring-1 *:drop-shadow before:absolute before:inset-0 before:rounded-lg">
       <Icon className={cn("stroke-foreground size-4", iconFill)} aria-hidden="true" />
     </div>
   );

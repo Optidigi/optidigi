@@ -666,9 +666,16 @@ select option {
   }
 }
 
+.theme-green [data-hero-services-preview] {
+  mask-image: radial-gradient(ellipse 80% 95% at 50% 0%, #000 80%, transparent 100%);
+  mask-mode: alpha;
+  -webkit-mask-image: radial-gradient(ellipse 80% 95% at 50% 0%, #000 80%, transparent 100%);
+}
+
 @media (max-width: 639px) {
   .theme-green [data-hero-services-preview] {
     mask-image: radial-gradient(ellipse 88% 94% at 50% 0%, #000 74%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 88% 94% at 50% 0%, #000 74%, transparent 100%);
   }
 }
 
