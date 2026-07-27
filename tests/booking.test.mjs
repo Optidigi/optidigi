@@ -33,7 +33,7 @@ test("a confirmed appointment atomically removes its slot and cancellation reope
     subject: "Kennismaking",
     note: "",
     idempotencyKey: "booking-test-1",
-  });
+  }, now);
 
   assert.equal(appointment.created, true);
   assert.equal(availableSlots("2026-07-20", "2026-07-20", now).slots.length, 1);
@@ -48,7 +48,7 @@ test("a confirmed appointment atomically removes its slot and cancellation reope
       subject: "Kennismaking",
       note: "",
       idempotencyKey: "booking-test-2",
-    }),
+    }, now),
     (error) => error?.code === "slot_unavailable",
   );
 
@@ -77,7 +77,7 @@ test("permanent deletion removes the appointment and reopens its slot", () => {
     subject: "Overig",
     note: "",
     idempotencyKey: "booking-delete-test",
-  });
+  }, now);
 
   deleteAppointment(appointment.id);
 
