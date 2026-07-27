@@ -52,11 +52,11 @@ export function availableSlots(fromValue?: string | null, toValue?: string | nul
   return { timezone: config.timezone, durationMinutes: config.durationMinutes, slots };
 }
 
-export function createAppointment(input: AppointmentInput) {
+export function createAppointment(input: AppointmentInput, currentTime = new Date()) {
   const config = bookingConfig();
   const requested = new Date(input.startAt);
   const localDate = dateKey(localParts(requested, config.timezone));
-  const valid = availableSlots(localDate, localDate).slots.find((slot) => slot.startAt === input.startAt);
+  const valid = availableSlots(localDate, localDate, currentTime).slots.find((slot) => slot.startAt === input.startAt);
   if (!valid) throw new InputError("Dit moment is niet meer beschikbaar.", 409, "slot_unavailable");
 
   const db = database();
@@ -65,7 +65,7 @@ export function createAppointment(input: AppointmentInput) {
     if (existing) return { id: existing.id, startAt: existing.start_at, endAt: existing.end_at, created: false };
   }
   const id = randomUUID();
-  const now = new Date().toISOString();
+  const now = currentTime.toISOString();
   db.exec("BEGIN IMMEDIATE");
   try {
     const conflict = db.prepare(`
