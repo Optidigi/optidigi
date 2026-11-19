@@ -60,3 +60,9 @@ Pushes to `main` publish `ghcr.io/optidigi/optidigi:latest` plus a commit-specif
 Production mounts a persistent volume at `/data` for SQLite. `scripts/backup-bookings.mjs` creates consistent database backups in `/data/backups` and retains 30 days. The public forms queue Cloudflare Email Service messages in SQLite so temporary mail failures can be retried through `/api/internal/email-outbox`.
 
 Copy `.env.example` to the private deployment environment and set the Cloudflare account/token, admin credentials and outbox cron secret. Never commit the production `.env`.
+
+## CMS pilot
+
+Set `OPTIDIGI_CMS_ORIGIN=https://cms.optidigi.nl` in the website container to enable CMS content on the Dutch homepage. The site reads the Optidigi tenant's published site name, SEO title and description, and homepage hero copy at request time. Each field falls back to the existing copy when it is unavailable.
+
+Payload opens `/cms-preview?grant=…&locale=nl` with a short-lived preview grant. The website sends that grant to the CMS server to read the draft. Configure Traefik to preserve the application's security headers on the exact preview path and its trailing-slash variant. The app allows framing by the configured CMS origin for valid previews and prevents shared caching and search indexing for all preview responses. Leave the regular site's frame-denying middleware in place for all other routes.

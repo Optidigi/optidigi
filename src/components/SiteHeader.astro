@@ -6,12 +6,14 @@ import { HeaderNavigationDesktop, HeaderNavigationMobile } from "@/components/He
 import { getSiteConfig } from "@/config/site";
 import { alternatePath, localeMeta, sharedCopy, type Locale } from "@/i18n";
 
-interface Props { locale?: Locale; }
-const { locale = "nl" } = Astro.props;
+interface Props { locale?: Locale; preview?: boolean; }
+const { locale = "nl", preview = false } = Astro.props;
 const siteConfig = getSiteConfig(locale);
 const copy = sharedCopy[locale];
 const otherLocale: Locale = locale === "nl" ? "en" : "nl";
-const languageHref = alternatePath(Astro.url.pathname, otherLocale) + Astro.url.search + Astro.url.hash;
+const languageHref = preview
+  ? alternatePath("/", otherLocale)
+  : alternatePath(Astro.url.pathname, otherLocale) + Astro.url.search + Astro.url.hash;
 
 const navControlHeight = "h-8";
 const navLogoHeight = "h-6";

@@ -1,0 +1,69 @@
+---
+import DutchHomepage from "@/components/pages/DutchHomepage.astro";
+import { cmsOrigin, fetchHomepageContent } from "@/lib/server/cms";
+
+export const prerender = false;
+
+const origin = cmsOrigin();
+const grant = Astro.url.searchParams.get("grant");
+const locale = Astro.url.searchParams.get("locale");
+const content = origin && grant && /^[A-Za-z0-9._~-]{1,2048}$/.test(grant) && locale === "nl"
+  ? await fetchHomepageContent(origin, grant)
+  : undefined;
+
+if (!content) return new Response("Deze voorbeeldlink is ongeldig of verlopen. Open het voorbeeld opnieuw in het CMS.", {
+  status: 404,
+  headers: { "content-type": "text/plain; charset=utf-8" },
+});
+---
+
+<DutchHomepage content={content} preview>
+  <span hidden data-cms-preview-origin={origin}></span>
+  <script>
+    const origin = document.querySelector<HTMLElement>("[data-cms-preview-origin]")?.dataset.cmsPreviewOrigin;
+    const editor = window.opener ?? (window.parent === window ? null : window.parent);
+
+    if (origin && editor) {
+      let pending: AbortController | undefined;
+      const textFields = "[data-cms-preview-text]";
+      const previewMeta = [
+        'meta[name="description"]', 'meta[name="twitter:title"]', 'meta[name="twitter:description"]',
+        'meta[property="og:title"]', 'meta[property="og:site_name"]', 'meta[property="og:description"]',
+      ];
+
+      window.addEventListener("message", async (event) => {
+        if (event.origin !== origin || event.source !== editor || event.data?.type !== "payload-document-event") return;
+
+        pending?.abort();
+        const request = new AbortController();
+        pending = request;
+        try {
+          const response = await fetch(window.location.href, { cache: "no-store", signal: request.signal });
+          if (response.status === 404) {
+            window.location.reload();
+            return;
+          }
+          if (!response.ok) return;
+
+          // Refresh the editable fields without reloading the iframe and repeating Payload's ready handshake.
+          const next = new DOMParser().parseFromString(await response.text(), "text/html");
+          if (request.signal.aborted) return;
+          document.title = next.title;
+          for (const field of document.querySelectorAll<HTMLElement>(textFields)) {
+            const name = CSS.escape(field.dataset.cmsPreviewText ?? "");
+            const updated = next.querySelector(`[data-cms-preview-text="${name}"]`);
+            if (updated) field.textContent = updated.textContent;
+          }
+          for (const selector of previewMeta) {
+            const value = next.querySelector(selector)?.getAttribute("content");
+            if (value !== null && value !== undefined) document.querySelector(selector)?.setAttribute("content", value);
+          }
+        } catch {
+          // An aborted or failed refresh can be retried on the next save.
+        }
+      });
+
+      editor.postMessage({ type: "payload-live-preview", ready: true }, origin);
+    }
+  </script>
+</DutchHomepage>
