@@ -7,8 +7,12 @@ import ProcessSteps from "@/components/ProcessSteps.astro";
 import ServicesGrid from "@/components/ServicesGrid.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 import type { Locale } from "@/i18n";
-interface Props { locale?: Locale; }
-const { locale = "nl" } = Astro.props;
+interface Props {
+  locale?: Locale;
+  hero?: { heading?: string; description?: string };
+  siteName?: string;
+}
+const { locale = "nl", hero, siteName } = Astro.props;
 const copy = locale === "en" ? {
   title: "Better systems. Less manual work. More room to grow.",
   description: "Optidigi builds and integrates software, AI and automation around the way your business works.",
@@ -40,17 +44,17 @@ const copy = locale === "en" ? {
 
     <div class="pb-20 pt-24 md:pt-32 lg:pt-40">
       <div class="relative z-10 mx-auto grid max-w-5xl items-end gap-4 px-6">
-        <h1 class="text-balance text-4xl font-semibold sm:text-5xl md:max-w-5xl lg:text-6xl">
+        <h1 data-cms-preview-text="heading" class="text-balance text-4xl font-semibold sm:text-5xl md:max-w-5xl lg:text-6xl">
           {locale === "en" ? (
             <>
               <span class="lg:block">Better systems. Less manual work.</span>{" "}
               <span class="lg:block">More room to grow.</span>
             </>
-          ) : copy.title}
+          ) : (hero?.heading ?? copy.title)}
         </h1>
         <div class="max-w-lg">
-          <p class="text-muted-foreground mb-6 text-balance text-lg lg:text-xl">
-            {copy.description}
+          <p data-cms-preview-text="description" class="text-muted-foreground mb-6 text-balance text-lg lg:text-xl">
+            {hero?.description ?? copy.description}
           </p>
           <AppointmentCta locale={locale} />
         </div>
@@ -66,4 +70,4 @@ const copy = locale === "en" ? {
   <FaqSection client:visible locale={locale} />
 </main>
 
-<SiteFooter showBrandMark locale={locale} />
+<SiteFooter showBrandMark locale={locale} siteName={siteName} />

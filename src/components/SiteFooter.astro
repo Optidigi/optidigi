@@ -10,9 +10,10 @@ interface Props {
   showLead?: boolean;
   compact?: boolean;
   locale?: Locale;
+  siteName?: string;
 }
 
-const { showBrandMark = false, showLead = true, compact = false, locale = "nl" } = Astro.props;
+const { showBrandMark = false, showLead = true, compact = false, locale = "nl", siteName } = Astro.props;
 const siteConfig = getSiteConfig(locale);
 const copy = locale === "en" ? {
   lead: "Ready to work smarter?", leadBody: "In a no-obligation session, we discuss where work gets stuck and which digital improvements could make the greatest difference to your business.",
@@ -181,7 +182,7 @@ const year = new Date().getFullYear();
     <div class="flex flex-wrap items-end justify-between gap-4">
       <div class:list={["text-muted-foreground text-sm", showBrandMark ? "space-y-2" : "space-y-1"]}>
         <p>
-          © {year}&nbsp;{siteConfig.name}. {copy.rights}
+          © {year}&nbsp;<span data-cms-preview-text="site-name">{siteName ?? siteConfig.name}</span>. {copy.rights}
         </p>
         {showBrandMark ? (
           <dl class="text-muted-foreground/75 flex flex-wrap gap-x-4 gap-y-1 text-xs">

@@ -1,17 +1,12 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import SiteHeader from "@/components/SiteHeader.astro";
-import HomePage from "@/components/HomePage.astro";
-import { siteConfig } from "@/config/site";
+import DutchHomepage from "@/components/pages/DutchHomepage.astro";
+import { cmsOrigin, fetchHomepageContent } from "@/lib/server/cms";
 
 export const prerender = false;
+
+const origin = cmsOrigin();
+const content = origin ? await fetchHomepageContent(origin) : undefined;
+if (origin) Astro.response.headers.set("cache-control", "no-store");
 ---
 
-<Layout title={siteConfig.defaultTitle} description={siteConfig.description} canonicalPath="/">
-  <div
-    class="theme-green scheme-light selection:bg-primary/15 selection:text-foreground bg-background dark:scheme-dark"
-  >
-  <SiteHeader locale="nl" />
-  <HomePage locale="nl" />
-  </div>
-</Layout>
+<DutchHomepage content={content} />
