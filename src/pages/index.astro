@@ -1,5 +1,5 @@
 ---
-import DutchHomepage from "@/components/pages/DutchHomepage.astro";
+import SiteHomepage from "@/components/pages/SiteHomepage.astro";
 import { cmsOrigin, fetchHomepageContent } from "@/lib/server/cms";
 
 export const prerender = false;
@@ -9,4 +9,4 @@ const content = origin ? await fetchHomepageContent(origin) : undefined;
 if (origin) Astro.response.headers.set("cache-control", "no-store");
 ---
 
-<DutchHomepage content={content} />
+<SiteHomepage content={content} />

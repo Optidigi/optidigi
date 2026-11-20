@@ -45,12 +45,12 @@ const copy = locale === "en" ? {
     <div class="pb-20 pt-24 md:pt-32 lg:pt-40">
       <div class="relative z-10 mx-auto grid max-w-5xl items-end gap-4 px-6">
         <h1 data-cms-preview-text="heading" class="text-balance text-4xl font-semibold sm:text-5xl md:max-w-5xl lg:text-6xl">
-          {locale === "en" ? (
+          {hero?.heading ?? (locale === "en" ? (
             <>
               <span class="lg:block">Better systems. Less manual work.</span>{" "}
               <span class="lg:block">More room to grow.</span>
             </>
-          ) : (hero?.heading ?? copy.title)}
+          ) : copy.title)}
         </h1>
         <div class="max-w-lg">
           <p data-cms-preview-text="description" class="text-muted-foreground mb-6 text-balance text-lg lg:text-xl">

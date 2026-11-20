@@ -26,10 +26,10 @@ export function cmsOrigin() {
   }
 }
 
-export async function fetchHomepageContent(origin: string, previewGrant?: string): Promise<HomepageContent | undefined> {
+export async function fetchHomepageContent(origin: string, previewGrant?: string, locale: "nl" | "en" = "nl"): Promise<HomepageContent | undefined> {
   const url = new URL("/api/site-content", origin);
   url.searchParams.set("tenant", "optidigi");
-  url.searchParams.set("locale", "nl");
+  url.searchParams.set("locale", locale);
   const headers = new Headers({ accept: "application/json" });
   if (previewGrant) {
     url.searchParams.set("draft", "true");

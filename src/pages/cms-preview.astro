@@ -1,5 +1,5 @@
 ---
-import DutchHomepage from "@/components/pages/DutchHomepage.astro";
+import SiteHomepage from "@/components/pages/SiteHomepage.astro";
 import { cmsOrigin, fetchHomepageContent } from "@/lib/server/cms";
 
 export const prerender = false;
@@ -7,8 +7,8 @@ export const prerender = false;
 const origin = cmsOrigin();
 const grant = Astro.url.searchParams.get("grant");
 const locale = Astro.url.searchParams.get("locale");
-const content = origin && grant && /^[A-Za-z0-9._~-]{1,2048}$/.test(grant) && locale === "nl"
-  ? await fetchHomepageContent(origin, grant)
+const content = origin && grant && /^[A-Za-z0-9._~-]{1,2048}$/.test(grant) && (locale === "nl" || locale === "en")
+  ? await fetchHomepageContent(origin, grant, locale)
   : undefined;
 
 if (!content) return new Response("Deze voorbeeldlink is ongeldig of verlopen. Open het voorbeeld opnieuw in het CMS.", {
@@ -17,7 +17,7 @@ if (!content) return new Response("Deze voorbeeldlink is ongeldig of verlopen. O
 });
 ---
 
-<DutchHomepage content={content} preview>
+<SiteHomepage content={content} locale={locale === "en" ? "en" : "nl"} preview>
   <span hidden data-cms-preview-origin={origin}></span>
   <script>
     const origin = document.querySelector<HTMLElement>("[data-cms-preview-origin]")?.dataset.cmsPreviewOrigin;
@@ -66,4 +66,4 @@ if (!content) return new Response("Deze voorbeeldlink is ongeldig of verlopen. O
       editor.postMessage({ type: "payload-live-preview", ready: true }, origin);
     }
   </script>
-</DutchHomepage>
+</SiteHomepage>

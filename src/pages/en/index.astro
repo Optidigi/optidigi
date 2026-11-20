@@ -1,14 +1,11 @@
 ---
-import Layout from "@/layouts/Layout.astro";
-import SiteHeader from "@/components/SiteHeader.astro";
-import HomePage from "@/components/HomePage.astro";
-import { getSiteConfig } from "@/config/site";
-const site = getSiteConfig("en");
+import SiteHomepage from "@/components/pages/SiteHomepage.astro";
+import { cmsOrigin, fetchHomepageContent } from "@/lib/server/cms";
+
+export const prerender = false;
+const origin = cmsOrigin();
+const content = origin ? await fetchHomepageContent(origin, undefined, "en") : undefined;
+if (origin) Astro.response.headers.set("Cache-Control", "no-store");
 ---
 
-<Layout locale="en" title={site.defaultTitle} description={site.description} canonicalPath="/en/">
-  <div class="theme-green scheme-light selection:bg-primary/15 selection:text-foreground bg-background dark:scheme-dark">
-    <SiteHeader locale="en" />
-    <HomePage locale="en" />
-  </div>
-</Layout>
+<SiteHomepage content={content} locale="en" />

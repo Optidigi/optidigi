@@ -2,28 +2,31 @@
 import Layout from "@/layouts/Layout.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import HomePage from "@/components/HomePage.astro";
-import { siteConfig } from "@/config/site";
+import { getSiteConfig } from "@/config/site";
 import type { HomepageContent } from "@/lib/server/cms";
 
 interface Props {
   content?: HomepageContent;
   preview?: boolean;
+  locale?: "nl" | "en";
 }
 
-const { content, preview = false } = Astro.props;
+const { content, preview = false, locale = "nl" } = Astro.props;
 const settings = content?.siteSettings;
+const siteConfig = getSiteConfig(locale);
 ---
 
 <Layout
   title={settings?.title ?? siteConfig.defaultTitle}
   description={settings?.description ?? siteConfig.description}
   siteName={settings?.name}
-  canonicalPath="/"
+  locale={locale}
+  canonicalPath={locale === "en" ? "/en/" : "/"}
   noindex={preview}
 >
   <div class="theme-green scheme-light selection:bg-primary/15 selection:text-foreground bg-background dark:scheme-dark">
-    <SiteHeader locale="nl" preview={preview} />
-    <HomePage locale="nl" hero={content?.homepage} siteName={settings?.name} />
+    <SiteHeader locale={locale} preview={preview} />
+    <HomePage locale={locale} hero={content?.homepage} siteName={settings?.name} />
   </div>
   <slot />
 </Layout>
