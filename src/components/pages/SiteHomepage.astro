@@ -8,10 +8,11 @@ import type { HomepageContent } from "@/lib/server/cms";
 interface Props {
   content?: HomepageContent;
   preview?: boolean;
+  previewLanguageHref?: string;
   locale?: "nl" | "en";
 }
 
-const { content, preview = false, locale = "nl" } = Astro.props;
+const { content, preview = false, previewLanguageHref, locale = "nl" } = Astro.props;
 const settings = content?.siteSettings;
 const siteConfig = getSiteConfig(locale);
 ---
@@ -25,7 +26,7 @@ const siteConfig = getSiteConfig(locale);
   noindex={preview}
 >
   <div class="theme-green scheme-light selection:bg-primary/15 selection:text-foreground bg-background dark:scheme-dark">
-    <SiteHeader locale={locale} preview={preview} />
+    <SiteHeader locale={locale} preview={preview} previewLanguageHref={previewLanguageHref} />
     <HomePage locale={locale} hero={content?.homepage} siteName={settings?.name} />
   </div>
   <slot />

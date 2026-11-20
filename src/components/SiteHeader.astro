@@ -6,14 +6,17 @@ import { HeaderNavigationDesktop, HeaderNavigationMobile } from "@/components/He
 import { getSiteConfig } from "@/config/site";
 import { alternatePath, localeMeta, sharedCopy, type Locale } from "@/i18n";
 
-interface Props { locale?: Locale; preview?: boolean; }
-const { locale = "nl", preview = false } = Astro.props;
+interface Props { locale?: Locale; preview?: boolean; previewLanguageHref?: string; }
+const { locale = "nl", preview = false, previewLanguageHref } = Astro.props;
 const siteConfig = getSiteConfig(locale);
 const copy = sharedCopy[locale];
 const otherLocale: Locale = locale === "nl" ? "en" : "nl";
 const languageHref = preview
-  ? alternatePath("/", otherLocale)
+  ? previewLanguageHref
   : alternatePath(Astro.url.pathname, otherLocale) + Astro.url.search + Astro.url.hash;
+
+const languageLabel = `${localeMeta[otherLocale].label} — ${locale === "nl" ? "switch language" : "taal wijzigen"}`;
+const languageLinkClass = "brand-secondary-control inline-flex h-8 shrink-0 items-center rounded-md px-2.5 text-xs font-medium text-muted-foreground transition hover:text-foreground";
 
 const navControlHeight = "h-8";
 const navLogoHeight = "h-6";
@@ -40,7 +43,7 @@ const getStartedClass =
         </div>
 
         <div
-          class="flex items-center justify-between gap-8 max-lg:h-14 max-lg:w-full max-lg:border-b"
+          class="flex items-center justify-between gap-3 lg:gap-8 max-lg:h-14 max-lg:w-full max-lg:border-b"
         >
           <a
             aria-label={copy.home}
@@ -55,7 +58,10 @@ const getStartedClass =
 
           <HeaderNavigationDesktop client:load locale={locale} />
 
-          <ThemeToggle class="ml-auto lg:hidden" locale={locale} />
+          <div class="ml-auto flex items-center gap-1 lg:hidden">
+            {languageHref && <a data-locale-switch={preview ? undefined : otherLocale} class={languageLinkClass} href={languageHref} lang={otherLocale} hreflang={otherLocale} aria-label={languageLabel}>{localeMeta[otherLocale].shortLabel}</a>}
+            <ThemeToggle locale={locale} />
+          </div>
 
           <button
             type="button"
@@ -109,7 +115,7 @@ const getStartedClass =
           <div
             class="flex w-full items-center gap-3 md:w-fit"
           >
-            <a data-locale-switch={otherLocale} class="brand-secondary-control inline-flex h-8 items-center rounded-md px-2.5 text-xs font-medium text-muted-foreground transition hover:text-foreground" href={languageHref} lang={otherLocale} hreflang={otherLocale} aria-label={`${localeMeta[otherLocale].label} — ${locale === "nl" ? "switch language" : "taal wijzigen"}`}>{localeMeta[otherLocale].shortLabel}</a>
+            {languageHref && <a data-locale-switch={preview ? undefined : otherLocale} class={languageLinkClass + " hidden lg:inline-flex"} href={languageHref} lang={otherLocale} hreflang={otherLocale} aria-label={languageLabel}>{localeMeta[otherLocale].shortLabel}</a>}
             <ThemeToggle class="hidden lg:inline-flex" locale={locale} />
             <a href={siteConfig.ctaHref} data-booking-trigger class:list={[getStartedClass, "brand-primary-action max-sm:w-full"]}>
               {siteConfig.ctaLabel}

@@ -4,6 +4,9 @@ import { cmsOrigin, fetchHomepageContent } from "@/lib/server/cms";
 
 export const prerender = false;
 
+Astro.response.headers.set("Cache-Control", "private, no-store");
+Astro.response.headers.set("Referrer-Policy", "no-referrer");
+
 const origin = cmsOrigin();
 const grant = Astro.url.searchParams.get("grant");
 const locale = Astro.url.searchParams.get("locale");
@@ -13,11 +16,16 @@ const content = origin && grant && /^[A-Za-z0-9._~-]{1,2048}$/.test(grant) && (l
 
 if (!content) return new Response("Deze voorbeeldlink is ongeldig of verlopen. Open het voorbeeld opnieuw in het CMS.", {
   status: 404,
-  headers: { "content-type": "text/plain; charset=utf-8" },
+  headers: { "content-type": "text/plain; charset=utf-8", "Cache-Control": "private, no-store", "Referrer-Policy": "no-referrer" },
 });
+const otherGrant = Astro.url.searchParams.get("alternateGrant");
+const previewLanguageHref = otherGrant && /^[A-Za-z0-9._~-]{1,2048}$/.test(otherGrant)
+  ? "/cms-preview?" + new URLSearchParams({ grant: otherGrant, locale: locale === "en" ? "nl" : "en", alternateGrant: grant! })
+  : undefined;
+
 ---
 
-<SiteHomepage content={content} locale={locale === "en" ? "en" : "nl"} preview>
+<SiteHomepage content={content} locale={locale === "en" ? "en" : "nl"} preview previewLanguageHref={previewLanguageHref}>
   <span hidden data-cms-preview-origin={origin}></span>
   <script>
     const origin = document.querySelector<HTMLElement>("[data-cms-preview-origin]")?.dataset.cmsPreviewOrigin;
